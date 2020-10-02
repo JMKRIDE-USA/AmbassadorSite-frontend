@@ -1,5 +1,6 @@
 {
   "expo": {
+    "entryPoint": "./src/App.js",
     "name": "ambassador_site_expo",
     "slug": "ambassador_site_expo",
     "version": "1.0.0",
