@@ -21,32 +21,47 @@ function getHeaderButtons(){
   ]);
 }
 
-function DesktopHeaderButtons({children}){
+function HeaderButtons({view_style, button_style}){
   let navigation = useNavigation();
   function redirect_to(location){
     return (() => navigation.reset({index: 0, routes: [{name: location}]}));
   }
   return(
-    <View style={styles.desktopheaderbuttons}>
+    <View style={view_style}>
       { getHeaderButtons().map(
         (button, index) => (
-          <Button title={button.title} key={index} onPress={redirect_to(button.location)}/>
+          <Button
+            title={button.title}
+            style={button_style}
+            key={index}
+            onPress={redirect_to(button.location)}
+          />
         ))
       }
     </View>
   )
 }
 
-function MobileHeaderMenu({children}){
+function MobileHeaderMenuToggle({toggle_menu}){
   return(
-    <TouchableOpacity onPress={() => console.log('test')}>
+    <TouchableOpacity onPress={toggle_menu}>
       <MaterialIcons name="menu" size={30} color="#00a0db" style={styles.mobileheadermenu}/>
     </TouchableOpacity>
   );
 }
 
+function MobileHeaderMenu(){
+}
+
 export function Header() {
+  let mobilemenu_visible = false;
   let bigHeader = useMediaQuery({minWidth: 800});
+
+  function toggle_mobilemenu(){
+    mobilemenu_visible = !mobilemenu_visible;
+    console.log("Menu is visible?: ", mobilemenu_visible);
+  }
+
   return (
     <View
       style={bigHeader ? styles.desktop_container : styles.mobile_container}
@@ -66,12 +81,21 @@ export function Header() {
         </View>
         <View style={styles.header_right}>
           { bigHeader
-            ? <DesktopHeaderButtons/>
-            : <MobileHeaderMenu>
-                <Button style={styles.button} title={"test"}/>
-              </MobileHeaderMenu>
+            ? <HeaderButtons
+                view_style={styles.desktopheaderbuttons_view}
+                button_style={styles.desktopheaderbuttons}
+              />
+            : <MobileHeaderMenuToggle toggle_menu={toggle_mobilemenu}>
+                <Button style={styles.menu_button} title={"test"}/>
+              </MobileHeaderMenuToggle>
           }
         </View>
+        { mobilemenu_visible && 
+          <HeaderButtons
+            view_style={styles.mobileheaderbuttons_view}
+            button_style={styles.mobileheaderbuttons}
+          />
+        }
       </View>
     </View>
   );
@@ -111,11 +135,15 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
   },
-  desktopheaderbuttons: {
+  desktopheaderbuttons_view: {
     flexDirection: "row",
   },
-  mobileheadermenu: {
-
+  desktopheaderbuttons: {
+  },
+  mobileheaderbuttons_view: {
+    flexDirection: "column",
+  },
+  mobileheaderbuttons: {
   },
   mobilelogo: {
     flex: 1,
@@ -136,7 +164,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#ffffff',
   },
-  button: {
+  menu_button: {
     flex: 1,
     maxHeight: 50,
     minHeight: 20,
