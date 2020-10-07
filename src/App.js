@@ -10,7 +10,6 @@ import { page_linking, genAppStack } from './pages.js';
 import { Header } from './components/header.js';
 
 function App() {
-  console.log("loaded.");
   const AppStack = createStackNavigator();
   return (
     <NavigationContainer linking={page_linking}>

@@ -1,32 +1,46 @@
 import React from 'react';
 
-
 import { StyleSheet, View } from 'react-native';
+
+
 import { Header } from './components/header.js';
-import { Home } from './pages/home.js';
-import { AboutUs } from './pages/about-us.js';
+
+import { SplashPage } from './pages/splash-page.js';
+import { SignUp } from './pages/sign-up.js';
+import { SignIn } from './pages/sign-in.js';
+import { ChallengeBoard } from './pages/challenge-board.js';
 
 
-export const all_pages = [
+export const welcome_pages = [
   {
-      title: "Home",
-      component: Home,
-      location: "Home",
-      url: "/",
-      in_header: true,
-      
+    title: "Splash Page",
+    component: SplashPage,
+    url: "/",
+    in_header: true,
   },
   {
-    title: "About Us",
-    component: AboutUs,
-    location: "About Us",
-    url: "about-us",
+    title: "Sign Up",
+    component: SignUp,
+    url: "sign-up",
+    in_header: true,
+  },
+  {
+    title: "Sign In",
+    component: SignIn,
+    url: "sign-in",
+  },
+  {
+    title: "Challenge Board",
+    component: ChallengeBoard,
+    url: "challenge-board",
     in_header: true,
   },
 ]
 
-export function getHeaderButtons(){
-  let included_pages = all_pages.filter(page => page.in_header);
+const all_pages = welcome_pages;
+
+export function getHeaderButtons(pages){
+  let included_pages = pages.filter(page => page.in_header);
   let header_buttons = []
   included_pages.forEach(
     function(page) {
@@ -63,6 +77,7 @@ function makeAppScreen(component, ...args) {
 export function genAppStack(stack){
   return(
     <stack.Navigator headerMode={"none"}>
+      // TODO
       <stack.Screen name="Home" component={makeAppScreen(Home)}/>
       <stack.Screen name="About Us" component={makeAppScreen(AboutUs)}/>
     </stack.Navigator>
