@@ -9,7 +9,9 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 import { useMediaQuery } from 'react-responsive';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
+import { selectAuthState } from '../modules/auth/authSlice.js';
 import jmk_bigheaderlogo from '../assets/JMKHeaderLogoTemp.png';
 import jmk_smallheaderlogo from '../assets/JMKHeaderLogoTempMobile.png';
 import { getHeaderButtons } from '../pages.js';
@@ -21,6 +23,7 @@ import {
 
 function HeaderButtons({style}){
   let navigation = useNavigation();
+  let auth_state = useSelector(selectAuthState);
   function redirect_to(location){
     return (() => {
       navigation.reset({index: 0, routes: [{name: location}]});
@@ -28,7 +31,7 @@ function HeaderButtons({style}){
   }
   return(
     <View style={style.view}>
-      { getHeaderButtons().map(
+      { getHeaderButtons(auth_state).map(
         (button, index) => (
           <TouchableOpacity
             style={style.button}

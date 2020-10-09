@@ -35,14 +35,21 @@ export const welcome_pages = [
     url: "challenge-board",
     in_header: true,
   },
-]
+];
+export const user_pages = [];
+export const admin_pages = [];
+const all_pages = welcome_pages.concat(user_pages).concat(admin_pages);
 
-const all_pages = welcome_pages;
+export const AUTH_STATE_TO_PAGES = {
+  "none": welcome_pages,
+  "user": user_pages,
+  "admin": admin_pages,
+}
 
-export function getHeaderButtons(pages){
-  let included_pages = pages.filter(page => page.in_header);
+export function getHeaderButtons(auth_state){
+  let pages = AUTH_STATE_TO_PAGES[auth_state];
   let header_buttons = []
-  included_pages.forEach(
+  pages.filter(page => page.in_header).forEach(
     function(page) {
       header_buttons.push({
         title: page.title,
@@ -74,12 +81,22 @@ function makeAppScreen(component, ...args) {
   );
 }
 
-export function genAppStack(stack){
+
+export function genAppStack(stack, auth_state){
+  console.log("AS:", auth_state);
   return(
     <stack.Navigator headerMode={"none"}>
-      // TODO
-      <stack.Screen name="Home" component={makeAppScreen(Home)}/>
-      <stack.Screen name="About Us" component={makeAppScreen(AboutUs)}/>
+      { 
+        AUTH_STATE_TO_PAGES[auth_state].map(
+          (page, i) => (
+            <stack.Screen
+              name={page.title}
+              key={i}
+              component={makeAppScreen(page.component)}
+            />
+          )
+        )
+      }
     </stack.Navigator>
   )
 }
