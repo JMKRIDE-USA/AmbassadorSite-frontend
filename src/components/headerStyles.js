@@ -1,26 +1,12 @@
 import { StyleSheet } from 'react-native'
 
 
-export const styles = StyleSheet.create({
-  desktop_container: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    backgroundColor: "#080808",
-    minHeight: "100px",
-  },
-  mobile_container: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    minHeight: "80px",
-    backgroundColor: "#080808",
-  },
+const common_styles = {
   header_visible: {
     flex: -1,
     flexDirection: "row",
     maxWidth: 1440,
-    width: "90%",
+    width: "100%",
   },
   header_right: {
     flex: 1,
@@ -31,25 +17,14 @@ export const styles = StyleSheet.create({
   },
   header_left: {
     flex: 3,
+    padding: "1em",
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
   },
-  mobilelogo: {
-    flex: 1,
-    height: 80,
-    maxWidth: 250,
-    resizeMode: 'center',
-  },
-  biglogo: {
-    flex: 1,
-    maxWidth: "300px",
-    height: "120px",
-    resizeMode: 'center',
-  },
   title: {
     color: '#ffffff',
-    fontSize: 16,
+    fontSize: 14,
   },
   text: {
     color: '#ffffff',
@@ -59,30 +34,75 @@ export const styles = StyleSheet.create({
     maxHeight: 50,
     minHeight: 20,
   },
+};
+
+export const desktop_styles = StyleSheet.create({
+  container: {
+    flexDirection: "column",
+  },
+  header_container: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    backgroundColor: "#080808",
+    minHeight: "100px",
+  },
+  logo: {
+    flex: 1,
+    maxWidth: "300px",
+    height: "120px",
+    resizeMode: 'center',
+  },
+  ...common_styles,
+});
+
+export const mobile_styles = StyleSheet.create({
+  container: {
+    flexDirection: "column",
+    alignItems: "flex-end",
+  },
+  header_container: {
+    display: "flex",
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+    height: "80px",
+    backgroundColor: "#080808",
+  },
+  logo: {
+    flex: 1,
+    height: 80,
+    maxWidth: 250,
+    resizeMode: 'center',
+  },
+  menutoggle: {
+    paddingRight: 20,
+  },
+  ...common_styles,
 });
 
 export const desktopHeaderButtons_styles = StyleSheet.create({
   view: {
     flexDirection: "row",
     alignItems: "center",
+    paddingRight: 30,
   },
   button: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "center",
-    minWidth: 100,
     height: 50,
     borderRightWidth: "1px",
     borderColor: "#808080",
-    paddingLeft: 50,
-    paddingRight: 50,
+    paddingLeft: 30,
+    paddingRight: 30,
   },
-  button_style:{
+  textview: {
     alignItems: "center",
     justifyContent: "center",
   },
-  button_text: {
-    fontSize: 18,
+  text: {
+    fontSize: 14,
     color: "white",
   },
 });
@@ -93,21 +113,21 @@ export const mobileHeaderButtons_styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.8)",
     flexDirection: "column",
     alignItems: "stretch",
-    justifyContent: "space-around",
+    justifyContent: "center",
     minHeight: "100%",
     top: "80px",
-    width: "100%",
   },
   button: {
     minHeight: 20,
     borderBottomWidth: "2px",
     borderColor: "#808080",
   },
-  button_style: {
+  textview: {
     alignItems: "center",
+    minWidth: 250,
     justifyContent: "center",
   },
-  button_text: {
+  text: {
     color: "white",
     padding: 10, 
   },

@@ -13,7 +13,7 @@ import { ChallengeBoard } from './pages/challenge-board.js';
 
 export const welcome_pages = [
   {
-    title: "Splash Page",
+    title: "Home",
     component: SplashPage,
     url: "/",
     in_header: true,
@@ -28,6 +28,7 @@ export const welcome_pages = [
     title: "Sign In",
     component: SignIn,
     url: "sign-in",
+    profile_page: true,
   },
   {
     title: "Challenge Board",
@@ -49,15 +50,18 @@ export const AUTH_STATE_TO_PAGES = {
 export function getHeaderButtons(auth_state){
   let pages = AUTH_STATE_TO_PAGES[auth_state];
   let header_buttons = []
-  pages.filter(page => page.in_header).forEach(
-    function(page) {
-      header_buttons.push({
-        title: page.title,
-        destination: page.title,
-      });
+  return pages.filter(page => page.in_header).map(page => page.title);
+}
+
+export function getProfilePage(auth_state){
+  let pages = AUTH_STATE_TO_PAGES[auth_state];
+  let profile_page;
+  pages.forEach(page => {
+    if(page.profile_page){
+      profile_page = page;
     }
-  );
-  return header_buttons;
+  });
+  return profile_page.title;
 }
 
 function getPageLinkings(){

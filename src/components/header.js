@@ -14,9 +14,10 @@ import { useSelector } from 'react-redux';
 import { selectAuthState } from '../modules/auth/authSlice.js';
 import jmk_bigheaderlogo from '../assets/JMKHeaderLogoTemp.png';
 import jmk_smallheaderlogo from '../assets/JMKHeaderLogoTempMobile.png';
-import { getHeaderButtons } from '../pages.js';
+import { getHeaderButtons, getProfilePage } from '../pages.js';
 import {
-  styles,
+  desktop_styles,
+  mobile_styles,
   desktopHeaderButtons_styles,
   mobileHeaderButtons_styles
 } from './headerStyles.js'
@@ -32,14 +33,14 @@ function HeaderButtons({style}){
   return(
     <View style={style.view}>
       { getHeaderButtons(auth_state).map(
-        (button, index) => (
+        (page_title, index) => (
           <TouchableOpacity
             style={style.button}
             key={index}
-            onPress={redirect_to(button.destination)}
+            onPress={redirect_to(page_title)}
           >
-            <View style={style.button_style}>
-              <Text style={style.button_text}>{button.title}</Text>
+            <View style={style.textview}>
+              <Text style={style.text}>{page_title}</Text>
             </View>
           </TouchableOpacity>
         ))
@@ -48,17 +49,32 @@ function HeaderButtons({style}){
   )
 }
 
-function MobileHeaderMenuToggle({toggle_menu}){
+function MobileHeaderMenuToggle({toggle_menu, style}){
   return(
-    <TouchableOpacity onPress={toggle_menu}>
-      <MaterialIcons name="menu" size={30} color="#00a0db" style={styles.mobileheadermenu}/>
+    <TouchableOpacity onPress={toggle_menu} style={style.menutoggle}>
+      <MaterialIcons name="menu" size={30} color="#00a0db"/>
+    </TouchableOpacity>
+  );
+}
+
+function ProfileButton({style}) {
+  let navigation = useNavigation();
+  let auth_state = useSelector(selectAuthState);
+  return ( 
+    <TouchableOpacity
+      onPress={() => navigation.reset(
+        {index: 0, routes: [{name: getProfilePage(auth_state)}]}
+      )}
+      style={style.profile_button}
+    >
+      <MaterialIcons name="account-circle" size={30} color="#00a0db"/>
     </TouchableOpacity>
   );
 }
 
 export function Header() {
   let [mobileMenuVisible, setMobileMenuVisible] = useState(false);
-  let bigHeader = useMediaQuery({minWidth: 800});
+  let bigHeader = useMediaQuery({minWidth: 870});
   if(bigHeader && mobileMenuVisible){
     setMobileMenuVisible(false);
   }
@@ -67,31 +83,30 @@ export function Header() {
     setMobileMenuVisible(!mobileMenuVisible);
   }
 
+  let styles = bigHeader ? desktop_styles : mobile_styles;
+  let header_logo = bigHeader ? jmk_bigheaderlogo : jmk_smallheaderlogo;
+
   return (
-    <View style={{flexDirection: "column"}}>
+    <View style={styles.container}>
       <View
-        style={bigHeader ? styles.desktop_container : styles.mobile_container}
+        style={styles.header_container}
       >
         <View style={styles.header_visible}>
           <View style={styles.header_left}>
-            { bigHeader
-              ? <Image
-                  style={styles.biglogo}
-                  source={jmk_bigheaderlogo}
-                />
-              : <Image
-                  style={styles.mobilelogo}
-                  source={jmk_smallheaderlogo}
-                />
-            }
+            <Image
+              style={styles.logo}
+              source={header_logo}
+            />
           </View>
           <View style={styles.header_right}>
             { bigHeader
               ? <HeaderButtons style={desktopHeaderButtons_styles}/>
-              : <MobileHeaderMenuToggle toggle_menu={toggle_mobilemenu}>
-                  <Button style={styles.menu_button} title={"test"}/>
-                </MobileHeaderMenuToggle>
+              : <MobileHeaderMenuToggle
+                  toggle_menu={toggle_mobilemenu}
+                  style={styles}
+                />
             }
+            <ProfileButton style={styles}/>
           </View>
         </View>
       </View>
