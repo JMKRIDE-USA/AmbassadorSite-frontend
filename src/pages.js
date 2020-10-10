@@ -87,7 +87,6 @@ function makeAppScreen(component, ...args) {
 
 
 export function genAppStack(stack, auth_state){
-  console.log("AS:", auth_state);
   return(
     <stack.Navigator headerMode={"none"}>
       { 
