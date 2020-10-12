@@ -86,6 +86,8 @@ export function Header() {
   let styles = bigHeader ? desktop_styles : mobile_styles;
   let header_logo = bigHeader ? jmk_bigheaderlogo : jmk_smallheaderlogo;
 
+  let navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <View
@@ -93,10 +95,12 @@ export function Header() {
       >
         <View style={styles.header_visible}>
           <View style={styles.header_left}>
-            <Image
-              style={styles.logo}
-              source={header_logo}
-            />
+            <TouchableOpacity style={styles.logo} onPress={() => navigation.reset({index: 0, routes: [{name: "Home"}]})}>
+              <Image
+                style={styles.logo}
+                source={header_logo}
+              />
+            </TouchableOpacity>
           </View>
           <View style={styles.header_right}>
             { bigHeader
