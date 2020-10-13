@@ -23,6 +23,7 @@ export const welcome_pages = [
     component: SignUp,
     url: "sign-up",
     in_header: true,
+    apply_page: true, // User needs an account before an application can be created
   },
   {
     title: "Sign In",
@@ -62,6 +63,17 @@ export function getProfilePage(auth_state){
     }
   });
   return profile_page.title;
+}
+
+export function getApplyPage(auth_state){
+  let pages = AUTH_STATE_TO_PAGES[auth_state];
+  let apply_page;
+  pages.forEach(page => {
+    if(page.apply_page){
+      apply_page = page;
+    };
+  });
+  return apply_page.title;
 }
 
 function getPageLinkings(){

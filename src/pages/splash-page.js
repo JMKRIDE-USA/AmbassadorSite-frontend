@@ -1,16 +1,30 @@
 import React from 'react';
 
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
+import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
-import { page_styles } from '../pages.js';
+import { page_styles, getApplyPage } from '../pages.js';
+import { selectAuthState } from '../modules/auth/authSlice.js';
+
 
 
 export function SplashPage() {
   let [fontsLoaded] = useFonts({
     'JMKRIDE': require('../assets/JMKRIDE-font.ttf'),
   });
-	if(!fontsLoaded) { return <></>; }
+
+  let navigation = useNavigation();
+  let auth_state = useSelector(selectAuthState);
+  let apply_page = getApplyPage(auth_state);
+
+  function redirect_to_apply_page() {
+    navigation.reset({index: 0, routes: [{name: apply_page}]})
+  }
+
+	if(!fontsLoaded) { return <></> }
+
   return (
     <View style={page_styles.app_scrollview}>
       <View style={styles.page}>
@@ -92,9 +106,13 @@ export function SplashPage() {
           </Text>
           <View style={styles.cta_row}>
             <Text style={styles.title_text_alt}>
-              Submit your application today!
+              Submit your application here:
             </Text>
-            <TouchableOpacity style={styles.cta_button} onPress={() => {}}>
+            <TouchableOpacity
+              style={styles.cta_button}
+              onPress={redirect_to_apply_page}
+            >
+              <Text style={styles.cta_button_text}>Apply</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -143,6 +161,21 @@ const styles = StyleSheet.create({
   },
   cta_row: {
     flexDirection: "row",
+    alignItems: "center",
+  },
+  cta_button: {
+    width: "100px",
+    height: "50px",
+    backgroundColor: "#080808",
+    borderWidth: "2px",
+    borderColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: "20px",
+  },
+  cta_button_text: {
+    color: "#00a0db",
+    fontSize: "22px",
   },
   title_text: {
     fontFamily: "Sans-Serif",
