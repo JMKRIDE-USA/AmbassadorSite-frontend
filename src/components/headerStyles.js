@@ -39,6 +39,7 @@ const common_styles = {
 export const desktop_styles = StyleSheet.create({
   container: {
     flexDirection: "column",
+    width: "100%",
   },
   header_container: {
     display: "flex",
@@ -59,6 +60,7 @@ export const desktop_styles = StyleSheet.create({
 export const mobile_styles = StyleSheet.create({
   container: {
     flexDirection: "column",
+    width: "100%",
     alignItems: "flex-end",
   },
   header_container: {

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { StyleSheet, View } from 'react-native';
-
+import { StyleSheet, View, ScrollView } from 'react-native';
 
 import { Header } from './components/header.js';
+import { Footer } from './components/footer.js';
 
 import { SplashPage } from './pages/splash-page.js';
 import { SignUp } from './pages/sign-up.js';
@@ -80,7 +80,13 @@ function makeAppScreen(component, ...args) {
   return (() =>
     <View style={page_styles.app_container}>
       <Header/>
-      { component(...args) }
+      <ScrollView
+        style={page_styles.page_scrollview}
+        contentContainerStyle={page_styles.page_cc_scrollview}
+      >
+        { component(...args) }
+        <Footer/>
+      </ScrollView>
     </View>
   );
 }
@@ -109,9 +115,19 @@ export const page_styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     backgroundColor: '#00a0db',
+    alignItems: "center",
+  },
+  page_scrollview: {
+    width: "100%",
+    zIndex: -10,
+  },
+  page_cc_scrollview: {
+    alignItems: 'center',
+    zIndex: -10,
   },
   app_scrollview: {
     alignItems: 'center',
+    maxWidth: 1200,
     zIndex: -10,
   }
 });
