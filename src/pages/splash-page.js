@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     margin: "20px",
   },
   cta_button_text: {
-    color: "#00a0db",
+    color: "white",
     fontSize: "22px",
   },
   title_text: {

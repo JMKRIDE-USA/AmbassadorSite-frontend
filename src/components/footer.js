@@ -31,7 +31,6 @@ export function Footer() {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    marginTop: "50px",
     backgroundColor: "#080808",
     minHeight: "100px",
     alignItems: "center",

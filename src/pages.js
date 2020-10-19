@@ -97,8 +97,8 @@ function makeAppScreen(component, ...args) {
         contentContainerStyle={page_styles.page_cc_scrollview}
       >
         { component(...args) }
-        <Footer/>
       </ScrollView>
+      <Footer/>
     </View>
   );
 }
@@ -125,17 +125,22 @@ export function genAppStack(stack, auth_state){
 export const page_styles = StyleSheet.create({
   app_container: {
     flex: 1,
-    flexDirection: "column",
     backgroundColor: '#00a0db',
-    alignItems: "center",
   },
   page_scrollview: {
-    width: "100%",
     zIndex: -10,
   },
+  scrollview_main: {
+    alignItems: "center",
+  },
+  scrollview_footer :{
+    justifyContent: "flex-end",
+  },
   page_cc_scrollview: {
-    alignItems: 'center',
-    zIndex: -10,
+    flexDirection: "column",
+    justifyContent: "center", 
+    alignItems: "center", 
+    minHeight: "100%",
   },
   app_scrollview: {
     alignItems: 'center',
