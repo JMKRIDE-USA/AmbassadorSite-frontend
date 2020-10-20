@@ -31,8 +31,7 @@ export function CreateAccountForm({
     <View style={styles.formview}>
       <Formik
         initialValues={{
-          firstname: '',
-          lastname: '',
+          fullname: '',
           email: '',
           password: '',
           password_copy: '',

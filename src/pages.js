@@ -8,7 +8,7 @@ import { Footer } from './components/footer.js';
 import { SplashPage } from './pages/splash-page.js';
 import { SignUp } from './pages/sign-up.js';
 import { SignIn } from './pages/sign-in.js';
-import { ChallengeBoard } from './pages/challenge-board.js';
+import ChallengeBoard from './pages/challenge-board.js';
 
 
 export const welcome_pages = [
@@ -88,7 +88,7 @@ export const page_linking = {
   },
 }
 
-function makeAppScreen(component, ...args) {
+function makeAppScreen(component) {
   return (() =>
     <View style={page_styles.app_container}>
       <Header/>
@@ -96,18 +96,26 @@ function makeAppScreen(component, ...args) {
         style={page_styles.page_scrollview}
         contentContainerStyle={page_styles.page_cc_scrollview}
       >
-        { component(...args) }
+        { component() }
       </ScrollView>
       <Footer/>
     </View>
   );
 }
 
+function componentMaker(component) {
+  return (() => {
+    <View>
+      {component.apply(null, arguments))}
+    </View>
+  });
+}
+
 
 export function genAppStack(stack, auth_state){
   return(
     <stack.Navigator headerMode={"none"}>
-      { 
+      { /*
         AUTH_STATE_TO_PAGES[auth_state].map(
           (page, i) => (
             <stack.Screen
@@ -117,7 +125,8 @@ export function genAppStack(stack, auth_state){
             />
           )
         )
-      }
+      */}
+      <stack.Screen name={"Challenge Board"} component={testApp(ChallengeBoard)}/>
     </stack.Navigator>
   )
 }

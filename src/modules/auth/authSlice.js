@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { AUTH_STATE } from './constants.js';
 
-export const authSlice = createSlice({
+const authSlice = createSlice({
   name: 'auth',
   initialState: {
     auth_state: AUTH_STATE.NONE,

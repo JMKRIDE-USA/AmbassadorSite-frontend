@@ -51,7 +51,7 @@ export const desktop_styles = StyleSheet.create({
   logo: {
     flex: 1,
     maxWidth: "300px",
-    height: "120px",
+    height: "80px",
     resizeMode: 'center',
   },
   ...common_styles,

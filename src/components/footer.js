@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     backgroundColor: "#080808",
-    minHeight: "100px",
+    minHeight: "70px",
     alignItems: "center",
     justifyContent: "stretch",
   },
