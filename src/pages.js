@@ -44,7 +44,7 @@ const all_pages = welcome_pages.concat(user_pages).concat(admin_pages);
 
 export const AUTH_STATE_TO_PAGES = {
   "none": welcome_pages,
-  "user": user_pages,
+  "user": welcome_pages,
   "admin": admin_pages,
 }
 
@@ -88,7 +88,7 @@ export const page_linking = {
   },
 }
 
-function makeAppScreen(component) {
+function makeAppScreen(Component) {
   return (() =>
     <View style={page_styles.app_container}>
       <Header/>
@@ -96,26 +96,17 @@ function makeAppScreen(component) {
         style={page_styles.page_scrollview}
         contentContainerStyle={page_styles.page_cc_scrollview}
       >
-        { component() }
+        <Component/>
       </ScrollView>
       <Footer/>
     </View>
   );
 }
 
-function componentMaker(component) {
-  return (() => {
-    <View>
-      {component.apply(null, arguments))}
-    </View>
-  });
-}
-
-
 export function genAppStack(stack, auth_state){
   return(
     <stack.Navigator headerMode={"none"}>
-      { /*
+      {
         AUTH_STATE_TO_PAGES[auth_state].map(
           (page, i) => (
             <stack.Screen
@@ -125,8 +116,7 @@ export function genAppStack(stack, auth_state){
             />
           )
         )
-      */}
-      <stack.Screen name={"Challenge Board"} component={testApp(ChallengeBoard)}/>
+      }
     </stack.Navigator>
   )
 }
