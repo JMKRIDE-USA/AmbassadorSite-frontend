@@ -2,12 +2,21 @@ import React from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { connect } from 'react-redux';
 
 import { page_styles } from '../pages.js';
 import { CreateAccountForm } from '../components/createAccountForm.js';
+import { getDateAfter } from '../modules/date.js';
+import {
+  setUserId,
+  setAuthTokens,
+  setAuthPermissions
+} from '../modules/auth/authSlice.js';
 
 
-export function SignUp() {
+const mapDispatchToProps = { setUserId, setAuthTokens, setAuthPermissions }
+
+function SignUp() {
   let navigation = useNavigation();
   return (
     <View style={page_styles.app_scrollview}>
@@ -31,6 +40,7 @@ export function SignUp() {
     </View>
   );
 }
+export default connect(null, mapDispatchToProps)(SignUp)
 
 const styles = StyleSheet.create({
   page: {

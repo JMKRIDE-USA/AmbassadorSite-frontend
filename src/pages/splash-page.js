@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import { page_styles, getApplyPage } from '../pages.js';
-import { selectAuthState } from '../modules/auth/authSlice.js';
+import { selectAuthPermissions } from '../modules/auth/authSlice.js';
 
 
 
@@ -16,8 +16,8 @@ export function SplashPage() {
   });
 
   let navigation = useNavigation();
-  let auth_state = useSelector(selectAuthState);
-  let apply_page = getApplyPage(auth_state);
+  let auth_permissions = useSelector(selectAuthPermissions);
+  let apply_page = getApplyPage(auth_permissions);
 
   function redirect_to_apply_page() {
     navigation.reset({index: 0, routes: [{name: apply_page}]})

@@ -9,16 +9,16 @@ import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import store from './redux/store.js';
-import { setAuthState, selectAuthState } from './modules/auth/authSlice.js';
+import { setAuthState, selectAuthPermissions } from './modules/auth/authSlice.js';
 import { page_linking, genAppStack } from './pages.js';
 import { Header } from './components/header.js';
 
 function AppPages() {
   const AppStack = createStackNavigator();
-  let auth_state = useSelector(selectAuthState);
+  let auth_permissions = useSelector(selectAuthPermissions);
   return (
     <NavigationContainer linking={page_linking}>
-        { genAppStack(AppStack, auth_state) }
+        { genAppStack(AppStack, auth_permissions) }
         <StatusBar style="auto" />
     </NavigationContainer>
   );

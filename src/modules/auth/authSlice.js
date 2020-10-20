@@ -5,20 +5,36 @@ import { AUTH_STATE } from './constants.js';
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    auth_state: AUTH_STATE.NONE,
+    auth_permissions: AUTH_STATE.NONE,
+    user_id: undefined,
+    access_token: undefined,
+    refresh_token: undefined,
+    expires_at: undefined,
   },
   reducers: {
-    setAuthState: (state, action) => {
-      state.auth_state = action.payload;
+    setUserId: (state, action) => {
+      state.user_id = action.payload;
     },
-    resetAuthState: state => {
-      state.auth_state = AUTH_STATE.NONE
+    setAuthTokens: (state, action) => {
+      state.access_token = action.payload.access_token;
+      state.refresh_token = action.payload.refresh_token;
+      state.expires_at = action.payload.expires_at;
+    },
+    setAuthPermissions: (state, action) => {
+      state.auth_permissions = action.payload;
+    },
+    resetAuth: state => {
+      state.auth_permissions = AUTH_STATE.NONE;
+      state.user_id = undefined;
+      state.access_token = undefined;
+      state.refresh_token = undefined;
+      state.expires_at = undefined;
     },
   }
 })
 
-export const { setAuthState, resetAuthState } = authSlice.actions;
+export const { setUserId, setAuthTokens, setAuthPermissions, resetAuth} = authSlice.actions;
 
-export const selectAuthState = state => state.auth.auth_state;
+export const selectAuthPermissions = state => state.auth.auth_permissions;
 
 export default authSlice.reducer;

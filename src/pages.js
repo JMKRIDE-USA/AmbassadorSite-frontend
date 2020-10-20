@@ -6,7 +6,7 @@ import { Header } from './components/header.js';
 import { Footer } from './components/footer.js';
 
 import { SplashPage } from './pages/splash-page.js';
-import { SignUp } from './pages/sign-up.js';
+import SignUp from './pages/sign-up.js';
 import { SignIn } from './pages/sign-in.js';
 import ChallengeBoard from './pages/challenge-board.js';
 
@@ -42,20 +42,20 @@ export const user_pages = [];
 export const admin_pages = [];
 const all_pages = welcome_pages.concat(user_pages).concat(admin_pages);
 
-export const AUTH_STATE_TO_PAGES = {
+export const AUTH_PERMISSIONS_TO_PAGES = {
   "none": welcome_pages,
   "user": welcome_pages,
   "admin": admin_pages,
 }
 
-export function getHeaderButtons(auth_state){
-  let pages = AUTH_STATE_TO_PAGES[auth_state];
+export function getHeaderButtons(auth_permissions){
+  let pages = AUTH_PERMISSIONS_TO_PAGES[auth_permissions];
   let header_buttons = []
   return pages.filter(page => page.in_header).map(page => page.title);
 }
 
-export function getProfilePage(auth_state){
-  let pages = AUTH_STATE_TO_PAGES[auth_state];
+export function getProfilePage(auth_permissions){
+  let pages = AUTH_PERMISSIONS_TO_PAGES[auth_permissions];
   let profile_page;
   pages.forEach(page => {
     if(page.profile_page){
@@ -65,8 +65,8 @@ export function getProfilePage(auth_state){
   return profile_page.title;
 }
 
-export function getApplyPage(auth_state){
-  let pages = AUTH_STATE_TO_PAGES[auth_state];
+export function getApplyPage(auth_permissions){
+  let pages = AUTH_PERMISSIONS_TO_PAGES[auth_permissions];
   let apply_page;
   pages.forEach(page => {
     if(page.apply_page){
@@ -103,11 +103,11 @@ function makeAppScreen(Component) {
   );
 }
 
-export function genAppStack(stack, auth_state){
+export function genAppStack(stack, auth_permissions){
   return(
     <stack.Navigator headerMode={"none"}>
       {
-        AUTH_STATE_TO_PAGES[auth_state].map(
+        AUTH_PERMISSIONS_TO_PAGES[auth_permissions].map(
           (page, i) => (
             <stack.Screen
               name={page.title}

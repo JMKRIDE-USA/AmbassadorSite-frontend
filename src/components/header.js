@@ -11,7 +11,7 @@ import { useMediaQuery } from 'react-responsive';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
-import { selectAuthState } from '../modules/auth/authSlice.js';
+import { selectAuthPermissions } from '../modules/auth/authSlice.js';
 import jmk_bigheaderlogo from '../assets/JMKHeaderLogoTemp.png';
 import jmk_smallheaderlogo from '../assets/JMKHeaderLogoTempMobile.png';
 import { getHeaderButtons, getProfilePage } from '../pages.js';
@@ -24,7 +24,7 @@ import {
 
 function HeaderButtons({style}){
   let navigation = useNavigation();
-  let auth_state = useSelector(selectAuthState);
+  let auth_permissions = useSelector(selectAuthPermissions);
   function redirect_to(location){
     return (() => {
       navigation.reset({index: 0, routes: [{name: location}]});
@@ -32,7 +32,7 @@ function HeaderButtons({style}){
   }
   return(
     <View style={style.view}>
-      { getHeaderButtons(auth_state).map(
+      { getHeaderButtons(auth_permissions).map(
         (page_title, index) => (
           <TouchableOpacity
             style={style.button}
@@ -59,11 +59,11 @@ function MobileHeaderMenuToggle({toggle_menu, style}){
 
 function ProfileButton({style}) {
   let navigation = useNavigation();
-  let auth_state = useSelector(selectAuthState);
+  let auth_permissions = useSelector(selectAuthPermissions);
   return ( 
     <TouchableOpacity
       onPress={() => navigation.reset(
-        {index: 0, routes: [{name: getProfilePage(auth_state)}]}
+        {index: 0, routes: [{name: getProfilePage(auth_permissions)}]}
       )}
       style={style.profile_button}
     >
