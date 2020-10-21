@@ -38,13 +38,27 @@ export const welcome_pages = [
     in_header: true,
   },
 ];
-export const user_pages = [];
+export const user_pages = [
+  {
+    title: "Home",
+    component: SplashPage,
+    url: "/",
+    in_header: true,
+    apply_page: true,
+  },
+  {
+    title: "Challenge Board",
+    component: ChallengeBoard,
+    url: "challenge-board",
+    in_header: true,
+  },
+];
 export const admin_pages = [];
 const all_pages = welcome_pages.concat(user_pages).concat(admin_pages);
 
 export const AUTH_PERMISSIONS_TO_PAGES = {
   "none": welcome_pages,
-  "user": welcome_pages,
+  "user": user_pages,
   "admin": admin_pages,
 }
 

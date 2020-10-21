@@ -14,7 +14,7 @@ export default connect(null, mapDispatchToProps)(({ resetAuth }) => {
     <View style={page_styles.app_scrollview}>
       <Text>Challenge Board</Text>
       <TouchableOpacity onPress={() => resetAuth()}>
-        <Text> Button </Text>
+        <Text> Reset Auth </Text>
       </TouchableOpacity>
     </View>
   );

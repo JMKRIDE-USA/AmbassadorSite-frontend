@@ -36,5 +36,10 @@ const authSlice = createSlice({
 export const { setUserId, setAuthTokens, setAuthPermissions, resetAuth} = authSlice.actions;
 
 export const selectAuthPermissions = state => state.auth.auth_permissions;
+export const selectUserId = state => state.auth.user_id;
+
+export const selectAuthHeader = state => {
+  return {"Authorization": "Bearer " + state.auth.access_token}
+}
 
 export default authSlice.reducer;

@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux';
+import { useMutation, queryCache } from 'react-query';
 
 import { page_styles } from '../pages.js';
 import { CreateAccountForm } from '../components/createAccountForm.js';
@@ -12,12 +13,64 @@ import {
   setAuthTokens,
   setAuthPermissions
 } from '../modules/auth/authSlice.js';
+import { useCreateAccount, useLogin, usePopulateAuth } from '../modules/auth/login.js';
 
 
 const mapDispatchToProps = { setUserId, setAuthTokens, setAuthPermissions }
 
 function SignUp() {
   let navigation = useNavigation();
+
+  const createAccount = useCreateAccount();
+  const loginUser = useLogin();
+  const populateAuth = usePopulateAuth();
+
+  async function submitSignUp(
+    { fullname, email, password, password_copy },
+    { setSubmitting },
+  ){
+
+    if ( password !== password_copy ) {
+      console.log("Sign up failed. Passwords do not match.");
+      setSubmitting(false);
+      return;
+    }
+    let index = fullname.indexOf(' ');
+    const firstName = fullname.substr(0, index), lastName = fullname.substr(index+1)
+
+    let success = await createAccount({
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password,
+    })
+    console.log("Create Account:", success ? "Success." : "Failure.");
+    if (! success ){
+      setSubmitting(false);
+      return;
+    }
+    success = await loginUser({
+      email: email,
+      password: password,
+    });
+    console.log("Log in:", success ? "Success." : "Failure.");
+    if (! success ){
+      setSubmitting(false);
+      return;
+    }
+
+    success = populateAuth();
+    console.log("Populate:", success ? "Success." : "Failure.");
+    if (! success ){
+      setSubmitting(false);
+      return;
+    }
+    if (success) {
+      () => navigation.reset({index: 0, routes: [{name: "Home"}]})
+    }
+    setSubmitting(false);
+
+  }
   return (
     <View style={page_styles.app_scrollview}>
       <View style={styles.page}>
@@ -28,7 +81,7 @@ function SignUp() {
           An account is required to create an 
           ambassador application and view its status.
         </Text>
-        <CreateAccountForm styles={styles}/>
+        <CreateAccountForm styles={styles} submitCreateAccount={submitSignUp}/>
         <TouchableOpacity onPress={
           () => navigation.reset({index: 0, routes: [{name: "Sign In"}]})
         }>
