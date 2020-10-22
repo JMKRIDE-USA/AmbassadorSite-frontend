@@ -34,6 +34,10 @@ const common_styles = {
     maxHeight: 50,
     minHeight: 20,
   },
+  profile_name_text: {
+    color: "#00a0db",
+    fontSize: 14,
+  }
 };
 
 export const desktop_styles = StyleSheet.create({

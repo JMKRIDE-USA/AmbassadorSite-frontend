@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import { selectAuthPermissions } from '../modules/auth/authSlice.js';
+import { selectUserName } from '../modules/users/userSlice.js';
 import jmk_bigheaderlogo from '../assets/JMKHeaderLogoTemp.png';
 import jmk_smallheaderlogo from '../assets/JMKHeaderLogoTempMobile.png';
 import { getHeaderButtons, getProfilePage } from '../pages.js';
@@ -60,6 +61,8 @@ function MobileHeaderMenuToggle({toggle_menu, style}){
 function ProfileButton({style}) {
   let navigation = useNavigation();
   let auth_permissions = useSelector(selectAuthPermissions);
+  let user_name = useSelector(selectUserName);
+
   return ( 
     <TouchableOpacity
       onPress={() => navigation.reset(
@@ -68,6 +71,9 @@ function ProfileButton({style}) {
       style={style.profile_button}
     >
       <MaterialIcons name="account-circle" size={30} color="#00a0db"/>
+      <Text style={style.profile_name_text}>
+        { user_name.length ? user_name[0] : null }
+      </Text>
     </TouchableOpacity>
   );
 }
