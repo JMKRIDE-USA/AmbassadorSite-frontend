@@ -8,10 +8,14 @@ import {
   setUserId,
   setAuthTokens,
   setAuthPermissions,
+  resetAuth,
   selectUserId,
   selectAuthHeader,
+  selectAuthExpiration,
+  selectRefreshToken,
 } from './authSlice.js'
-import { getDateAfter } from '../date.js';
+import { setUserName } from '../users/userSlice.js';
+import { getDateAfter, hasExpired, needsRefresh } from '../date.js';
 
 export function useCreateAccount(){
 
@@ -97,6 +101,7 @@ export function useLogin(){
 export function usePopulateAuth(){
   const userId = useSelector(selectUserId);
   const header = useSelector(selectAuthHeader);
+  const dispatch = useDispatch();
 
   const {
     data,
@@ -112,7 +117,6 @@ export function usePopulateAuth(){
       }).then(res => res.json()),
     { enabled: false },
   );
-  const dispatch = useDispatch();
 
   return async () => {
     let result;
@@ -122,6 +126,7 @@ export function usePopulateAuth(){
       console.log("[!] Error populating user:", error);
       return false;
     }
+    console.log("Populate result:", result)
     if (error) {
       console.log("[!] Error populating user:", error);
       return false;
@@ -130,8 +135,9 @@ export function usePopulateAuth(){
       console.log("[!] Error populating user:", error);
       return false;
     }
-    if (result) {
+    if (result && result.permissionLevel && result.firstName && result.lastName) {
       dispatch(setAuthPermissions(result.permissionLevel));
+      dispatch(setUserName({firstname: result.firstName, lastname: result.lastName}));
       return true;
     }
 
@@ -140,3 +146,67 @@ export function usePopulateAuth(){
   }
 };
 
+export function useRefreshAuth() {
+  const userId = useSelector(selectUserId);
+  const header = useSelector(selectAuthHeader);
+  const refresh_token = useSelector(selectRefreshToken);
+  const dispatch = useDispatch()
+
+  const [refresh, { error }] = useMutation(({to_submit}) => fetch(
+    config.backend_url + "auth/refresh",
+    {
+      method: "POST",
+      headers: {...header, "Content-Type": "application/json"},
+      body: JSON.stringify(to_submit),
+    }).then(res => res.json()),
+  );
+  return async () => {
+    let to_submit = {refresh_token: refresh_token}
+    let result;
+    try {
+      result = await refresh({to_submit});
+    } catch (error) {
+      console.log("[!] Error refreshing authentication:", error);
+      return false;
+    }
+    if (error){
+      console.log("[!] Error refreshing authentication:", error);
+      return false;
+    }
+    if (result && result.error) {
+      console.log("[!] Error refreshing authentication:", result.error);
+      return false;
+    }
+    console.log("Result:", result);
+    if (result && result.accessToken && result.refreshToken && result.expiresIn) {
+      dispatch(setAuthTokens({
+        access_token: result.accessToken,
+        refresh_token: result.refreshToken,
+        expires_at: getDateAfter(result.expiresIn),
+      }));
+    }
+    return true;
+  }
+}
+
+export function useSetupAuth(){
+  const userId = useSelector(selectUserId);
+  const expirationDate = useSelector(selectAuthExpiration);
+  const dispatch = useDispatch();
+  const populateAuth = usePopulateAuth();
+  const refreshAuth = useRefreshAuth();
+
+  return async () => {
+    if (userId && !hasExpired(expirationDate)) {
+      if (needsRefresh(expirationDate)) {
+        console.log("needs refresh");
+        refreshAuth();
+      }
+      console.log("populating");
+      populateAuth();
+    } else {
+      console.log("resetting");
+      dispatch(resetAuth());
+    }
+  };
+};

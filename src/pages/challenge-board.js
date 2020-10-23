@@ -5,15 +5,20 @@ import { connect } from 'react-redux';
 
 import { page_styles } from '../pages.js';
 import { resetAuth } from '../modules/auth/authSlice.js';
+import { logoutUser } from '../modules/users/userSlice.js';
 
-const mapDispatchToProps = { resetAuth };
+const mapDispatchToProps = { resetAuth, logoutUser };
 
 
-export default connect(null, mapDispatchToProps)(({ resetAuth }) => {
+export default connect(null, mapDispatchToProps)(({ resetAuth, logoutUser }) => {
+  function logout() {
+    resetAuth()
+    logoutUser()
+  }
   return (
     <View style={page_styles.app_scrollview}>
       <Text>Challenge Board</Text>
-      <TouchableOpacity onPress={() => resetAuth()}>
+      <TouchableOpacity onPress={() => logout()}>
         <Text> Reset Auth </Text>
       </TouchableOpacity>
     </View>

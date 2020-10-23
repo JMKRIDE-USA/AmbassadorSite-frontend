@@ -7,14 +7,18 @@ const userSlice = createSlice({
     lastname: undefined,
   },
   reducers: {
-    setName: (state, action) => {
+    setUserName: (state, action) => {
       state.firstname = action.payload.firstname;
       state.lastname = action.payload.lastname;
     },
-  }
+    logoutUser: state => {
+      state.firstname = undefined;
+      state.lastname = undefined;
+    },
+  },
 });
 
-export const { setName } = userSlice.actions;
+export const { setUserName, logoutUser } = userSlice.actions;
 
 export const selectUserName = state => [state.user.firstname, state.user.lastname];
 

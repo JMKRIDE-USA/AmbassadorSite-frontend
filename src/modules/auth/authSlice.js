@@ -37,6 +37,8 @@ export const { setUserId, setAuthTokens, setAuthPermissions, resetAuth} = authSl
 
 export const selectAuthPermissions = state => state.auth.auth_permissions;
 export const selectUserId = state => state.auth.user_id;
+export const selectAuthExpiration = state => state.auth.expires_at;
+export const selectRefreshToken = state => state.auth.refresh_token;
 
 export const selectAuthHeader = state => {
   return {"Authorization": "Bearer " + state.auth.access_token}

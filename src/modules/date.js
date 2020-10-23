@@ -18,3 +18,13 @@ export function getDateAfter(timedelta){
     }
   }
 }
+
+export function hasExpired(date){
+  return (Date.now() <= date);
+}
+
+// true within 24 hours of auth expiration
+export function needsRefresh(date){
+  return (Date.now() - date) <= 24 * 60 * 60
+}
+

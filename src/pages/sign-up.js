@@ -18,7 +18,7 @@ import { useCreateAccount, useLogin, usePopulateAuth } from '../modules/auth/log
 
 const mapDispatchToProps = { setUserId, setAuthTokens, setAuthPermissions }
 
-function SignUp() {
+const SignUp = connect()(() => {
   let navigation = useNavigation();
 
   const createAccount = useCreateAccount();
@@ -92,7 +92,7 @@ function SignUp() {
       </View>
     </View>
   );
-}
+});
 export default connect(null, mapDispatchToProps)(SignUp)
 
 const styles = StyleSheet.create({
