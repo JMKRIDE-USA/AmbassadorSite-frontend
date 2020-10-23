@@ -22,8 +22,6 @@ const SignUp = connect()(() => {
   let navigation = useNavigation();
 
   const createAccount = useCreateAccount();
-  const loginUser = useLogin();
-  const populateAuth = usePopulateAuth();
 
   async function submitSignUp(
     { fullname, email, password, password_copy },
@@ -45,31 +43,11 @@ const SignUp = connect()(() => {
       password: password,
     })
     console.log("Create Account:", success ? "Success." : "Failure.");
-    if (! success ){
-      setSubmitting(false);
-      return;
-    }
-    success = await loginUser({
-      email: email,
-      password: password,
-    });
-    console.log("Log in:", success ? "Success." : "Failure.");
-    if (! success ){
-      setSubmitting(false);
-      return;
-    }
-
-    success = populateAuth();
-    console.log("Populate:", success ? "Success." : "Failure.");
-    if (! success ){
-      setSubmitting(false);
-      return;
-    }
     if (success) {
       () => navigation.reset({index: 0, routes: [{name: "Home"}]})
     }
     setSubmitting(false);
-
+    return;
   }
   return (
     <View style={page_styles.app_scrollview}>

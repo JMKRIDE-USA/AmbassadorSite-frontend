@@ -19,6 +19,9 @@ import { getDateAfter, hasExpired, needsRefresh } from '../date.js';
 
 export function useCreateAccount(){
 
+  let dispatch = useDispatch();
+  let login = useLogin();
+
   const [createAccount, { error }] = useMutation(({to_submit}) => fetch(
     config.backend_url + "users",
     {
@@ -32,7 +35,6 @@ export function useCreateAccount(){
       }
     },
   );
-  let dispatch = useDispatch();
 
   return async (to_submit) => {
     let result;
@@ -52,6 +54,7 @@ export function useCreateAccount(){
     }
     if (result && result.id) {
       dispatch(setUserId(result.id));
+      return login({email: to_submit.email, password: to_submit.password, userId: result.id});
     }
     return true;
   }
@@ -59,6 +62,8 @@ export function useCreateAccount(){
 
 
 export function useLogin(){
+  let dispatch = useDispatch();
+
   const [login, { error }] = useMutation(({to_submit}) => fetch(
     config.backend_url + "auth",
     {
@@ -68,8 +73,8 @@ export function useLogin(){
     }).then(res => res.json()),
   );
 
-  let dispatch = useDispatch();
-  return async (to_submit) => {
+  return async ({email, password}) => {
+    let to_submit = {email: email, passowrd: password};
     console.log("Submitting:", to_submit);
     let result;
     try {
@@ -93,14 +98,15 @@ export function useLogin(){
         refresh_token: result.refreshToken,
         expires_at: getDateAfter(result.expiresIn),
       }));
+      return true;
     }
-    return true;
+    console.log("[!] Error logging in:", "[unknown]");
+    return false
   };
 };
 
 export function usePopulateAuth(){
   const userId = useSelector(selectUserId);
-  const header = useSelector(selectAuthHeader);
   const dispatch = useDispatch();
 
   const {
