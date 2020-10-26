@@ -4,13 +4,13 @@ import '@expo/match-media';
 import { registerRootComponent } from 'expo';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Provider, useSelector, connect } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import store from './redux/store.js';
 import {
-  setAuthState,
+  fetchAuthRequest,
   selectAuthPermissions,
   selectAuthExpiration 
 } from './modules/auth/authSlice.js';
@@ -18,33 +18,32 @@ import { page_linking, genAppStack } from './pages.js';
 import { Header } from './components/header.js';
 import { usePopulateAuth } from './modules/auth/login.js';
 
-const AuthWrapper = connect(selectAuthPermissions, selectAuthExpiration)(({auth_permissions, expires_at}) => {
-  let populateAuth;
-  let expires_in = selectAuthExpiration();
-  useEffect(() => {
-    populateAuth = usePopulateAuth();
-  }, [expires_in]);
-
+function AuthWrapper(){
   return (
-    <AppPages populateAuth={populateAuth}/>
+    <AppPages/>
   );
-});
+};
 
-function AppPages({populateAuth}) {
-  useEffect(() => populateAuth(), []);
+function AppPages() {
   const AppStack = createStackNavigator();
+  const authPermissions = useSelector(selectAuthPermissions);
   return (
     <NavigationContainer linking={page_linking}>
-        { genAppStack(AppStack, auth_permissions) }
+        { genAppStack(AppStack, authPermissions) }
         <StatusBar style="auto" />
     </NavigationContainer>
   );
 }
 
 function PersistedApp({persistor}) {
+  const dispatch = useDispatch()
   return (
-    <PersistGate loading={null} persistor={persistor}>
-      <AuthWrapper/>
+    <PersistGate
+      onBeforeLift={() => dispatch(fetchAuthRequest())}
+      loading={null}
+      persistor={persistor}
+    >
+      <AppPages/>
     </PersistGate>
   );
 }

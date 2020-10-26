@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -18,10 +18,17 @@ import { useCreateAccount, useLogin, usePopulateAuth } from '../modules/auth/log
 
 const mapDispatchToProps = { setUserId, setAuthTokens, setAuthPermissions }
 
-const SignUp = connect()(() => {
+export default function SignUp(){
   let navigation = useNavigation();
 
   const createAccount = useCreateAccount();
+  let haveLoggedIn = false;
+
+  useEffect(() => {
+    if( haveLoggedIn ) {
+      navigation.reset({index: 0, routes: [{name: "Home"}]})
+    }
+  }, [haveLoggedIn]);
 
   async function submitSignUp(
     { fullname, email, password, password_copy },
@@ -43,9 +50,7 @@ const SignUp = connect()(() => {
       password: password,
     })
     console.log("Create Account:", success ? "Success." : "Failure.");
-    if (success) {
-      () => navigation.reset({index: 0, routes: [{name: "Home"}]})
-    }
+    haveLoggedIn = success;
     setSubmitting(false);
     return;
   }
@@ -70,8 +75,7 @@ const SignUp = connect()(() => {
       </View>
     </View>
   );
-});
-export default connect(null, mapDispatchToProps)(SignUp)
+};
 
 const styles = StyleSheet.create({
   page: {

@@ -12,6 +12,8 @@ import {
 
 import authReducer from '../modules/auth/authSlice.js';
 import userReducer from '../modules/users/userSlice.js';
+import asyncListenerMiddleware from './asyncListenerMiddleware.js';
+import authALM from './authALM.js';
 
 const persistConfig = {key: 'root', storage: AsyncStorage, whitelist: ['auth']}; 
 const rootReducer = combineReducers({auth: authReducer, user: userReducer});
@@ -22,5 +24,5 @@ export default configureStore({
     serializableCheck: {
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
     }
-  })
+  }).concat(asyncListenerMiddleware(authALM))
 });

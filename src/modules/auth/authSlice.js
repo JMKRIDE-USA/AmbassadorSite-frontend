@@ -30,10 +30,19 @@ const authSlice = createSlice({
       state.refresh_token = undefined;
       state.expires_at = undefined;
     },
+    fetchAuthRequest: state => state,
+    fetchAuthFailure: state => state,
   }
 })
 
-export const { setUserId, setAuthTokens, setAuthPermissions, resetAuth} = authSlice.actions;
+export const {
+  setUserId,
+  setAuthTokens,
+  setAuthPermissions,
+  resetAuth,
+  fetchAuthRequest,
+  fetchAuthFailure,
+} = authSlice.actions;
 
 export const selectAuthPermissions = state => state.auth.auth_permissions;
 export const selectUserId = state => state.auth.user_id;

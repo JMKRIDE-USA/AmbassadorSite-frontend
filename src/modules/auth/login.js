@@ -54,7 +54,7 @@ export function useCreateAccount(){
     }
     if (result && result.id) {
       dispatch(setUserId(result.id));
-      return login({email: to_submit.email, password: to_submit.password, userId: result.id});
+      return login({email: to_submit.email, password: to_submit.password});
     }
     return true;
   }
@@ -74,7 +74,7 @@ export function useLogin(){
   );
 
   return async ({email, password}) => {
-    let to_submit = {email: email, passowrd: password};
+    let to_submit = {email: email, password: password};
     console.log("Submitting:", to_submit);
     let result;
     try {
