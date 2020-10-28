@@ -2,33 +2,29 @@ import React, { useEffect } from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { connect } from 'react-redux';
-import { useMutation, queryCache } from 'react-query';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { page_styles } from '../pages.js';
 import { CreateAccountForm } from '../components/createAccountForm.js';
-import { getDateAfter } from '../modules/date.js';
 import {
-  setUserId,
-  setAuthTokens,
-  setAuthPermissions
+  selectUserId,
+  fetchAuthRequest,
 } from '../modules/auth/authSlice.js';
-import { useCreateAccount, useLogin, usePopulateAuth } from '../modules/auth/login.js';
+import { useCreateAccount } from '../modules/auth/login.js';
 
-
-const mapDispatchToProps = { setUserId, setAuthTokens, setAuthPermissions }
 
 export default function SignUp(){
   let navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const createAccount = useCreateAccount();
-  let haveLoggedIn = false;
+  let userId = useSelector(selectUserId)
 
   useEffect(() => {
-    if( haveLoggedIn ) {
+    if (userId) {
       navigation.reset({index: 0, routes: [{name: "Home"}]})
     }
-  }, [haveLoggedIn]);
+  }, [userId]);
 
   async function submitSignUp(
     { fullname, email, password, password_copy },
@@ -50,7 +46,6 @@ export default function SignUp(){
       password: password,
     })
     console.log("Create Account:", success ? "Success." : "Failure.");
-    haveLoggedIn = success;
     setSubmitting(false);
     return;
   }
@@ -75,7 +70,7 @@ export default function SignUp(){
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   page: {

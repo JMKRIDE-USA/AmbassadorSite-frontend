@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import '@expo/match-media';
 import { registerRootComponent } from 'expo';
@@ -12,17 +12,8 @@ import store from './redux/store.js';
 import {
   fetchAuthRequest,
   selectAuthPermissions,
-  selectAuthExpiration 
 } from './modules/auth/authSlice.js';
 import { page_linking, genAppStack } from './pages.js';
-import { Header } from './components/header.js';
-import { usePopulateAuth } from './modules/auth/login.js';
-
-function AuthWrapper(){
-  return (
-    <AppPages/>
-  );
-};
 
 function AppPages() {
   const AppStack = createStackNavigator();

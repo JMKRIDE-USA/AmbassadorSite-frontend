@@ -9,6 +9,7 @@ import { SplashPage } from './pages/splash-page.js';
 import SignUp from './pages/sign-up.js';
 import { SignIn } from './pages/sign-in.js';
 import ChallengeBoard from './pages/challenge-board.js';
+import { Profile } from './pages/profile.js';
 
 
 export const welcome_pages = [
@@ -52,6 +53,13 @@ export const user_pages = [
     url: "challenge-board",
     in_header: true,
   },
+  {
+    title: "Profile",
+    component: Profile,
+    url: "profile",
+    in_header: false,
+    profile_page: true,
+  },
 ];
 export const admin_pages = [];
 const all_pages = welcome_pages.concat(user_pages).concat(admin_pages);
@@ -64,7 +72,6 @@ export const AUTH_PERMISSIONS_TO_PAGES = {
 
 export function getHeaderButtons(auth_permissions){
   let pages = AUTH_PERMISSIONS_TO_PAGES[auth_permissions];
-  let header_buttons = []
   return pages.filter(page => page.in_header).map(page => page.title);
 }
 
@@ -85,7 +92,7 @@ export function getApplyPage(auth_permissions){
   pages.forEach(page => {
     if(page.apply_page){
       apply_page = page;
-    };
+    }
   });
   return apply_page.title;
 }

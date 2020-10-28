@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import { page_styles, getApplyPage } from '../pages.js';
+import card_styles from './cardStyle.js';
 import { selectAuthPermissions } from '../modules/auth/authSlice.js';
 
 
@@ -122,78 +123,48 @@ export function SplashPage() {
 }
 
 const styles = StyleSheet.create({
-  page: {
-    paddingTop: "30px",
-    textAlign: "center",
-  },
-  page_card: {
-    marginTop: "30px",
-    margin: "10px",
-    maxWidth: "800px",
-    backgroundColor: "#080808",
-    borderColor: "white",
-    borderWidth: "2px",
-  },
-  card_text: {
-    padding: "20px",
-    fontWeight: "light",
-    textAlign: "left",
-    color: "white",
-  },
-	jmk_text: {
-		fontFamily: 'JMKRIDE',
-		fontSize: "50px",
-    marginTop: "5px",
-    marginBottom: "15px",
-	},
-  dotted_line: {
-    borderStyle: "dotted",
-    borderBottomWidth: "3px",
-    borderColor: "white",
-    paddingBottom: "30px",
-    marginBottom: "10px",
-    marginRight: "30px",
-    marginLeft: "30px",
-  },
-  call_to_action: {
-    marginTop: "50px",
-    alignItems: "center",
-  },
-  cta_row: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  cta_button: {
-    width: "100px",
-    height: "50px",
-    backgroundColor: "#080808",
-    borderWidth: "2px",
-    borderColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-    margin: "20px",
-  },
-  cta_button_text: {
-    color: "white",
-    fontSize: "22px",
-  },
-  title_text: {
-    fontFamily: "Sans-Serif",
-    fontSize: "30px",
-    fontWeight: "bold",
-  },
-  sub_title_text: {
-    fontFamily: "Sans-Serif",
-    fontSize: "28px",
-    fontWeight: "bold",
-  },
-  title_text_alt: {
-    fontWeight: "light",
-    fontSize: "30px",
-    color: "white",
-  },
-  body_text: {
-    fontFamily: "Sans-Serif",
-    fontSize: "18px",
+  ...card_styles,
+  ...{
+    page: {
+      paddingTop: "30px",
+      textAlign: "center",
+    },
+    jmk_text: {
+      fontFamily: 'JMKRIDE',
+      fontSize: "50px",
+      marginTop: "5px",
+      marginBottom: "15px",
+    },
+    dotted_line: {
+      borderStyle: "dotted",
+      borderBottomWidth: "3px",
+      borderColor: "white",
+      paddingBottom: "30px",
+      marginBottom: "10px",
+      marginRight: "30px",
+      marginLeft: "30px",
+    },
+    call_to_action: {
+      marginTop: "50px",
+      alignItems: "center",
+    },
+    cta_row: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    cta_button: {
+      width: "100px",
+      height: "50px",
+      backgroundColor: "white",
+      borderWidth: "2px",
+      borderColor: "black",
+      alignItems: "center",
+      justifyContent: "center",
+      margin: "20px",
+    },
+    cta_button_text: {
+      color: "black",
+      fontSize: "22px",
+    },
   },
 });

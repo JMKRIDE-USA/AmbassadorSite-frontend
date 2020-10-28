@@ -1,21 +1,15 @@
-import React, { useCallback } from 'react';
-
-import { useQuery, useMutation, queryCache } from 'react-query';
+import { useMutation, queryCache } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
 
 import config from '../../config.js';
 import {
   setUserId,
   setAuthTokens,
-  setAuthPermissions,
-  resetAuth,
-  selectUserId,
   selectAuthHeader,
-  selectAuthExpiration,
   selectRefreshToken,
+  fetchAuthRequest,
 } from './authSlice.js'
-import { setUserName } from '../users/userSlice.js';
-import { getDateAfter, hasExpired, needsRefresh } from '../date.js';
+import { getDateAfter } from '../date.js';
 
 export function useCreateAccount(){
 
@@ -58,7 +52,43 @@ export function useCreateAccount(){
     }
     return true;
   }
-};
+}
+
+export function useLookupUser(){
+  let dispatch = useDispatch();
+
+  const [lookup, { error }] = useMutation(({to_submit}) => fetch(
+    config.backend_url + "users-lookup",
+    {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(to_submit),
+    }).then(res => res.json())
+  );
+  return async (to_submit) => {
+    let result;
+    try {
+      result = await lookup({to_submit})
+    } catch (error) {
+      console.log("[!] Error looking up user:", error);
+      return;
+    }
+    if (error){
+      console.log("[!] Error looking up user:", error);
+      return;
+    }
+    if (result && result.error){
+      console.log("[!] Error looking up user:", result.error);
+      return;
+    }
+    if (result && result.id) {
+      dispatch(setUserId(result.id));
+      return result.id;
+    }
+    console.log("[!] Error looking up user:", "Unknown");
+    return;
+  }
+}
 
 
 export function useLogin(){
@@ -76,7 +106,7 @@ export function useLogin(){
   return async ({email, password}) => {
     let to_submit = {email: email, password: password};
     console.log("Submitting:", to_submit);
-    let result;
+    let result, id;
     try {
       result = await login({to_submit})
     } catch (error) {
@@ -98,62 +128,15 @@ export function useLogin(){
         refresh_token: result.refreshToken,
         expires_at: getDateAfter(result.expiresIn),
       }));
+      dispatch(fetchAuthRequest());
       return true;
     }
     console.log("[!] Error logging in:", "[unknown]");
     return false
   };
-};
-
-export function usePopulateAuth(){
-  const userId = useSelector(selectUserId);
-  const dispatch = useDispatch();
-
-  const {
-    data,
-    error,
-    refetch,
-  } = useQuery(
-    "users-get",
-    () => fetch(
-      config.backend_url + "users/" + userId,
-      {
-        method: 'GET',
-        headers: header,
-      }).then(res => res.json()),
-    { enabled: false },
-  );
-
-  return async () => {
-    let result;
-    try {
-      result = await refetch();
-    } catch (error) {
-      console.log("[!] Error populating user:", error);
-      return false;
-    }
-    console.log("Populate result:", result)
-    if (error) {
-      console.log("[!] Error populating user:", error);
-      return false;
-    }
-    if (result && result.error){
-      console.log("[!] Error populating user:", error);
-      return false;
-    }
-    if (result && result.permissionLevel && result.firstName && result.lastName) {
-      dispatch(setAuthPermissions(result.permissionLevel));
-      dispatch(setUserName({firstname: result.firstName, lastname: result.lastName}));
-      return true;
-    }
-
-    console.log("[!] Unknown Error occurred while populating user.");
-    return false;
-  }
-};
+}
 
 export function useRefreshAuth() {
-  const userId = useSelector(selectUserId);
   const header = useSelector(selectAuthHeader);
   const refresh_token = useSelector(selectRefreshToken);
   const dispatch = useDispatch()
@@ -194,25 +177,3 @@ export function useRefreshAuth() {
     return true;
   }
 }
-
-export function useSetupAuth(){
-  const userId = useSelector(selectUserId);
-  const expirationDate = useSelector(selectAuthExpiration);
-  const dispatch = useDispatch();
-  const populateAuth = usePopulateAuth();
-  const refreshAuth = useRefreshAuth();
-
-  return async () => {
-    if (userId && !hasExpired(expirationDate)) {
-      if (needsRefresh(expirationDate)) {
-        console.log("needs refresh");
-        refreshAuth();
-      }
-      console.log("populating");
-      populateAuth();
-    } else {
-      console.log("resetting");
-      dispatch(resetAuth());
-    }
-  };
-};

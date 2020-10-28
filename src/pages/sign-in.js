@@ -1,14 +1,41 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { page_styles } from '../pages.js';
 import { LoginAccountForm } from '../components/loginForm.js';
+import {
+  selectUserId,
+  fetchAuthRequest,
+} from '../modules/auth/authSlice.js';
+import { useLogin } from '../modules/auth/login.js';
 
 
 export function SignIn() {
   let navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const login = useLogin();
+  let userId = useSelector(selectUserId);
+
+  useEffect(() => {
+    if (userId) {
+      navigation.reset({index: 0, routes: [{name: "Home"}]});
+    }
+  }, [userId]);
+
+  async function submitLogin(
+    { email, password },
+    { setSubmitting },
+  ){
+    let success = await login({ email, password });
+    console.log("User Log In:", success ? "Successful." : "Failure.");
+    setSubmitting(false);
+    return;
+  }
+
   return (
     <View style={page_styles.app_scrollview}>
       <View style={styles.page}>
@@ -18,7 +45,7 @@ export function SignIn() {
         <Text style={styles.subtitle}>
           Log in to your JMKRIDE ambassador account.
         </Text>
-        <LoginAccountForm styles={styles}/>
+        <LoginAccountForm styles={styles} submitLogin={submitLogin}/>
         <TouchableOpacity onPress={
           () => navigation.reset({index: 0, routes: [{name: "Sign Up"}]})
         }>
