@@ -1,5 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { AUTH_STATE } from '../auth/constants.js';
+
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -15,6 +18,11 @@ const userSlice = createSlice({
       state.firstname = undefined;
       state.lastname = undefined;
     },
+    setUserInfo: (state, action) => {
+      state.email = action.payload.email,
+      state.ambassador = action.payload.permissionLevel == AUTH_STATE.AMBASSADOR,
+      state.application_status = action.payload.
+    }
   },
 });
 

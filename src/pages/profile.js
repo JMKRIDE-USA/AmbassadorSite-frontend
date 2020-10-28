@@ -14,7 +14,10 @@ export function Profile() {
       <View style={styles.page_card}>
         <Text style={styles.card_text}>
           <Text style={styles.title_text}>
-            Ambassador Profile: {firstName} {lastName}
+            Ambassador Profile<br/>
+          </Text>
+          <Text style={styles.body_text}>
+            Name: {firstName} {lastName}
           </Text>
         </Text>
       </View>

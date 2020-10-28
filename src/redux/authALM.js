@@ -1,6 +1,6 @@
 import {
   fetchAuthRequest,
-  fetchUserRequest,
+  fetchUserIdRequest,
   selectAccessToken,
   selectAuthHeader,
   selectUserId,
@@ -10,6 +10,7 @@ import {
 } from '../modules/auth/authSlice.js';
 import { setUserName } from '../modules/users/userSlice.js';
 import config from '../config.js';
+
 
 export default {
   [fetchAuthRequest]: (action, dispatch, state) => {
@@ -24,7 +25,7 @@ export default {
     const userId = selectUserId(state);
     if (! userId ) {
       console.log('User Id Not Found. Looking up.');
-      dispatch(fetchUserRequest());
+      dispatch(fetchUserIdRequest());
       return
     }
 
@@ -43,7 +44,7 @@ export default {
     });
   },
 
-  [fetchUserRequest]: (action, dispatch, state) => {
+  [fetchUserIdRequest]: (action, dispatch, state) => {
     const header = selectAuthHeader(state);
     fetch(
       config.backend_url + "user-lookup",

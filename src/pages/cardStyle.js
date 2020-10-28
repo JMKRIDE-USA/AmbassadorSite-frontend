@@ -7,6 +7,7 @@ export default {
     borderColor: "#080808",
     borderWidth: "2px",
     borderRadius: "20px",
+    flexDirection: "column",
   },
   card_text: {
     padding: "20px",
