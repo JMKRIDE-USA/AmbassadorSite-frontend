@@ -3,6 +3,7 @@ export default {
     marginTop: "30px",
     margin: "10px",
     maxWidth: "800px",
+    minWidth: "400px",
     backgroundColor: "white",
     borderColor: "#080808",
     borderWidth: "2px",

@@ -10,24 +10,30 @@ const userSlice = createSlice({
     lastname: undefined,
   },
   reducers: {
-    setUserName: (state, action) => {
-      state.firstname = action.payload.firstname;
-      state.lastname = action.payload.lastname;
-    },
     logoutUser: state => {
       state.firstname = undefined;
       state.lastname = undefined;
+      state.email = undefined;
     },
     setUserInfo: (state, action) => {
-      state.email = action.payload.email,
-      state.ambassador = action.payload.permissionLevel == AUTH_STATE.AMBASSADOR,
-      state.application_status = action.payload.
-    }
+      state.firstname = action.payload.firstName;
+      state.lastname = action.payload.lastName;
+      state.email = action.payload.email;
+      state.is_ambassador = action.payload.permissionLevel == AUTH_STATE.AMBASSADOR;
+    },
   },
 });
 
-export const { setUserName, logoutUser } = userSlice.actions;
+export const { setUserInfo, logoutUser } = userSlice.actions;
 
 export const selectUserName = state => [state.user.firstname, state.user.lastname];
+export const selectUserInfo = state => {
+  return {
+    firstname: state.user.firstname, 
+    lastname: state.user.lastname,
+    email: state.user.email,
+    is_ambassador: state.user.is_ambassador,
+  };
+}
 
 export default userSlice.reducer;

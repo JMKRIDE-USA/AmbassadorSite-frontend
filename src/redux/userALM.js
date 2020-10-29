@@ -19,6 +19,7 @@ export default {
         headers: header,
       }
     ).then(res=>res.json()).then(res => {
+      console.log("User Info:", res);
       dispatch(setUserInfo(res));
     }).catch(error => {
       console.log('[!] Error fetching user information:', error);

@@ -8,7 +8,7 @@ import {
   setUserId,
   resetAuth,
 } from '../modules/auth/authSlice.js';
-import { setUserName } from '../modules/users/userSlice.js';
+import { setUserInfo } from '../modules/users/userSlice.js';
 import config from '../config.js';
 
 
@@ -37,7 +37,7 @@ export default {
       }
     ).then(res => res.json()).then(res => {
       dispatch(setAuthPermissions(res.permissionLevel));
-      dispatch(setUserName({firstname: res.firstName, lastname: res.lastName}));
+      dispatch(setUserInfo(res));
     }).catch(error => {
       console.log('[!] Error fetching user credentials:', error);
       dispatch(resetAuth());
