@@ -1,5 +1,6 @@
 import {
   fetchUserInfoRequest,
+  setUserInfo,
 } from '../modules/users/userSlice.js';
 import {
   selectAuthHeader,
