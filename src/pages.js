@@ -64,19 +64,24 @@ export const user_pages = [
 export const admin_pages = [];
 const all_pages = welcome_pages.concat(user_pages).concat(admin_pages);
 
-export const AUTH_PERMISSIONS_TO_PAGES = {
-  "none": welcome_pages,
-  "user": user_pages,
-  "admin": admin_pages,
+export function authPermissionsToPages(auth_permissions) {
+  if (auth_permissions) {
+    return {
+      "none": welcome_pages,
+      "user": user_pages,
+      "admin": admin_pages,
+    }[auth_permissions]
+  }
+  return welcome_pages;
 }
 
 export function getHeaderButtons(auth_permissions){
-  let pages = AUTH_PERMISSIONS_TO_PAGES[auth_permissions];
+  let pages = authPermissionsToPages(auth_permissions);
   return pages.filter(page => page.in_header).map(page => page.title);
 }
 
 export function getProfilePage(auth_permissions){
-  let pages = AUTH_PERMISSIONS_TO_PAGES[auth_permissions];
+  let pages = authPermissionsToPages(auth_permissions);
   let profile_page;
   pages.forEach(page => {
     if(page.profile_page){
@@ -87,7 +92,7 @@ export function getProfilePage(auth_permissions){
 }
 
 export function getApplyPage(auth_permissions){
-  let pages = AUTH_PERMISSIONS_TO_PAGES[auth_permissions];
+  let pages = authPermissionsToPages(auth_permissions);
   let apply_page;
   pages.forEach(page => {
     if(page.apply_page){
@@ -128,7 +133,7 @@ export function genAppStack(stack, auth_permissions){
   return(
     <stack.Navigator headerMode={"none"}>
       {
-        AUTH_PERMISSIONS_TO_PAGES[auth_permissions].map(
+        authPermissionsToPages(auth_permissions).map(
           (page, i) => (
             <stack.Screen
               name={page.title}

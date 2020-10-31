@@ -21,10 +21,11 @@ const userSlice = createSlice({
       state.email = action.payload.email;
       state.is_ambassador = action.payload.permissionLevel == AUTH_STATE.AMBASSADOR;
     },
+    fetchUserInfoRequest: state => state,
   },
 });
 
-export const { setUserInfo, logoutUser } = userSlice.actions;
+export const { setUserInfo, fetchUserInfoRequest, logoutUser } = userSlice.actions;
 
 export const selectUserName = state => [state.user.firstname, state.user.lastname];
 export const selectUserInfo = state => {

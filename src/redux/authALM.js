@@ -29,36 +29,55 @@ export default {
       return
     }
 
-    fetch(
-      config.backend_url + "users/" + userId,
-      {
-        method: 'GET',
-        headers: header,
-      }
-    ).then(res => res.json()).then(res => {
-      dispatch(setAuthPermissions(res.permissionLevel));
-      dispatch(setUserInfo(res));
-    }).catch(error => {
+    try {
+      fetch(
+        config.backend_url + "users/" + userId,
+        {
+          method: 'GET',
+          headers: header,
+        }
+      ).then(res => {
+        if(!res.ok){
+          dispatch(resetAuth());
+        }
+        return res.json();
+      }).then(res => {
+        if (res){
+          dispatch(setAuthPermissions(res.permissionLevel));
+          dispatch(setUserInfo(res));
+        } else {
+          dispatch(resetAuth());
+        }
+      }).catch(error => {
+        console.log('[!] Error fetching user credentials:', error);
+        dispatch(resetAuth());
+      });
+    } catch (err) {
       console.log('[!] Error fetching user credentials:', error);
       dispatch(resetAuth());
-    });
+    }
   },
 
   [fetchUserIdRequest]: (action, dispatch, state) => {
     const header = selectAuthHeader(state);
-    fetch(
-      config.backend_url + "user-lookup",
-      {
-        method: 'GET',
-        headers: header,
-      }
-    ).then(res => res.json()).then(res => {
-      dispatch(setUserId(res.id));
-      dispatch(fetchAuthRequest());
-    }).catch(error => {
+    try { 
+      fetch(
+        config.backend_url + "user-lookup",
+        {
+          method: 'GET',
+          headers: header,
+        }
+      ).then(res => res.json()).then(res => {
+        dispatch(setUserId(res.id));
+        dispatch(fetchAuthRequest());
+      }).catch(error => {
+        console.log('[!] Error looking up user information:', error);
+        dispatch(resetAuth());
+      });
+    } catch (err) {
       console.log('[!] Error looking up user information:', error);
       dispatch(resetAuth());
-    });
+    }
   },
 }
 
