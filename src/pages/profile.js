@@ -10,17 +10,21 @@ import { resetAuth } from '../modules/auth/authSlice.js';
 import { useGetUserSessions, useDisableSession } from '../modules/users/hooks.js';
 
 
-const SessionItem = (disable_session) => (session) => {
+const SessionItem = (disable_session, current) => (session) => {
+  const date = new Date(session.lastUsedDate);
+  if (current !== Boolean(session.current)){
+    return <View key={session.id}></View>
+  }
   return (
     <View style={styles.session_item} key={session.id}>
       <Text style={styles.session_text}>
-        Last Seen: {session.lastUsedDate} at {session.lastUsedIP}
+        Last Seen: {date.toLocaleString()} at {session.lastUsedIP}
       </Text>
       <TouchableOpacity
         style={styles.session_logout_button}
-        onPress={disable_session(session.id)}
+        onPress={disable_session(session.id, session.current)}
       >
-        <Text>Delete</Text>
+        <Text>{current ? "Log Out" : "Delete"}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -32,7 +36,6 @@ export function Profile() {
   const userInfo = useSelector(selectUserInfo);
 
   const userSessions = useGetUserSessions();
-  console.log("Sessions:", userSessions.data);
 
   const disable_session = useDisableSession();
 
@@ -59,7 +62,9 @@ export function Profile() {
       </TouchableOpacity>
       { userSessions.data.length
         ? <View style={styles.session_list}>
-            {userSessions.data.map(SessionItem(disable_session))}
+            <Text style={styles.body_text}>Logged In Sessions:</Text>
+            {userSessions.data.map(SessionItem(disable_session, true))} 
+            {userSessions.data.map(SessionItem(disable_session, false))}
           </View>
         : <></>
       }
@@ -85,11 +90,26 @@ const styles = StyleSheet.create({
       fontSize: 22,
       color: "black",
     },
-    session_item: {},
+    session_list: {
+      ...card_styles.page_card,
+      padding: "10px",
+    },
+    session_item: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      borderBottomWidth: "1px",
+      borderColor: "black",
+    },
     session_text: {},
     session_logout_button: {
       width: 100,
-      backgroundColor: "gray",
+      borderRadius: 5,
+      padding: "2px",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "#d5d5d5",
+      margin: "10px",
     }
   },
 });

@@ -83,7 +83,18 @@ export default {
   },
 
   [resetAuth]: (action, dispatch, state) => {
-    console.log('invalidated user cache');
+    const header = selectAuthHeader(state);
+    try { 
+      fetch(
+        config.backend_url + "auth/sessions/disable-self",
+        {
+          method: 'POST',
+          headers: header,
+        }
+      )
+    } catch (err) {
+      console.log('[!] Error disabling current session:', error);
+    }
     queryCache.invalidateQueries('user')
     queryCache.invalidateQueries('users')
   },

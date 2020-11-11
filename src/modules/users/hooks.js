@@ -1,12 +1,16 @@
 import { useQuery, useMutation, queryCache } from 'react-query';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { selectAuthHeader } from '../auth/authSlice.js';
+import { logoutUser } from './userSlice.js';
+import { selectAuthHeader, resetAuth, selectUserId } from '../auth/authSlice.js';
 import config from '../../config.js';
 
 function useGetUserQuery(endpoint) {
   const header = useSelector(selectAuthHeader);
-
+  const userId = useSelector(selectUserId);
+  if (! userId) {
+    console.log("[!] User is not logged in.");
+  }
   try {
     const { data, error, status } = useQuery(
       'user', // global key for this file
@@ -41,6 +45,7 @@ export function useGetUserSessions() {
 
 export function useDisableSession(){
   const header = useSelector(selectAuthHeader);
+  let dispatch = useDispatch();
 
   const [disableSession, { error }] = useMutation(
     ({to_submit}) => fetch(
@@ -58,7 +63,7 @@ export function useDisableSession(){
     }
   );
 
-  return (sessionId) => async () => {
+  return (sessionId, isCurrent) => async () => {
     let to_submit = {
       session_id: sessionId,
     }
@@ -78,6 +83,10 @@ export function useDisableSession(){
       return false;
     }
     if (result) {
+      if (isCurrent) {
+        dispatch(resetAuth());
+        dispatch(logoutUser());
+      }
       return true;
     }
     return false;
