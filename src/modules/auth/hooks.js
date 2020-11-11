@@ -4,12 +4,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import config from '../../config.js';
 import {
   setUserId,
+  resetAuth,
   setAuthTokens,
   selectAuthHeader,
+  selectUserId,
   selectRefreshToken,
   fetchAuthRequest,
+  selectAuthExpiration,
 } from './authSlice.js'
-import { getDateAfter } from '../date.js';
+import { logoutUser } from '../users/userSlice.js';
+import { hasExpired, needsRefresh, getDateAfter } from '../date.js';
 
 export function useCreateAccount(){
 
@@ -135,46 +139,4 @@ export function useLogin(){
     console.log("[!] Error logging in:", "[unknown]");
     return false
   };
-}
-
-export function useRefreshAuth() {
-  const header = useSelector(selectAuthHeader);
-  const refresh_token = useSelector(selectRefreshToken);
-  const dispatch = useDispatch()
-
-  const [refresh, { error }] = useMutation(({to_submit}) => fetch(
-    config.backend_url + "auth/refresh",
-    {
-      method: "POST",
-      headers: {...header, "Content-Type": "application/json"},
-      body: JSON.stringify(to_submit),
-    }).then(res => res.json()),
-  );
-  return async () => {
-    let to_submit = {refresh_token: refresh_token}
-    let result;
-    try {
-      result = await refresh({to_submit});
-    } catch (error) {
-      console.log("[!] Error refreshing authentication:", error);
-      return false;
-    }
-    if (error){
-      console.log("[!] Error refreshing authentication:", error);
-      return false;
-    }
-    if (result && result.error) {
-      console.log("[!] Error refreshing authentication:", result.error);
-      return false;
-    }
-    console.log("Result:", result);
-    if (result && result.accessToken && result.refreshToken && result.expiresIn) {
-      dispatch(setAuthTokens({
-        access_token: result.accessToken,
-        refresh_token: result.refreshToken,
-        expires_at: getDateAfter(result.expiresIn),
-      }));
-    }
-    return true;
-  }
 }

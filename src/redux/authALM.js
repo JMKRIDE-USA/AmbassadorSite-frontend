@@ -1,17 +1,22 @@
 import { queryCache } from 'react-query';
 
 import {
+  verifyAuthRequest,
   fetchAuthRequest,
   fetchUserIdRequest,
   selectAccessToken,
   selectAuthHeader,
+  selectAuthExpiration,
+  selectRefreshToken,
   selectUserId,
   setAuthPermissions,
   setUserId,
+  setAuthTokens,
   resetAuth,
 } from '../modules/auth/authSlice.js';
 import { setUserInfo } from '../modules/users/userSlice.js';
 import config from '../config.js';
+import { getDateAfter, hasExpired, needsRefresh } from '../modules/date.js';
 
 
 export default {
@@ -82,21 +87,71 @@ export default {
     }
   },
 
-  [resetAuth]: (action, dispatch, state) => {
-    const header = selectAuthHeader(state);
-    try { 
-      fetch(
-        config.backend_url + "auth/sessions/disable-self",
-        {
-          method: 'POST',
-          headers: header,
-        }
-      )
-    } catch (err) {
-      console.log('[!] Error disabling current session:', error);
+  [verifyAuthRequest]: (action, dispatch, state) => {
+    const userId = selectUserId(state);
+    const access_token = selectAccessToken(state);
+    const expiration_raw = selectAuthExpiration(state);
+
+    if(!(userId && access_token && expiration_raw)) {
+      return
     }
-    queryCache.invalidateQueries('user')
-    queryCache.invalidateQueries('users')
+
+    const expiration = new Date(expiration_raw);
+    console.log("This Expiration:", expiration.toLocaleString());
+
+    if (hasExpired(expiration)){
+      return;
+    } else if (!needsRefresh(expiration)) {
+      return
+    }
+
+    console.log("[+] Refreshing authentication tokens.");
+
+    const header = selectAuthHeader(state);
+    const refresh_token = selectRefreshToken(state);
+
+    try {
+      fetch(
+        config.backend_url + "auth/refresh",
+        {
+          method: "POST",
+          headers: {...header, "Content-Type": "application/json"},
+          body: JSON.stringify({refresh_token: refresh_token}),
+        }
+      ).then(res => {if(res.ok) return res.json()}
+      ).then(result => {
+        if(result) {
+          console.log("New Authentication Result:", result)
+          dispatch(setAuthTokens({
+            access_token: result.accessToken,
+            refresh_token: result.refreshToken,
+            expires_at: getDateAfter(result.expiresIn),
+          }));
+        }
+      });
+    } catch (error) {
+      console.log("[!] Error refreshing authentication:", error);
+    }
+  },
+
+  [resetAuth]: (action, dispatch, state) => {
+    const access_token = selectAccessToken(state);
+    queryCache.invalidateQueries('user');
+    queryCache.invalidateQueries('users');
+    if(access_token){
+      const header = selectAuthHeader(state);
+      try {
+        fetch(
+          config.backend_url + "auth/sessions/disable-self",
+          {
+            method: 'POST',
+            headers: header,
+          }
+        )
+      } catch (err) {
+        console.log('[!] Error disabling current session:', error);
+      }
+    }
   },
 }
 

@@ -32,6 +32,7 @@ const authSlice = createSlice({
     },
     fetchAuthRequest: state => state,
     fetchUserIdRequest: state => state,
+    verifyAuthRequest: state => state,
   }
 })
 
@@ -42,6 +43,7 @@ export const {
   resetAuth,
   fetchAuthRequest,
   fetchUserIdRequest,
+  verifyAuthRequest,
 } = authSlice.actions;
 
 export const selectAuthPermissions = state => state.auth.auth_permissions;

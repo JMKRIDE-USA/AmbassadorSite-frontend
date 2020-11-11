@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { StyleSheet, View, ScrollView } from 'react-native';
+import { useDispatch } from 'react-redux';
 
 import { Header } from './components/header.js';
 import { Footer } from './components/footer.js';
@@ -10,6 +11,8 @@ import SignUp from './pages/sign-up.js';
 import { SignIn } from './pages/sign-in.js';
 import ChallengeBoard from './pages/challenge-board.js';
 import { Profile } from './pages/profile.js';
+
+import { verifyAuthRequest } from './modules/auth/authSlice.js';
 
 
 export const welcome_pages = [
@@ -115,6 +118,8 @@ export const page_linking = {
 }
 
 const makeAppScreen = (Component) => (props) => { 
+  const dispatch = useDispatch()
+  //useEffect(() => dispatch(verifyAuthRequest()), []);
   useEffect(() => console.log("ran"), []);
   return (
     <View style={page_styles.app_container}>

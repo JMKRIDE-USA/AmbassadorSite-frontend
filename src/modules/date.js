@@ -5,26 +5,34 @@ export function getDateAfter(timedelta){
   let amount = parseInt(timedelta.slice(0, -1));
   switch( unit ) {
     case 'd': {
-      return now + (amount * 60 * 60 * 24);
+      return now + (amount * 1000 * 60 * 60 * 24);
     }
     case 'h': {
-      return now + (amount * 60 * 60);
+      return now + (amount * 1000 * 60 * 60);
     }
     case 'm': {
-      return now + (amount * 60);
+      return now + (amount * 1000 * 60);
     }
     case 's': {
-      return now + amount;
+      return now + 1000 * amount;
     }
   }
 }
 
 export function hasExpired(date){
-  return (Date.now() <= date);
+  return (date <= Date.now());
 }
 
 // true within 24 hours of auth expiration
 export function needsRefresh(date){
-  return (Date.now() - date) <= 24 * 60 * 60
+  console.log(date - Date.now())
+  if ((date - Date.now()) <= 24 * 60 * 60 * 1000) {
+    console.log("Yep")
+  } else {
+    console.log("Nope")
+  }
+
+  return ((date - Date.now()) <= 24 * 60 * 60 * 1000)
+
 }
 
