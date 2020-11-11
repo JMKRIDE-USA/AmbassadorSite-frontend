@@ -10,7 +10,7 @@ import {
   selectUserId,
   fetchAuthRequest,
 } from '../modules/auth/authSlice.js';
-import { useCreateAccount } from '../modules/auth/login.js';
+import { useCreateAccount } from '../modules/auth/hooks.js';
 
 
 export default function SignUp(){

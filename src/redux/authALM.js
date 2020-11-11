@@ -1,3 +1,5 @@
+import { queryCache } from 'react-query';
+
 import {
   fetchAuthRequest,
   fetchUserIdRequest,
@@ -78,6 +80,12 @@ export default {
       console.log('[!] Error looking up user information:', error);
       dispatch(resetAuth());
     }
+  },
+
+  [resetAuth]: (action, dispatch, state) => {
+    console.log('invalidated user cache');
+    queryCache.invalidateQueries('user')
+    queryCache.invalidateQueries('users')
   },
 }
 

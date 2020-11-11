@@ -25,7 +25,8 @@ export function useCreateAccount(){
     }).then(res => res.json()),
     {
       onSuccess: async () => {
-        queryCache.invalidateQueries("users-get")
+        queryCache.invalidateQueries('user');
+        queryCache.invalidateQueries('users');
       }
     },
   );

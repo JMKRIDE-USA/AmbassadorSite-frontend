@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { StyleSheet, View, ScrollView } from 'react-native';
 
@@ -114,19 +114,20 @@ export const page_linking = {
   },
 }
 
-function makeAppScreen(Component) {
-  return (() =>
+const makeAppScreen = (Component) => (props) => { 
+  useEffect(() => console.log("ran"), []);
+  return (
     <View style={page_styles.app_container}>
       <Header/>
       <ScrollView
         style={page_styles.page_scrollview}
         contentContainerStyle={page_styles.page_cc_scrollview}
       >
-        <Component/>
+        <Component {...props}/>
       </ScrollView>
       <Footer/>
     </View>
-  );
+  )
 }
 
 export function genAppStack(stack, auth_permissions){

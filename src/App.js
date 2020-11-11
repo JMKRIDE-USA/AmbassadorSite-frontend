@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import '@expo/match-media';
 import { registerRootComponent } from 'expo';
