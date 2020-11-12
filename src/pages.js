@@ -10,6 +10,7 @@ import { SplashPage } from './pages/splash-page.js';
 import SignUp from './pages/sign-up.js';
 import { SignIn } from './pages/sign-in.js';
 import ChallengeBoard from './pages/challenge-board.js';
+import { CreateChallengePage } from './pages/create-challenge.js';
 import { Profile } from './pages/profile.js';
 
 import { verifyAuthRequest } from './modules/auth/authSlice.js';
@@ -64,7 +65,14 @@ export const user_pages = [
     profile_page: true,
   },
 ];
-export const admin_pages = [];
+export const admin_pages = user_pages.concat([
+  {
+    title: "Create Challenge",
+    component: CreateChallengePage, 
+    url: "create-challenge",
+    in_header: true,
+  },
+]);
 const all_pages = welcome_pages.concat(user_pages).concat(admin_pages);
 
 export function authPermissionsToPages(auth_permissions) {
@@ -119,8 +127,8 @@ export const page_linking = {
 
 const makeAppScreen = (Component) => (props) => { 
   const dispatch = useDispatch()
-  //useEffect(() => dispatch(verifyAuthRequest()), []);
-  useEffect(() => console.log("ran"), []);
+  useEffect(() => dispatch(verifyAuthRequest()), []);
+  //useEffect(() => console.log("ran"), []);
   return (
     <View style={page_styles.app_container}>
       <Header/>

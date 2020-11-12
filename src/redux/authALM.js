@@ -105,7 +105,7 @@ export default {
       return
     }
 
-    console.log("[+] Refreshing authentication tokens.");
+    console.log("[+] Refreshing authentication tokens...");
 
     const header = selectAuthHeader(state);
     const refresh_token = selectRefreshToken(state);
@@ -121,12 +121,12 @@ export default {
       ).then(res => {if(res.ok) return res.json()}
       ).then(result => {
         if(result) {
-          console.log("New Authentication Result:", result)
           dispatch(setAuthTokens({
             access_token: result.accessToken,
             refresh_token: result.refreshToken,
             expires_at: getDateAfter(result.expiresIn),
           }));
+          console.log("[+] Done.");
         }
       });
     } catch (error) {

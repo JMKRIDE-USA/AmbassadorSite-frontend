@@ -25,14 +25,6 @@ export function hasExpired(date){
 
 // true within 24 hours of auth expiration
 export function needsRefresh(date){
-  console.log(date - Date.now())
-  if ((date - Date.now()) <= 24 * 60 * 60 * 1000) {
-    console.log("Yep")
-  } else {
-    console.log("Nope")
-  }
-
   return ((date - Date.now()) <= 24 * 60 * 60 * 1000)
-
 }
 

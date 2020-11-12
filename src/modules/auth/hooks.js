@@ -1,19 +1,13 @@
 import { useMutation, queryCache } from 'react-query';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import config from '../../config.js';
 import {
   setUserId,
-  resetAuth,
   setAuthTokens,
-  selectAuthHeader,
-  selectUserId,
-  selectRefreshToken,
   fetchAuthRequest,
-  selectAuthExpiration,
 } from './authSlice.js'
-import { logoutUser } from '../users/userSlice.js';
-import { hasExpired, needsRefresh, getDateAfter } from '../date.js';
+import {  getDateAfter } from '../date.js';
 
 export function useCreateAccount(){
 
