@@ -80,6 +80,7 @@ export function authPermissionsToPages(auth_permissions) {
     return {
       "none": welcome_pages,
       "user": user_pages,
+      "ambassador": user_pages,
       "admin": admin_pages,
     }[auth_permissions]
   }

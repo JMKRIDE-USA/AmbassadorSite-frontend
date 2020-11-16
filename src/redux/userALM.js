@@ -12,9 +12,9 @@ import config from '../config.js';
 export default {
   [fetchUserInfoRequest]: (action, dispatch, state) => {
     const header = selectAuthHeader(state);
-    const userId =selectUserId(state);
+    const userId = selectUserId(state);
     fetch(
-      config.backend_url + "users/" + userId,
+      config.backend_url + "users/id/" + userId,
       {
         method: 'GET',
         headers: header,

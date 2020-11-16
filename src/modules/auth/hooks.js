@@ -15,7 +15,7 @@ export function useCreateAccount(){
   let login = useLogin();
 
   const [createAccount, { error }] = useMutation(({to_submit}) => fetch(
-    config.backend_url + "users",
+    config.backend_url + "users/create",
     {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -52,43 +52,6 @@ export function useCreateAccount(){
     return true;
   }
 }
-
-export function useLookupUser(){
-  let dispatch = useDispatch();
-
-  const [lookup, { error }] = useMutation(({to_submit}) => fetch(
-    config.backend_url + "users-lookup",
-    {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(to_submit),
-    }).then(res => res.json())
-  );
-  return async (to_submit) => {
-    let result;
-    try {
-      result = await lookup({to_submit})
-    } catch (error) {
-      console.log("[!] Error looking up user:", error);
-      return;
-    }
-    if (error){
-      console.log("[!] Error looking up user:", error);
-      return;
-    }
-    if (result && result.error){
-      console.log("[!] Error looking up user:", result.error);
-      return;
-    }
-    if (result && result.id) {
-      dispatch(setUserId(result.id));
-      return result.id;
-    }
-    console.log("[!] Error looking up user:", "Unknown");
-    return;
-  }
-}
-
 
 export function useLogin(){
   let dispatch = useDispatch();

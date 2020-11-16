@@ -38,7 +38,7 @@ export default {
 
     try {
       fetch(
-        config.backend_url + "users/" + userId,
+        config.backend_url + "users/id/" + userId,
         {
           method: 'GET',
           headers: header,
@@ -59,7 +59,7 @@ export default {
         console.log('[!] Error fetching user credentials:', error);
         dispatch(resetAuth());
       });
-    } catch (err) {
+    } catch (error) {
       console.log('[!] Error fetching user credentials:', error);
       dispatch(resetAuth());
     }
@@ -69,7 +69,7 @@ export default {
     const header = selectAuthHeader(state);
     try { 
       fetch(
-        config.backend_url + "user-lookup",
+        config.backend_url + "users/self",
         {
           method: 'GET',
           headers: header,
@@ -81,7 +81,7 @@ export default {
         console.log('[!] Error looking up user information:', error);
         dispatch(resetAuth());
       });
-    } catch (err) {
+    } catch (error) {
       console.log('[!] Error looking up user information:', error);
       dispatch(resetAuth());
     }
@@ -142,13 +142,13 @@ export default {
       const header = selectAuthHeader(state);
       try {
         fetch(
-          config.backend_url + "auth/sessions/disable-self",
+          config.backend_url + "auth/sessions/self",
           {
-            method: 'POST',
+            method: 'DELETE',
             headers: header,
           }
         )
-      } catch (err) {
+      } catch (error) {
         console.log('[!] Error disabling current session:', error);
       }
     }

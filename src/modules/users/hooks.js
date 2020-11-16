@@ -24,7 +24,7 @@ function useGetUserQuery(endpoint) {
     )
 
     if (error) {
-      console.log("[!] Error fetching user endpoint \'", endpoint, "\':", error);
+      console.log("[!] Error fetching user endpoint \"", endpoint, "\":", error);
       return { data: {}, error: error, status: status }
     }
 
@@ -32,7 +32,7 @@ function useGetUserQuery(endpoint) {
       return { data: data, error: error, status: status }
     }
   } catch (error) {
-    console.log("[!] Error fetching user endpoint \'", endpoint, "\':", error);
+    console.log("[!] Error fetching user endpoint \"", endpoint, "\":", error);
     return { data: {}, error: error, status: 'error' }
   }
 
@@ -40,7 +40,7 @@ function useGetUserQuery(endpoint) {
 }
 
 export function useGetUserSessions() {
-  return useGetUserQuery("auth/sessions");
+  return useGetUserQuery("auth/sessions/all");
 }
 
 export function useDisableSession(){
@@ -49,9 +49,9 @@ export function useDisableSession(){
 
   const [disableSession, { error }] = useMutation(
     ({to_submit}) => fetch(
-      config.backend_url + "auth/sessions/disable/" + to_submit.session_id,
+      config.backend_url + "auth/sessions/id/" + to_submit.session_id,
       {
-        method: "POST",
+        method: "DELETE",
         headers: header,
       }
     ),
