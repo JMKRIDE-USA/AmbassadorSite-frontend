@@ -44,7 +44,7 @@ export function SplashPage() {
         </View>
         <View style={styles.page_card}>
           <Text style={styles.card_text}>
-            <Text style={styles.sub_title_text}>
+            <Text style={styles.title_text}>
               Our Goals:<br/><br/>
             </Text>
             <Text style={styles.body_text}>
@@ -59,7 +59,7 @@ export function SplashPage() {
         </View>
         <View style={styles.page_card}>
           <Text style={styles.card_text}>
-            <Text style={styles.sub_title_text}>
+            <Text style={styles.title_text}>
               What We're Looking For in a Great Ambassador:<br/><br/>
             </Text>
             <Text style={styles.body_text}>
@@ -84,7 +84,7 @@ export function SplashPage() {
         </View>
         <View style={styles.page_card}>
           <Text style={styles.card_text}>
-            <Text style={styles.sub_title_text}>
+            <Text style={styles.title_text}>
               About the program:<br/><br/>
             </Text>
             <Text style={styles.body_text}>

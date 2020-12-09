@@ -1,46 +1,20 @@
-import { useQuery, useMutation, queryCache } from 'react-query';
+import { useMutation, queryCache } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { useGetQuery } from '../data.js';
 import { logoutUser } from './userSlice.js';
-import { selectAuthHeader, resetAuth, selectUserId } from '../auth/authSlice.js';
+import { selectAuthHeader, resetAuth } from '../auth/authSlice.js';
 import config from '../../config.js';
 
 function useGetUserQuery(endpoint) {
-  const header = useSelector(selectAuthHeader);
-  const userId = useSelector(selectUserId);
-  if (! userId) {
-    console.log("[!] User is not logged in.");
-  }
-  try {
-    const { data, error, status } = useQuery(
-      'user', // global key for this file
-      () => fetch(
-        config.backend_url + endpoint,
-        {
-          method: "GET",
-          headers: header,
-        }
-      ).then(res => res.json()),
-    )
-
-    if (error) {
-      console.log("[!] Error fetching user endpoint \"", endpoint, "\":", error);
-      return { data: {}, error: error, status: status }
-    }
-
-    if (data) {
-      return { data: data, error: error, status: status }
-    }
-  } catch (error) {
-    console.log("[!] Error fetching user endpoint \"", endpoint, "\":", error);
-    return { data: {}, error: error, status: 'error' }
-  }
-
-  return { data: {}, error: "Unknown", status: "error" }
+  return useGetQuery(
+    endpoint,
+    'user', //global key for this file
+  )
 }
 
 export function useGetUserSessions() {
-  return useGetUserQuery("auth/sessions/all");
+  return useGetUserQuery("auth/sessions/self");
 }
 
 export function useDisableSession(){

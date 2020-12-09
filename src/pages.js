@@ -12,6 +12,7 @@ import { SignIn } from './pages/sign-in.js';
 import ChallengeBoard from './pages/challenge-board.js';
 import { CreateChallengePage } from './pages/create-challenge.js';
 import { Profile } from './pages/profile.js';
+import { AmbassadorApplication } from './pages/ambassador-application.js';
 
 import { verifyAuthRequest } from './modules/auth/authSlice.js';
 
@@ -24,7 +25,7 @@ export const welcome_pages = [
     in_header: true,
   },
   {
-    title: "Sign Up",
+    title: "Apply Now",
     component: SignUp,
     url: "sign-up",
     in_header: true,
@@ -36,12 +37,6 @@ export const welcome_pages = [
     url: "sign-in",
     profile_page: true,
   },
-  {
-    title: "Challenge Board",
-    component: ChallengeBoard,
-    url: "challenge-board",
-    in_header: true,
-  },
 ];
 export const user_pages = [
   {
@@ -52,9 +47,9 @@ export const user_pages = [
     apply_page: true,
   },
   {
-    title: "Challenge Board",
-    component: ChallengeBoard,
-    url: "challenge-board",
+    title: "Apply Now",
+    component: AmbassadorApplication,
+    url: "ambassador-application",
     in_header: true,
   },
   {
