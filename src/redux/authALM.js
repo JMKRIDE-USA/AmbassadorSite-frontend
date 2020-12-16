@@ -97,7 +97,6 @@ export default {
     }
 
     const expiration = new Date(expiration_raw);
-    console.log("This Expiration:", expiration.toLocaleString());
 
     if (hasExpired(expiration)){
       return;

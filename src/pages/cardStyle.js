@@ -9,8 +9,6 @@ export default {
     borderWidth: "2px",
     borderRadius: "20px",
     flexDirection: "column",
-    //alignItems: "center",
-    //justifyContent: "center",
   },
   card_text: {
     padding: "20px",

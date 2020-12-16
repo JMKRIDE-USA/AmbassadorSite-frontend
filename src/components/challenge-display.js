@@ -1,43 +1,61 @@
 import React from 'react';
 
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Button} from 'react-native';
+import { useForm } from 'react-hook-form';
 
+import Form from './forms/form.js';
+import validation from './forms/validation.js';
+import TextInput from './forms/textinput.js';
+import SwitchInput from './forms/switchinput.js';
 import card_styles from '../pages/cardStyle.js';
 
-function ChallengeField(field) {
-  return ( <></>);
-    switch(field.fieldType){
-      case "TEXT_SHORT": {
-      }
-      case "TEXT_MEDIUM": {
-      }
-      case "TEXT_LONG": {
-      }
-      case "NUMBER": {
-      }
-      case "DATE": {
-      }
-      case "SWITCH": {
-      }
-      case "LEGAL_CHECK": {
-      }
-    }
-  //);
+function challengeField(field, key) {
+  let all_props = {label: field.title, key: field._id}
+
+  switch(field.fieldType){
+    case "TEXT_SHORT":
+      return <TextInput name="text" {...all_props} />
+    case "TEXT_MEDIUM":
+      return <TextInput name="text" {...all_props}/>
+    case "TEXT_LONG":
+      return <TextInput name="text" {...all_props}/>
+    case "EMAIL":
+      return <TextInput name="email" {...all_props}/>
+    case "NUMBER":
+      return <TextInput name="number" {...all_props}/>
+    case "DATE":
+      return <TextInput name="date" {...all_props}/>
+    case "YES_NO":
+      return <SwitchInput name="yesno" switchOptions={["Yes", "No"]} {...all_props}/>
+    case "LEGAL_CHECK":
+      return <></>
+    default:
+      return <></>
+  }
 }
 
 function ChallengeFieldList({ fields }) {
+  const { handleSubmit, register, setValue, errors } = useForm();
+
+  const onSubmit = (data) => {
+    console.log('data:', data);
+  }
   if(fields === undefined) {
     return <></>;
   }
+        //<Input name="name" label="Name "/>
   return (
-    <View style={styles.challenge_field_list}>
-      {fields.map(ChallengeField)}
+    <View style={styles.challenge_field_container}>
+      <Form {... { register, setValue, validation, errors }}>
+        {fields.map(challengeField)}
+      </Form>
+      <Button title="Submit" onPress={handleSubmit(onSubmit)} />
     </View>
   );
 };
 
 export function ChallengeDisplay({ challengeData }) {
-  if(challengeData === undefined) {
+  if(challengeData === undefined || Object.keys(challengeData).length === 0) {
     return <></>;
   } else {
     console.log(challengeData);
@@ -58,4 +76,7 @@ export function ChallengeDisplay({ challengeData }) {
 
 const styles = StyleSheet.create({
   ...card_styles,
+  challenge_field_container: {
+    padding: "16px",
+  }
 });
