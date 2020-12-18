@@ -3,14 +3,16 @@ import React from 'react';
 import { StyleSheet, View, Text, Button} from 'react-native';
 import { useForm } from 'react-hook-form';
 
+import { useGetChallengeById, useSubmitChallenge } from '../modules/challenges/hooks.js';
+
 import Form from './forms/form.js';
 import validation from './forms/validation.js';
 import TextInput from './forms/textinput.js';
 import SwitchInput from './forms/switchinput.js';
 import card_styles from '../pages/cardStyle.js';
 
-function challengeField(field, key) {
-  let all_props = {label: field.title, key: field._id}
+function challengeField(field) {
+  let all_props = {label: field.title, id: field._id}
 
   switch(field.fieldType){
     case "TEXT_SHORT":
@@ -34,16 +36,16 @@ function challengeField(field, key) {
   }
 }
 
-function ChallengeFieldList({ fields }) {
+function ChallengeForm({ fields, submitChallenge}) {
   const { handleSubmit, register, setValue, errors } = useForm();
 
   const onSubmit = (data) => {
     console.log('data:', data);
+    submitChallenge(data);
   }
   if(fields === undefined) {
     return <></>;
   }
-        //<Input name="name" label="Name "/>
   return (
     <View style={styles.challenge_field_container}>
       <Form {... { register, setValue, validation, errors }}>
@@ -52,13 +54,14 @@ function ChallengeFieldList({ fields }) {
       <Button title="Submit" onPress={handleSubmit(onSubmit)} />
     </View>
   );
-};
+}
 
-export function ChallengeDisplay({ challengeData }) {
+export function ChallengeDisplay({ challengeId }) {
+  const challengeData = useGetChallengeById(challengeId).data;
+  const submitChallenge = useSubmitChallenge(challengeId)
   if(challengeData === undefined || Object.keys(challengeData).length === 0) {
-    return <></>;
+    return <Text>Loading...</Text>;
   } else {
-    console.log(challengeData);
     return (
       <View style={styles.page_card}>
         <Text style={styles.card_text}>
@@ -68,7 +71,7 @@ export function ChallengeDisplay({ challengeData }) {
           </Text>
           <Text style={styles.body_text}>{challengeData.longDescription}</Text>
         </Text>
-        <ChallengeFieldList fields={challengeData.structure}/>
+        <ChallengeForm fields={challengeData.structure} submitChallenge={submitChallenge}/>
       </View>
     );
   }

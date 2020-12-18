@@ -4,20 +4,18 @@ import {
   TextInput,
   Text,
   StyleSheet,
-  ViewStyle,
-  TextStyle,
 } from 'react-native';
-import { FieldError } from 'react-hook-form';
 
 export default React.forwardRef(
-  (props, ref): React.ReactElement => {
-    const { label, labelStyle, error, ...inputProps } = props;
+  (props, ref) => {
+    const { label, labelStyle, error, onValueChange, id, ...inputProps } = props;
 
     return (
-      <View style={styles.container}>
+      <View key={id} style={styles.container}>
         {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
         <TextInput
           autoCapitalize="none"
+          onChangeText={onValueChange}
           ref={ref}
           style={[styles.input, { borderColor: error ? '#fc6d47' : '#000000' }]}
           {...inputProps}

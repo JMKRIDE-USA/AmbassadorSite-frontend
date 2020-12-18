@@ -10,7 +10,7 @@ import { resetAuth } from '../modules/auth/authSlice.js';
 import { useGetUserSessions, useDisableSession } from '../modules/users/hooks.js';
 
 
-const SessionItem = (disable_session, current) => (session) => {
+const SessionItem = (disable_session, current, logout) => (session) => {
   const date = new Date(session.lastUsedDate);
   if (current !== Boolean(session.current)){
     return <View key={session.id}></View>
@@ -22,7 +22,12 @@ const SessionItem = (disable_session, current) => (session) => {
       </Text>
       <TouchableOpacity
         style={styles.session_logout_button}
-        onPress={disable_session(session.id, session.current)}
+        onPress={() => {
+          disable_session({session_id: session.id})
+          if(current) {
+            logout();
+          }
+        }}
       >
         <Text>{current ? "Log Out" : "Delete"}</Text>
       </TouchableOpacity>
@@ -63,8 +68,8 @@ export function Profile() {
       { userSessions.data.length
         ? <View style={styles.session_list}>
             <Text style={styles.body_text}>Logged In Sessions:</Text>
-            {userSessions.data.map(SessionItem(disable_session, true))} 
-            {userSessions.data.map(SessionItem(disable_session, false))}
+            {userSessions.data.map(SessionItem(disable_session, true, logout))} 
+            {userSessions.data.map(SessionItem(disable_session, false, ()=> true))}
           </View>
         : <></>
       }

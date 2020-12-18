@@ -4,17 +4,21 @@ import {
   Picker,
   Text,
   StyleSheet,
-  ViewStyle,
-  TextStyle,
 } from 'react-native';
-import { FieldError } from 'react-hook-form';
 
 export default React.forwardRef(
-  (props, ref): React.ReactElement => {
-    const { label, labelStyle, error, switchOptions, ...inputProps } = props;
+  (props, ref) => {
+    const {
+      label,
+      labelStyle,
+      error,
+      switchOptions,
+      id,
+      ...inputProps 
+    } = props;
 
     return (
-      <View style={styles.container}>
+      <View key={id} style={styles.container}>
         {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
         <Picker
           autoCapitalize="none"
@@ -22,8 +26,9 @@ export default React.forwardRef(
           style={[styles.input, { borderColor: error ? '#fc6d47' : '#000000' }]}
           {...inputProps}
         >
-          {switchOptions.map(item =>
-            <Picker.Item label={item} value={item}/>
+          <Picker.Item key={"default"} label={"Select One"} enabled={false} value={undefined}/>
+          {switchOptions.map((item, index) =>
+            <Picker.Item key={index} label={item} value={item}/>
           )}
         </Picker>
         <Text style={styles.textError}>{error && error.message}</Text>

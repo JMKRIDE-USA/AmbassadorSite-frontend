@@ -47,7 +47,7 @@ export const user_pages = [
     apply_page: true,
   },
   {
-    title: "Apply Now",
+    title: "Ambassador Application",
     component: AmbassadorApplication,
     url: "ambassador-application",
     in_header: true,
@@ -101,6 +101,7 @@ export function getProfilePage(auth_permissions){
 export function getApplyPage(auth_permissions){
   let pages = authPermissionsToPages(auth_permissions);
   let apply_page;
+  console.log(pages);
   pages.forEach(page => {
     if(page.apply_page){
       apply_page = page;

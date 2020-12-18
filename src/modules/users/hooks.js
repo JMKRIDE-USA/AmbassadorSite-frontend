@@ -1,7 +1,7 @@
 import { useMutation, queryCache } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { useGetQuery } from '../data.js';
+import { useGetQuery, createMutationCall } from '../data.js';
 import { logoutUser } from './userSlice.js';
 import { selectAuthHeader, resetAuth } from '../auth/authSlice.js';
 import config from '../../config.js';
@@ -19,7 +19,6 @@ export function useGetUserSessions() {
 
 export function useDisableSession(){
   const header = useSelector(selectAuthHeader);
-  let dispatch = useDispatch();
 
   const [disableSession, { error }] = useMutation(
     ({to_submit}) => fetch(
@@ -37,32 +36,7 @@ export function useDisableSession(){
     }
   );
 
-  return (sessionId, isCurrent) => async () => {
-    let to_submit = {
-      session_id: sessionId,
-    }
-    let result;
-    try {
-      result = await disableSession({to_submit})
-    } catch (error) {
-      console.log("[!] Error disabling session:", error);
-      return false;
-    }
-    if (error){
-      console.log("[!] Error disabling session:", error);
-      return false;
-    }
-    if (result && result.error){
-      console.log("[!] Error disabling session:", result.error);
-      return false;
-    }
-    if (result) {
-      if (isCurrent) {
-        dispatch(resetAuth());
-        dispatch(logoutUser());
-      }
-      return true;
-    }
-    return false;
-  }
+  return createMutationCall(
+    disableSession, error, "disabling session",
+  )
 }

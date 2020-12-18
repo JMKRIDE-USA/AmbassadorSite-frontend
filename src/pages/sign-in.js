@@ -2,22 +2,19 @@ import React, { useEffect } from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { page_styles } from '../pages.js';
 import { LoginAccountForm } from '../components/loginForm.js';
 import {
   selectUserId,
-  fetchAuthRequest,
 } from '../modules/auth/authSlice.js';
 import { useLogin } from '../modules/auth/hooks.js';
 
 
 export function SignIn() {
-  let navigation = useNavigation();
-  const dispatch = useDispatch();
+  const navigation = useNavigation();
 
-  const login = useLogin();
   let userId = useSelector(selectUserId);
 
   useEffect(() => {
@@ -25,6 +22,8 @@ export function SignIn() {
       navigation.reset({index: 0, routes: [{name: "Home"}]});
     }
   }, [userId]);
+
+  const login = useLogin();
 
   async function submitLogin(
     { email, password },
@@ -35,7 +34,7 @@ export function SignIn() {
     setSubmitting(false);
     return;
   }
-
+  console.log(navigation)
   return (
     <View style={page_styles.app_scrollview}>
       <View style={styles.page}>
@@ -47,10 +46,10 @@ export function SignIn() {
         </Text>
         <LoginAccountForm styles={styles} submitLogin={submitLogin}/>
         <TouchableOpacity onPress={
-          () => navigation.reset({index: 0, routes: [{name: "Sign Up"}]})
+          () => navigation.reset({index: 0, routes: [{name: "Apply Now"}]})
         }>
           <Text style={styles.clickableText}>
-            Don't yet have an account? Sign Up.
+            {'Don\'t yet have an account? Sign Up.'}
           </Text>
         </TouchableOpacity>
       </View>

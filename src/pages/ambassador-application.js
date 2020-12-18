@@ -10,7 +10,10 @@ export function AmbassadorApplication() {
   let challengeQueryResult = useGetAmbassadorApplication();
   return (
     <View style={page_styles.app_scrollview}>
-      <ChallengeDisplay challengeData={challengeQueryResult.data}/>
+      { (Object.keys(challengeQueryResult.data).length !== 0 && challengeQueryResult.data)
+        ? <ChallengeDisplay challengeId={challengeQueryResult.data}/>
+        : <Text> Loading... </Text>
+      }
     </View>
   );
 }

@@ -11,4 +11,7 @@ export default {
   password: {
     required: {value: true, message: 'Password is required'},
   },
+  yesno: {
+    required: {value: true, message: 'This field is required'}
+  },
 };
