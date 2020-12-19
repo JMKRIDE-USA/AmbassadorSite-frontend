@@ -34,6 +34,7 @@ export default ({
                 },
                 error: errors[child.props.name],
                 id: child.props.id,
+                key: child.props.id,
               })
             : child;
         }

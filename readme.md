@@ -7,6 +7,7 @@
   - Fix verify
 * Admin page
   - Approve submissions
+  - Create challenges
   - List users + details
 * Ambassador page
   - Challenge board

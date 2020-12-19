@@ -7,7 +7,7 @@ import config from '../../config.js';
 
 const CACHE_KEY = 'challenge' //global key cache invalidations for queries this file
 
-function useGetChallenge(endpoint){
+function challengeGetter(endpoint){
   return useGetQuery(
     endpoint,
     CACHE_KEY,
@@ -15,11 +15,15 @@ function useGetChallenge(endpoint){
 }
 
 export function useGetAmbassadorApplication() {
-  return useGetChallenge("challenges/ambassador-application");
+  return challengeGetter("challenges/ambassador-application");
 }
 
-export function useGetChallengeById(id) {
-  return useGetChallenge("challenges/id/" + id);
+export function useGetChallenge({ challengeId }) {
+  return challengeGetter("challenges/id/" + challengeId);
+}
+
+export function useGetSubmission({ challengeId }) {
+  return challengeGetter("challenges/submissions/id/" + challengeId);
 }
 
 export function useSubmitChallenge(challengeId) {
