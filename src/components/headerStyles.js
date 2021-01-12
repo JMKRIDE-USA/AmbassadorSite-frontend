@@ -16,7 +16,7 @@ const common_styles = {
     alignItems: "center",
   },
   header_left: {
-    flex: 3,
+    flex: 1,
     padding: "1em",
     flexDirection: "row",
     justifyContent: "flex-start",

@@ -9,22 +9,27 @@ export default {
     borderWidth: "2px",
     borderRadius: "20px",
     flexDirection: "column",
+    padding: "10px",
+    justifyContent: "center",
   },
-  card_text: {
-    padding: "20px",
+  title_card_text: {
+    color: "#080808",
+    fontFamily: "Sans-Serif",
+    textAlign: "center",
+  },
+  body_card_text: {
     fontWeight: "light",
     textAlign: "left",
-    color: "#080808",
   },
   title_text: {
-    fontFamily: "Sans-Serif",
     fontSize: "30px",
     fontWeight: "bold",
   },
   sub_title_text: {
-    fontFamily: "Sans-Serif",
     fontSize: "24px",
+    fontWeight: "light",
     color: "#333333",
+    textAlign: "center",
   },
   title_text_alt: {
     fontWeight: "light",
@@ -32,7 +37,6 @@ export default {
     color: "white",
   },
   body_text: {
-    fontFamily: "Sans-Serif",
     fontSize: "18px",
   },
 };

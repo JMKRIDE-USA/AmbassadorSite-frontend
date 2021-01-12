@@ -43,7 +43,7 @@ export function SplashPage() {
           </Text>
         </View>
         <View style={styles.page_card}>
-          <Text style={styles.card_text}>
+          <Text style={styles.body_card_text}>
             <Text style={styles.title_text}>
               Our Goals:<br/><br/>
             </Text>
@@ -58,7 +58,7 @@ export function SplashPage() {
           </Text>
         </View>
         <View style={styles.page_card}>
-          <Text style={styles.card_text}>
+          <Text style={styles.body_card_text}>
             <Text style={styles.title_text}>
               What We're Looking For in a Great Ambassador:<br/><br/>
             </Text>
@@ -83,7 +83,7 @@ export function SplashPage() {
           </Text>
         </View>
         <View style={styles.page_card}>
-          <Text style={styles.card_text}>
+          <Text style={styles.body_card_text}>
             <Text style={styles.title_text}>
               About the program:<br/><br/>
             </Text>

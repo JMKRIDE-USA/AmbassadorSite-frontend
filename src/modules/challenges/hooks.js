@@ -26,6 +26,10 @@ export function useGetSubmission({ challengeId }) {
   return challengeGetter("challenges/submissions/id/" + challengeId);
 }
 
+export function useGetSubmissionsAllowed({ challengeId }) {
+  return challengeGetter("challenges/submissions_allowed/id/" + challengeId);
+}
+
 export function useSubmitChallenge(challengeId) {
   const header = useSelector(selectAuthHeader);
 

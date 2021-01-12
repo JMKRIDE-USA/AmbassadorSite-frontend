@@ -11,8 +11,9 @@ export function useGetQuery(endpoint, key, auth = true) {
   }
   const userId = useSelector(selectUserId);
   if (auth && !userId) {
-    console.log("[!] GetQuery: Auth requested but user is not logged in.");
-    return { data: {}, error: "Unknown", status: "error" }
+    const error = "GetQuery: Auth requested but user is not logged in." ;
+    console.log("[!]", error);
+    return { data: {}, error: error, status: "error" }
   }
 
   try {
