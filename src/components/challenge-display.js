@@ -9,6 +9,7 @@ import {
   useSubmitChallenge,
   useGetSubmissionsAllowed,
 } from '../modules/challenges/hooks.js';
+import { ISOToReadableString } from '../modules/date.js';
 
 import Form from './forms/form.js';
 import validation from './forms/validation.js';
@@ -78,36 +79,70 @@ function ChallengeDisplayTitle({ challengeData }) {
 function ChallengeDisplay({ challengeData, submissionsAllowed, submitChallenge }) {
   return (
     <View style={styles.page_card}>
-      <View style={submissionsAllowed ? {} : styles.disable_cover}>
-        <Text style={styles.body_card_text}>
-          <Text style={styles.body_text}>{challengeData.longDescription}</Text>
-        </Text>
-        <ChallengeForm
-          enabled={submissionsAllowed}
-          fields={challengeData.structure}
-          submitChallenge={submitChallenge}
-        />
+      <View>
+        { submissionsAllowed
+          ? <></>
+          : <View style={styles.disable_cover}>
+              <Text style={styles.disable_text}>
+                {"You've already submitted this challenge, and cannot submit another."}
+              </Text>
+            </View>
+        }
+        <View>
+          <Text style={styles.body_card_text}>
+            <Text style={styles.body_text}>{challengeData.longDescription}</Text>
+          </Text>
+          <ChallengeForm
+            enabled={submissionsAllowed}
+            fields={challengeData.structure}
+            submitChallenge={submitChallenge}
+          />
+        </View>
       </View>
     </View>
   );
 }
 
-function SubmissionItem(submission) {
+function SubmissionItem(submission, index) {
+
+  const statusStyle = (status) => ({
+      height: "20px",
+      width: "60px",
+      justifyContent: "center",
+      marginRight: "9px",
+      alignItems: "center",
+      backgroundColor: {
+        'PENDING': "#ebd234", // yellow
+        'APPROVED': "#34eb49", // green
+        'DENIED': "#eb3434", // red
+      }[status],
+  });
+
+  const itemStyle = (index) => {
+    let style = styles.submission_item;
+    if(index > 0) {
+      style.borderTopWidth = "1px";
+    }
+    return style
+  }
+
   return (
-    <View style={styles.submission_item} key={submission._id}>
-      <Text style={styles.body_text}>
-        Content
+    <View style={itemStyle(index)} key={submission._id}>
+      <View style={statusStyle(submission.status)}>
+        <Text style={styles.status_text}>{submission.status}</Text>
+      </View>
+      <Text style={styles.submission_item_text}>
+        Submitted At: {ISOToReadableString(submission.createdAt)}
       </Text>
     </View>
   );
 }
 
 function SubmissionList({ submissionData }) {
-  console.log("SubmissionData:", submissionData);
   return (
     <View style={styles.page_card}>
       <Text style={styles.body_card_text}>
-        <Text> Your Submission(s): </Text>
+        <Text style={styles.title_text}> Your Submission(s): </Text>
       </Text>
       { submissionData.map(SubmissionItem) }
     </View>
@@ -129,7 +164,7 @@ export function FullChallengeDisplay({ challengeId }) {
 
   const submitChallenge = useSubmitChallenge(challengeId)
 
-  let loading = [challengeQuery, submissionQuery, submissionsAllowedQuery].every(
+  let loading = ![challengeQuery, submissionQuery, submissionsAllowedQuery].every(
     (query) => query.status === 'success'
   );
 
@@ -143,7 +178,7 @@ export function FullChallengeDisplay({ challengeId }) {
       <ChallengeDisplayTitle
         challengeData={challengeQuery.data}
       />
-      { (submissionQuery.data.length > 0 )
+      { submissionQuery.data.length > 0
         ? <SubmissionList submissionData={submissionQuery.data}/>
         : <></>
       }
@@ -159,9 +194,34 @@ export function FullChallengeDisplay({ challengeId }) {
 
 const styles = StyleSheet.create({
   ...card_styles,
+  submission_item: {
+    flexDirection: "row",
+    borderColor: "black",
+    padding: "10px",
+  },
+  status_text: {
+    fontSize: "10px",
+  },
+  submission_item_text: {
+    fontSize: "15px",
+  },
   disable_cover: {
-    backgroundColor: "red",
-    //backgroundColor: "rgba(52, 52, 52, 0.8)",
+    backgroundColor: "rgba(52, 52, 52, 0.8)",
+    borderRadius: "4px",
+    padding: "10px",
+    alignItems: "center",
+    justifyContent: "center",
+    flex: -1,
+    height: "100%",
+    width: "100%",
+    position: "absolute",
+    zIndex: 5,
+  },
+  disable_text: {
+    fontSize: "30px",
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
   challenge_field_container: {
     padding: "16px",

@@ -28,3 +28,7 @@ export function needsRefresh(date){
   return ((date - Date.now()) <= 24 * 60 * 60 * 1000)
 }
 
+export function ISOToReadableString(ISOString) {
+  const date = new Date(ISOString);
+  return date.toLocaleString();
+}

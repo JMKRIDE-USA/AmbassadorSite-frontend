@@ -33,15 +33,11 @@ export function useGetQuery(endpoint, key, auth = true) {
       return { data: {}, error: error, status: status }
     }
 
-    if (data) {
-      return { data: data, error: error, status: status }
-    }
+    return { data: data, error: error, status: status }
   } catch (error) {
     console.log("[!] Error fetching", key, "endpoint \"", endpoint, "\":", error);
     return { data: {}, error: error, status: 'error' }
   }
-
-  return { data: {}, error: "Unknown", status: "error" }
 }
 
 export function createMutationCall(mutationFn, mutationError, mutationVerb) {

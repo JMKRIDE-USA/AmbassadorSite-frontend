@@ -8,17 +8,21 @@ import { page_styles } from '../pages.js';
 import card_styles from './cardStyle.js';
 import { resetAuth } from '../modules/auth/authSlice.js';
 import { useGetUserSessions, useDisableSession } from '../modules/users/hooks.js';
+import { ISOToReadableString } from '../modules/date.js';
 
 
-const SessionItem = (disable_session, current, logout) => (session) => {
-  const date = new Date(session.lastUsedDate);
+const SessionItem = (disable_session, current, logout) => (session, index) => {
   if (current !== Boolean(session.current)){
     return <View key={session.id}></View>
   }
+  let item_style = {}
+  if(index > 0) {
+    item_style.borderTopWidth = "1px";
+  }
   return (
-    <View style={styles.session_item} key={session.id}>
+    <View style={[styles.session_item, item_style]} key={session.id}>
       <Text style={styles.session_text}>
-        Last Seen: {date.toLocaleString()} at {session.lastUsedIP}
+        Last Seen: {ISOToReadableString(session.lastUsedDate)} at {session.lastUsedIP}
       </Text>
       <TouchableOpacity
         style={styles.session_logout_button}
@@ -44,6 +48,15 @@ export function Profile() {
 
   const disable_session = useDisableSession();
 
+  let loading = ![userSessions].every(
+    (query) => query.status === 'success'
+  );
+
+  if (loading) {
+    return (
+      <Text> Profile loading... </Text>
+    )
+  }
   function logout(){
     dispatch(logoutUser());
     dispatch(resetAuth());
@@ -103,7 +116,6 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "center",
-      borderBottomWidth: "1px",
       borderColor: "black",
     },
     session_text: {},
