@@ -13,17 +13,34 @@ import ChallengeBoard from './pages/challenge-board.js';
 import { CreateChallengePage } from './pages/create-challenge.js';
 import { Profile } from './pages/profile.js';
 import { AmbassadorApplication } from './pages/ambassador-application.js';
+import { ChallengeSubmissions } from './pages/challenge-submission.js';
 
 import { verifyAuthRequest } from './modules/auth/authSlice.js';
 
+const homePage = {
+  title: "Home",
+  component: SplashPage,
+  url: "/",
+  in_header: true,
+};
+
+const profilePage = {
+  title: "Profile",
+  component: Profile,
+  url: "profile",
+  in_header: false,
+  profile_page: true,
+};
+
+const challengeSubmissions = {
+  title: "Challenge Submission",
+  component: ChallengeSubmissions,
+  url: "challenge-submissions",
+  in_header: false,
+}
 
 export const welcome_pages = [
-  {
-    title: "Home",
-    component: SplashPage,
-    url: "/",
-    in_header: true,
-  },
+  homePage,
   {
     title: "Apply Now",
     component: SignUp,
@@ -39,28 +56,29 @@ export const welcome_pages = [
   },
 ];
 export const user_pages = [
-  {
-    title: "Home",
-    component: SplashPage,
-    url: "/",
-    in_header: true,
-    apply_page: true,
-  },
+  homePage,
+  profilePage,
+  challengeSubmissions,
   {
     title: "Ambassador Application",
     component: AmbassadorApplication,
     url: "ambassador-application",
     in_header: true,
-  },
-  {
-    title: "Profile",
-    component: Profile,
-    url: "profile",
-    in_header: false,
-    profile_page: true,
+    apply_page: true,
   },
 ];
-export const admin_pages = user_pages.concat([
+export const ambassador_pages = [
+  homePage,
+  profilePage,
+  challengeSubmissions,
+  {
+    title: "Challenge Board",
+    component: ChallengeBoard,
+    url: "challenge-board",
+    in_header: true,
+  },
+];
+export const admin_pages = ambassador_pages.concat([
   {
     title: "Create Challenge",
     component: CreateChallengePage, 
@@ -68,14 +86,17 @@ export const admin_pages = user_pages.concat([
     in_header: true,
   },
 ]);
-const all_pages = welcome_pages.concat(user_pages).concat(admin_pages);
+const all_pages = welcome_pages
+  .concat(user_pages)
+  .concat(ambassador_pages)
+  .concat(admin_pages);
 
 export function authPermissionsToPages(auth_permissions) {
   if (auth_permissions) {
     return {
       "none": welcome_pages,
       "user": user_pages,
-      "ambassador": user_pages,
+      "ambassador": ambassador_pages,
       "admin": admin_pages,
     }[auth_permissions]
   }
