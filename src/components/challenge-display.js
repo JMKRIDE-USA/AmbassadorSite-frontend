@@ -1,21 +1,23 @@
 import React from 'react';
 
-import { StyleSheet, View, Text, Button} from 'react-native';
+import { StyleSheet, View, Text, Button } from 'react-native';
 import { useForm } from 'react-hook-form';
 
 import {
   useGetChallenge,
-  useGetSubmission,
+  useGetSubmissions,
   useSubmitChallenge,
   useGetSubmissionsAllowed,
 } from '../modules/challenges/hooks.js';
-import { ISOToReadableString } from '../modules/date.js';
+
+import { SubmissionItem } from './submission-display.js';
 
 import Form from './forms/form.js';
 import validation from './forms/validation.js';
 import TextInput from './forms/textinput.js';
 import SwitchInput from './forms/switchinput.js';
 import card_styles from '../pages/cardStyle.js';
+import common_styles from '../components/commonStyle.js';
 
 
 function challengeField(field) {
@@ -103,44 +105,9 @@ function ChallengeDisplay({ challengeData, submissionsAllowed, submitChallenge }
   );
 }
 
-function SubmissionItem(submission, index) {
-
-  const statusStyle = (status) => ({
-      height: "20px",
-      width: "60px",
-      justifyContent: "center",
-      marginRight: "9px",
-      alignItems: "center",
-      backgroundColor: {
-        'PENDING': "#ebd234", // yellow
-        'APPROVED': "#34eb49", // green
-        'DENIED': "#eb3434", // red
-      }[status],
-  });
-
-  const itemStyle = (index) => {
-    let style = styles.submission_item;
-    if(index > 0) {
-      style.borderTopWidth = "1px";
-    }
-    return style
-  }
-
-  return (
-    <View style={itemStyle(index)} key={submission._id}>
-      <View style={statusStyle(submission.status)}>
-        <Text style={styles.status_text}>{submission.status}</Text>
-      </View>
-      <Text style={styles.submission_item_text}>
-        Submitted At: {ISOToReadableString(submission.createdAt)}
-      </Text>
-    </View>
-  );
-}
-
 function SubmissionList({ submissionData }) {
   return (
-    <View style={styles.page_card}>
+    <View style={styles.list}>
       <Text style={styles.body_card_text}>
         <Text style={styles.title_text}> Your Submission(s): </Text>
       </Text>
@@ -159,7 +126,7 @@ function SubmissionList({ submissionData }) {
 export function FullChallengeDisplay({ challengeId }) {
 
   const challengeQuery = useGetChallenge({challengeId: challengeId});
-  const submissionQuery = useGetSubmission({challengeId: challengeId});
+  const submissionQuery = useGetSubmissions({challengeId: challengeId});
   const submissionsAllowedQuery = useGetSubmissionsAllowed({challengeId: challengeId});
 
   const submitChallenge = useSubmitChallenge(challengeId)
@@ -194,11 +161,7 @@ export function FullChallengeDisplay({ challengeId }) {
 
 const styles = StyleSheet.create({
   ...card_styles,
-  submission_item: {
-    flexDirection: "row",
-    borderColor: "black",
-    padding: "10px",
-  },
+  ...common_styles,
   status_text: {
     fontSize: "10px",
   },

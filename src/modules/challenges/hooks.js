@@ -18,12 +18,23 @@ export function useGetAmbassadorApplication() {
   return challengeGetter("challenges/ambassador-application");
 }
 
-export function useGetChallenge({ challengeId }) {
-  return challengeGetter("challenges/id/" + challengeId);
+export function useGetChallenge({ challengeId, submissionId }) {
+  if(challengeId) {
+    return challengeGetter("challenges?challengeId=" + challengeId);
+  } else if (submissionId) {
+    return challengeGetter("challenges?submissionId=" + submissionId);
+  }
+  throw new Error("[useGetChallenge] One of submissionId, challengeId required.")
 }
 
-export function useGetSubmission({ challengeId }) {
-  return challengeGetter("challenges/submissions/id/" + challengeId);
+export function useGetSubmissions({ submissionId, challengeId }) {
+  if(submissionId) {
+    return challengeGetter("challenges/submissions?submissionId=" + submissionId);
+  } else if (challengeId) {
+    return challengeGetter("challenges/submissions?challengeId=" + challengeId);
+  }
+
+  throw new Error("[useGetSubmissions] One of submissionId, challengeId required.")
 }
 
 export function useGetSubmissionsAllowed({ challengeId }) {

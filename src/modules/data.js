@@ -32,7 +32,9 @@ export function useGetQuery(endpoint, key, auth = true) {
       console.log("[!] Error fetching", key, "endpoint \"", endpoint, "\":", error);
       return { data: {}, error: error, status: status }
     }
-
+    if (data && data.error){
+      return { data: data, error: data.error, status: "error" }
+    }
     return { data: data, error: error, status: status }
   } catch (error) {
     console.log("[!] Error fetching", key, "endpoint \"", endpoint, "\":", error);

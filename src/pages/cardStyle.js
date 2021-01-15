@@ -38,5 +38,6 @@ export default {
   },
   body_text: {
     fontSize: "18px",
+    fontWeight: "normal",
   },
 };

@@ -1,21 +1,26 @@
 import React from 'react';
 
-import { View, Text } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View } from 'react-native';
 
 import { page_styles } from '../pages.js';
 
+import { 
+  FullChallengeSubmissionDisplay,
+  SubmissionList,
+} from '../components/submission-display.js';
+
 export function ChallengeSubmissions(props) {
-  let navigation = useNavigation();
-  console.log(props.route);
-  //let submissionQueryResult = useGetAmbassadorApplication();
+  if(props.route.params.id){
+    return (
+      <View style={page_styles.app_scrollview}>
+        <FullChallengeSubmissionDisplay submissionId={props.route.params.id}/>
+      </View>
+    )
+  }
   return (
     <View style={page_styles.app_scrollview}>
-      <Text>Challenge Submission:</Text>
-      <Text>
-        {props.route.params.id ? props.route.params.id : 'None'}
-      </Text>
+      <SubmissionList/>
     </View>
-  );
+  )
 }
 

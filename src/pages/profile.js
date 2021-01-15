@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectUserInfo, logoutUser } from '../modules/users/userSlice.js';
 import { page_styles } from '../pages.js';
 import card_styles from './cardStyle.js';
+import common_styles from '../components/commonStyle.js';
 import { resetAuth } from '../modules/auth/authSlice.js';
 import { useGetUserSessions, useDisableSession } from '../modules/users/hooks.js';
 import { ISOToReadableString } from '../modules/date.js';
@@ -20,12 +21,12 @@ const SessionItem = (disable_session, current, logout) => (session, index) => {
     item_style.borderTopWidth = "1px";
   }
   return (
-    <View style={[styles.session_item, item_style]} key={session.id}>
-      <Text style={styles.session_text}>
+    <View style={[styles.item_view, item_style]} key={session.id}>
+      <Text style={styles.item_text}>
         Last Seen: {ISOToReadableString(session.lastUsedDate)} at {session.lastUsedIP}
       </Text>
       <TouchableOpacity
-        style={styles.session_logout_button}
+        style={styles.item_button}
         onPress={() => {
           disable_session({session_id: session.id})
           if(current) {
@@ -33,7 +34,7 @@ const SessionItem = (disable_session, current, logout) => (session, index) => {
           }
         }}
       >
-        <Text>{current ? "Log Out" : "Delete"}</Text>
+        <Text style={styles.item_button_text}>{current ? "Log Out" : "Delete"}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -79,10 +80,10 @@ export function Profile() {
         </Text>
       </TouchableOpacity>
       { userSessions.data.length
-        ? <View style={styles.session_list}>
+        ? <View style={styles.list}>
             <Text style={styles.body_text}>Logged In Sessions:</Text>
-            {userSessions.data.map(SessionItem(disable_session, true, logout))} 
             {userSessions.data.map(SessionItem(disable_session, false, ()=> true))}
+            {userSessions.data.map(SessionItem(disable_session, true, logout))} 
           </View>
         : <></>
       }
@@ -93,6 +94,7 @@ export function Profile() {
 
 const styles = StyleSheet.create({
   ...card_styles,
+  ...common_styles,
   ...{
     logout_button: {
       width: 300,
@@ -108,25 +110,5 @@ const styles = StyleSheet.create({
       fontSize: 22,
       color: "black",
     },
-    session_list: {
-      ...card_styles.page_card,
-      padding: "10px",
-    },
-    session_item: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
-      borderColor: "black",
-    },
-    session_text: {},
-    session_logout_button: {
-      width: 100,
-      borderRadius: 5,
-      padding: "2px",
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: "#d5d5d5",
-      margin: "10px",
-    }
   },
 });
