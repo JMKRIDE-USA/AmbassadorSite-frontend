@@ -23,7 +23,8 @@ const SessionItem = (disable_session, current, logout) => (session, index) => {
   return (
     <View style={[styles.item_view, item_style]} key={session.id}>
       <Text style={styles.item_text}>
-        Last Seen: {ISOToReadableString(session.lastUsedDate)} at {session.lastUsedIP}
+        <Text style={styles.bold_item_text}>{"Last Seen: "}</Text>
+        {ISOToReadableString(session.lastUsedDate)} at {session.lastUsedIP}
       </Text>
       <TouchableOpacity
         style={styles.item_button}

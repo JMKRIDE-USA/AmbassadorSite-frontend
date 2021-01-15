@@ -16,11 +16,16 @@ export default {
   },
   item_text: {
     fontSize: "15px",
+    fontWeight: "normal",
+  },
+  bold_item_text: {
+    fontSize: "15px",
+    fontWeight: "bold",
   },
   item_view: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
     borderColor: "black",
   },
   item_button: {
