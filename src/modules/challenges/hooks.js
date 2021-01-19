@@ -18,6 +18,10 @@ export function useGetAmbassadorApplication() {
   return challengeGetter("challenges/ambassador-application");
 }
 
+export function useGetAmbassadorApplicationSubmission() {
+  return challengeGetter("challenges/submissions/ambassador-application");
+}
+
 export function useGetChallenge({ challengeId, submissionId }) {
   if(challengeId) {
     return challengeGetter("challenges?challengeId=" + challengeId);

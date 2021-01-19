@@ -18,7 +18,7 @@ const statusColors = {
   'DENIED': "#eb3434", // red
 }
 
-export function SubmissionItem(submission, index, view_button = true) {
+export function SubmissionItem({submission, index, view_button = true}) {
   let { onPress, ...props } = useLinkProps({to: "/challenge-submissions?id=" + submission._id})
 
   const statusStyle = (status) => ([
@@ -114,10 +114,10 @@ const SubmissionContentItem = (challengeFields) => (item, index) => {
     <View style={itemStyle} key={item._id}>
       <View style={styles.item_view}>
         <Text style={styles.bold_item_text}>Title:</Text>
-        <Text style={styles.item_text}>{field.title}</Text>
+        <Text style={styles.bold_item_text}>Response:</Text>
       </View>
       <View style={styles.item_view}>
-        <Text style={styles.bold_item_text}>Response:</Text>
+        <Text style={styles.item_text}>{field.title}</Text>
         <Text style={styles.item_text}>{item.content}</Text>
       </View>
     </View>
@@ -168,6 +168,12 @@ export function FullChallengeSubmissionDisplay({submissionId}) {
         challenge={challengeQuery.data}
       />
     </>
+  );
+}
+
+export function SubmissionList() {
+  return (
+    <Text>SubmissionList</Text>
   );
 }
 

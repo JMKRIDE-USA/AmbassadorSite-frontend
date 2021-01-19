@@ -111,7 +111,11 @@ function SubmissionList({ submissionData }) {
       <Text style={styles.body_card_text}>
         <Text style={styles.title_text}> Your Submission(s): </Text>
       </Text>
-      { submissionData.map(SubmissionItem) }
+      { submissionData.map(
+        (submission, index) => (
+          <SubmissionItem submission={submission} index={index} key={submission._id}/>
+        )) 
+      }
     </View>
   );
 }

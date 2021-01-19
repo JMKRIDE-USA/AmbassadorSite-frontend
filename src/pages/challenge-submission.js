@@ -10,7 +10,7 @@ import {
 } from '../components/submission-display.js';
 
 export function ChallengeSubmissions(props) {
-  if(props.route.params.id){
+  if(props.route.params && props.route.params.id){
     return (
       <View style={page_styles.app_scrollview}>
         <FullChallengeSubmissionDisplay submissionId={props.route.params.id}/>

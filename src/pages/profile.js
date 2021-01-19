@@ -9,7 +9,9 @@ import card_styles from './cardStyle.js';
 import common_styles from '../components/commonStyle.js';
 import { resetAuth } from '../modules/auth/authSlice.js';
 import { useGetUserSessions, useDisableSession } from '../modules/users/hooks.js';
+import { useGetAmbassadorApplicationSubmission } from '../modules/challenges/hooks.js';
 import { ISOToReadableString } from '../modules/date.js';
+import { SubmissionItem } from '../components/submission-display.js';
 
 
 const SessionItem = (disable_session, current, logout) => (session, index) => {
@@ -50,7 +52,9 @@ export function Profile() {
 
   const disable_session = useDisableSession();
 
-  let loading = ![userSessions].every(
+  const AASubmissionQuery = useGetAmbassadorApplicationSubmission();
+
+  let loading = ![userSessions, AASubmissionQuery].every(
     (query) => query.status === 'success'
   );
 
@@ -59,6 +63,10 @@ export function Profile() {
       <Text> Profile loading... </Text>
     )
   }
+  let AASubmission = undefined;
+  if(AASubmissionQuery.data && AASubmissionQuery.data.length) {
+    AASubmission = AASubmissionQuery.data[0]
+  }
   function logout(){
     dispatch(logoutUser());
     dispatch(resetAuth());
@@ -66,14 +74,24 @@ export function Profile() {
   return (
     <View style={page_styles.app_scrollview}>
       <View style={styles.page_card}>
-        <Text style={styles.card_text}>
-          <Text style={styles.title_text}>
-            {userInfo.is_ambassador ? "Ambassador" : "User"} Profile<br/>
-          </Text>
-          <Text style={styles.body_text}>
-            Name: {userInfo.firstname} {userInfo.lastname}
-          </Text>
+        <Text style={styles.title_text}>
+          {userInfo.is_ambassador ? "Ambassador" : "User"} Profile<br/>
         </Text>
+        <Text style={styles.body_text}>
+          Name: {userInfo.firstname} {userInfo.lastname}
+        </Text>
+        { userInfo.is_ambassador ? <></>
+          : <Text style={styles.body_text}>
+              Ambassador Status: 
+            </Text>
+        }
+        {(!userInfo.is_ambassador && AASubmission)
+          ? <SubmissionItem
+              submission={AASubmission}
+              index={0}
+            />
+          : <></>
+        }
       </View>
       <TouchableOpacity style={styles.logout_button} onPress={logout}>
         <Text style={styles.logout_button_text}>
