@@ -70,3 +70,7 @@ export function useSubmitChallenge(challengeId) {
   return createMutationCall(submitChallenge, error, "submitting challenge");
 
 }
+
+export function useGetPendingSubmissions() {
+  return challengeGetter("challenges/submissions/pending");
+}

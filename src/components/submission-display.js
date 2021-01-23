@@ -72,6 +72,7 @@ function SubmissionInfoDisplay({submissionId, submission, challenge}) {
         <View style={styles.submission_info_item}>
           <Text style={styles.bold_body_text}>Author:</Text>
           <Text style={styles.body_text}>
+            {/* TODO This is Wrong */}
             {userInfo.firstname + " " + userInfo.lastname}<br/>
           </Text>
         </View>

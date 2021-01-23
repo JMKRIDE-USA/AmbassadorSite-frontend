@@ -14,6 +14,7 @@ import { CreateChallengePage } from './pages/create-challenge.js';
 import { Profile } from './pages/profile.js';
 import { AmbassadorApplication } from './pages/ambassador-application.js';
 import { ChallengeSubmissions } from './pages/challenge-submission.js';
+import { AdminPage } from './pages/admin.js';
 
 import { verifyAuthRequest } from './modules/auth/authSlice.js';
 
@@ -78,14 +79,22 @@ export const ambassador_pages = [
     in_header: true,
   },
 ];
-export const admin_pages = ambassador_pages.concat([
+export const admin_pages = [
+  profilePage,
+  challengeSubmissions,
   {
     title: "Create Challenge",
     component: CreateChallengePage, 
     url: "create-challenge",
     in_header: true,
   },
-]);
+  {
+    title: "Admin Page",
+    component: AdminPage,
+    url: "dashboard",
+    in_header: true,
+  }
+];
 const all_pages = welcome_pages
   .concat(user_pages)
   .concat(ambassador_pages)
