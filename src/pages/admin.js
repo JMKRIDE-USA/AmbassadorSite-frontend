@@ -25,7 +25,14 @@ function SubmissionQueue() {
     <View>
       { submissionQueue.data.map(
         (submission, index) => (
-          <SubmissionItem submission={submission} index={index} key={submission._id}/>
+          <SubmissionItem
+            submission={submission}
+            index={index}
+            key={submission._id}
+            admin={true}
+            showAuthor={true}
+            showChallenge={true}
+          />
         ))
       }
     </View>

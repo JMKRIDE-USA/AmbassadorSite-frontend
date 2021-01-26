@@ -9,12 +9,13 @@ import { Footer } from './components/footer.js';
 import { SplashPage } from './pages/splash-page.js';
 import SignUp from './pages/sign-up.js';
 import { SignIn } from './pages/sign-in.js';
-import ChallengeBoard from './pages/challenge-board.js';
 import { CreateChallengePage } from './pages/create-challenge.js';
 import { Profile } from './pages/profile.js';
 import { AmbassadorApplication } from './pages/ambassador-application.js';
 import { ChallengeSubmissions } from './pages/challenge-submission.js';
 import { AdminPage } from './pages/admin.js';
+import { UserPage } from './pages/user.js';
+import { ChallengePage } from './pages/challenge.js';
 
 import { verifyAuthRequest } from './modules/auth/authSlice.js';
 
@@ -39,6 +40,12 @@ const challengeSubmissions = {
   url: "challenge-submissions",
   in_header: false,
 }
+const challengeBoard = {
+  title: "Challenge Board",
+  component: ChallengePage,
+  url: "challenges",
+  in_header: true,
+}
 
 export const welcome_pages = [
   homePage,
@@ -60,6 +67,7 @@ export const user_pages = [
   homePage,
   profilePage,
   challengeSubmissions,
+  {...challengeBoard, in_header: false},
   {
     title: "Ambassador Application",
     component: AmbassadorApplication,
@@ -72,16 +80,12 @@ export const ambassador_pages = [
   homePage,
   profilePage,
   challengeSubmissions,
-  {
-    title: "Challenge Board",
-    component: ChallengeBoard,
-    url: "challenge-board",
-    in_header: true,
-  },
+  challengeBoard,
 ];
 export const admin_pages = [
   profilePage,
   challengeSubmissions,
+  challengeBoard,
   {
     title: "Create Challenge",
     component: CreateChallengePage, 
@@ -93,6 +97,12 @@ export const admin_pages = [
     component: AdminPage,
     url: "dashboard",
     in_header: true,
+  },
+  {
+    title: "User Page",
+    component: UserPage,
+    url: "user",
+    in_header: false,
   }
 ];
 const all_pages = welcome_pages

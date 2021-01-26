@@ -41,4 +41,35 @@ export default {
     fontSize: "12px",
     color: "black",
   },
+  info_list: {
+    marginTop: "15px",
+    marginBottom: "10px"
+  },
+  info_item: {  // used in submission information, (admin) user profile
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  info_item_column: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  standalone_button: { // large outside-of-page-card button
+    minWidth: 300,
+    height: 50,
+    backgroundColor: "lightgray", // override
+    borderWidth: "2px",
+    borderColor: "black",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "20px",
+    marginTop: "10px",
+    marginBottom: "10px",
+  },
+  standalone_button_text: {
+    fontSize: 22,
+    color: "black",
+    padding: "10px",
+  },
 };

@@ -6,8 +6,18 @@ import {
   setUserId,
   setAuthTokens,
   fetchAuthRequest,
+  resetAuth,
 } from './authSlice.js'
 import {  getDateAfter } from '../date.js';
+import { logoutUser } from '../users/userSlice.js';
+
+export function useLogoutUser() {
+  let dispatch = useDispatch()
+  return () => {
+    dispatch(logoutUser())
+    dispatch(resetAuth())
+  }
+}
 
 export function useCreateAccount(){
 

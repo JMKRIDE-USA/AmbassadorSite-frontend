@@ -56,4 +56,6 @@ export const selectAuthHeader = state => {
   return {"Authorization": "Bearer " + state.auth.access_token}
 }
 
+export const selectIsAdmin = state => state.auth.auth_permissions === AUTH_STATE.ADMIN;
+
 export default authSlice.reducer;

@@ -40,4 +40,8 @@ export default {
     fontSize: "18px",
     fontWeight: "normal",
   },
+  bold_body_text: {
+    fontSize: "18px",
+    fontWeight: "bold",
+  },
 };

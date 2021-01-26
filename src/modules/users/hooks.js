@@ -17,6 +17,10 @@ export function useGetUserSessions() {
   return useGetUserQuery("auth/sessions/self");
 }
 
+export function useGetUser({userId}){
+  return useGetUserQuery("users/id/" + userId);
+}
+
 export function useDisableSession(){
   const header = useSelector(selectAuthHeader);
 
@@ -40,3 +44,4 @@ export function useDisableSession(){
     disableSession, error, "disabling session",
   )
 }
+

@@ -3,11 +3,11 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectUserInfo, logoutUser } from '../modules/users/userSlice.js';
+import { selectUserInfo } from '../modules/users/userSlice.js';
 import { page_styles } from '../pages.js';
 import card_styles from './cardStyle.js';
 import common_styles from '../components/commonStyle.js';
-import { resetAuth } from '../modules/auth/authSlice.js';
+import { useLogoutUser } from '../modules/auth/hooks.js';
 import { useGetUserSessions, useDisableSession } from '../modules/users/hooks.js';
 import { useGetAmbassadorApplicationSubmission } from '../modules/challenges/hooks.js';
 import { ISOToReadableString } from '../modules/date.js';
@@ -44,8 +44,6 @@ const SessionItem = (disable_session, current, logout) => (session, index) => {
 }
 
 export function Profile() {
-  const dispatch = useDispatch();
-
   const userInfo = useSelector(selectUserInfo);
 
   const userSessions = useGetUserSessions();
@@ -53,6 +51,8 @@ export function Profile() {
   const disable_session = useDisableSession();
 
   const AASubmissionQuery = useGetAmbassadorApplicationSubmission();
+
+  const logout = useLogoutUser();
 
   let loading = ![userSessions, AASubmissionQuery].every(
     (query) => query.status === 'success'
@@ -66,10 +66,6 @@ export function Profile() {
   let AASubmission = undefined;
   if(AASubmissionQuery.data && AASubmissionQuery.data.length) {
     AASubmission = AASubmissionQuery.data[0]
-  }
-  function logout(){
-    dispatch(logoutUser());
-    dispatch(resetAuth());
   }
   return (
     <View style={page_styles.app_scrollview}>
@@ -93,8 +89,11 @@ export function Profile() {
           : <></>
         }
       </View>
-      <TouchableOpacity style={styles.logout_button} onPress={logout}>
-        <Text style={styles.logout_button_text}>
+      <TouchableOpacity
+        style={[styles.standalone_button, {backgroundColor: "red"}]}
+        onPress={logout}
+      >
+        <Text style={styles.standalone_button_text}>
           Log Out
         </Text>
       </TouchableOpacity>
@@ -115,19 +114,5 @@ const styles = StyleSheet.create({
   ...card_styles,
   ...common_styles,
   ...{
-    logout_button: {
-      width: 300,
-      height: 50,
-      backgroundColor: "red",
-      borderWidth: "2px",
-      borderColor: "black",
-      alignItems: "center",
-      justifyContent: "center",
-      borderRadius: "20px",
-    },
-    logout_button_text: {
-      fontSize: 22,
-      color: "black",
-    },
   },
 });
