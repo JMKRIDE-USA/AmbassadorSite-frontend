@@ -99,7 +99,7 @@ export function useDeleteSubmission(submissionId) {
 
   const [deleteSubmission, {error}] = useMutation(
     () => fetch(
-      config.backend_url + "challenges/submissions/id" + submissionId,
+      config.backend_url + "challenges/submissions/id/" + submissionId,
       {
         method: "DELETE",
         headers: header,

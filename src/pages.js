@@ -77,7 +77,6 @@ export const user_pages = [
   },
 ];
 export const ambassador_pages = [
-  homePage,
   profilePage,
   challengeSubmissions,
   challengeBoard,
@@ -141,7 +140,6 @@ export function getProfilePage(auth_permissions){
 export function getApplyPage(auth_permissions){
   let pages = authPermissionsToPages(auth_permissions);
   let apply_page;
-  console.log(pages);
   pages.forEach(page => {
     if(page.apply_page){
       apply_page = page;
