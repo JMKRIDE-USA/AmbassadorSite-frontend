@@ -1,9 +1,10 @@
 import React from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { selectUserInfo } from '../modules/users/userSlice.js';
+import { selectUserId } from '../modules/auth/authSlice.js';
 import { page_styles } from '../pages.js';
 import card_styles from './cardStyle.js';
 import common_styles from '../components/commonStyle.js';
@@ -12,6 +13,7 @@ import { useGetUserSessions, useDisableSession } from '../modules/users/hooks.js
 import { useGetAmbassadorApplicationSubmission } from '../modules/challenges/hooks.js';
 import { ISOToReadableString } from '../modules/date.js';
 import { SubmissionItem } from '../components/submission-display.js';
+import { SubmissionsTable } from '../components/tables.js';
 
 
 const SessionItem = (disable_session, current, logout) => (session, index) => {
@@ -45,7 +47,6 @@ const SessionItem = (disable_session, current, logout) => (session, index) => {
 
 export function Profile() {
   const userInfo = useSelector(selectUserInfo);
-
   const userSessions = useGetUserSessions();
 
   const disable_session = useDisableSession();
@@ -105,6 +106,12 @@ export function Profile() {
           </View>
         : <></>
       }
+      <View style={styles.page_card}>
+        <Text style={styles.body_text}>
+          My Submissions:
+        </Text>
+        <SubmissionsTable/>
+      </View>
       
     </View>
   );

@@ -37,7 +37,7 @@ export function useGetSubmissions(
     challengeId,
     userId,
     populateAuthor = true,
-    populateChallenge = false
+    populateChallenge = false,
   }) {
   const currentUserId = useSelector(selectUserId);
   if (!userId) {
