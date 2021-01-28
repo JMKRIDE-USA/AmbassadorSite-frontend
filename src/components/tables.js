@@ -3,11 +3,9 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 
 import { useLinkProps } from '@react-navigation/native';
-import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
+import { Table, Row } from 'react-native-table-component';
 
 import common_styles from './commonStyle.js';
-import { useGetSubmissions } from '../modules/challenges/hooks.js';
-import { ISOToReadableString } from '../modules/date.js';
 
 /*
  * Standard Table
@@ -17,7 +15,7 @@ import { ISOToReadableString } from '../modules/date.js';
  *  provide rawDataRowFn
  *    rawDataRowFn
  *      - inputs -> 1 element from rowDataInput + row index
- *      - outputs -> array of data representing columns
+ *      - outputs -> array of data (strings) representing columns
  *
  * Manual Mode:
  *  provide manualRowFn
@@ -64,85 +62,25 @@ export function StandardTable({header, widthArr, rowDataInputs, manualRowFn, raw
   );
 }
 
-function SubmissionViewButton({submissionId, key}) {
-  const { onPress, ...props } = useLinkProps(
-    {to: "/challenge-submissions?id=" + submissionId}
-  )
-  return (
-    <TouchableOpacity
-      key={key}
-      onPress={onPress}
-      style={[styles.item_button, {width: 70}]}
-      {...props}
-    >
-      <Text styles={styles.item_button_text}>View</Text>
-    </TouchableOpacity>
-  )
-}
-
-export function SubmissionsTable(){
-  const userSubmissionsQuery = useGetSubmissions({populateChallenge: true})
-  const submissionTableWidthArr = ["180px", "100px", "180px", "100px"]
-
-  const submissionRowFn = (submission, row_index) => {
-    const button_index = 3
-    const submissionViewButton = (submissionId, index) => (
-      <SubmissionViewButton submissionId={submissionId} index={index}/>
-    );
+export function makeViewButtonFn(endpoint){
+  return ({id, key})  => {
+    const { onPress, ...props } = useLinkProps(
+      {to: "/" + endpoint + "?id=" + id}
+    )
     return (
-      <TableWrapper
-        key={row_index}
-        style={[styles.standardTableRow, row_index%2 && {backgroundColor: "#F7F6E7"}]}
+      <TouchableOpacity
+        key={key}
+        onPress={onPress}
+        style={[styles.item_button, {width: 70}]}
+        {...props}
       >
-        {
-          [
-            ISOToReadableString(submission.createdAt),
-            submission.status,
-            submission.challenge.title,
-            submission._id,
-          ].map(
-            (cellValue, index) => (
-              <Cell
-                key={index}
-                style={[styles.standardTableCell, {width: submissionTableWidthArr[index]}]}
-                data={
-                  index === button_index 
-                    ? submissionViewButton(cellValue, index) 
-                    : cellValue
-                }
-                textStyle={styles.standardTableDataText}
-              />
-            )
-        )
-        }
-      </TableWrapper>
-    );
-  }
-
-
-  let loading = ![userSubmissionsQuery].every(
-    (query) => query.status === 'success'
-  );
-
-  if (loading) {
-    return (
-      <Text> Submissions loading... </Text>
+        <Text styles={styles.item_button_text}>View</Text>
+      </TouchableOpacity>
     )
   }
-
-  return (
-    <View>
-      <StandardTable
-        header={['Submitted At', 'Status', 'Challenge', '']}
-        widthArr={submissionTableWidthArr}
-        rowDataInputs={userSubmissionsQuery.data}
-        manualRowFn={submissionRowFn}
-      />
-    </View>
-  );
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   ...common_styles,
   ...{
     standardTableView: {

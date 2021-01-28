@@ -10,10 +10,13 @@ import card_styles from './cardStyle.js';
 import common_styles from '../components/commonStyle.js';
 import { useLogoutUser } from '../modules/auth/hooks.js';
 import { useGetUserSessions, useDisableSession } from '../modules/users/hooks.js';
-import { useGetAmbassadorApplicationSubmission } from '../modules/challenges/hooks.js';
+import {
+  useGetAmbassadorApplicationSubmission,
+  useGetSubmissions,
+} from '../modules/challenges/hooks.js';
 import { ISOToReadableString } from '../modules/date.js';
 import { SubmissionItem } from '../components/submission-display.js';
-import { SubmissionsTable } from '../components/tables.js';
+import { SubmissionsTable } from '../components/tables/submissions.js';
 
 
 const SessionItem = (disable_session, current, logout) => (session, index) => {
@@ -48,6 +51,7 @@ const SessionItem = (disable_session, current, logout) => (session, index) => {
 export function Profile() {
   const userInfo = useSelector(selectUserInfo);
   const userSessions = useGetUserSessions();
+  //const userSubmissionsQuery = useGetSubmissions({populateAuthor: false});
 
   const disable_session = useDisableSession();
 
@@ -79,13 +83,14 @@ export function Profile() {
         </Text>
         { userInfo.is_ambassador ? <></>
           : <Text style={styles.body_text}>
-              Ambassador Status: 
+              Ambassador Status: {!AASubmission && "Not Yet Submitted."}
             </Text>
         }
         {(!userInfo.is_ambassador && AASubmission)
           ? <SubmissionItem
               submission={AASubmission}
               index={0}
+              showAuthor={false}
             />
           : <></>
         }
@@ -106,13 +111,16 @@ export function Profile() {
           </View>
         : <></>
       }
-      <View style={styles.page_card}>
-        <Text style={styles.body_text}>
-          My Submissions:
-        </Text>
-        <SubmissionsTable/>
-      </View>
-      
+      { userInfo.is_ambassador 
+        ?
+          <View style={styles.page_card}>
+            <Text style={styles.body_text}>
+              My Submissions:
+            </Text>
+            <SubmissionsTable submissionsQueryParams={{showAuthor: false}}/>
+          </View>
+        : <></>
+      }
     </View>
   );
 }

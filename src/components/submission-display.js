@@ -17,7 +17,7 @@ import { selectIsAdmin, selectUserId } from '../modules/auth/authSlice.js';
 import card_style from '../pages/cardStyle.js';
 import common_styles from './commonStyle.js';
 
-const statusColors = {
+export const statusColors = {
   'PENDING': "#ebd234", // yellow
   'APPROVED': "#34eb49", // green
   'DENIED': "#eb3434", // red
@@ -296,7 +296,7 @@ function SubmissionOperationButtons({submissionId, admin, isOwner, isPending}) {
 
   return (
     <>
-      {isOwner ? <OwnerButtons/> : <></>}
+      {isPending && isOwner ? <OwnerButtons/> : <></>}
       {isPending && admin ? <AdminButtons/> : <></>}
     </>
   );

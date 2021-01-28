@@ -5,13 +5,12 @@ import { View, Text, StyleSheet } from 'react-native';
 import { page_styles } from '../pages.js';
 import card_styles from './cardStyle.js';
 import common_styles from '../components/commonStyle.js';
-import { useGetSubmissions } from '../modules/challenges/hooks.js';
-import { useGetUser } from '../modules/users/hooks.js';
+import { useGetUser, useGetUserList, useGetUserSubmissionsCount } from '../modules/users/hooks.js';
+import { UsersTable } from '../components/tables/users.js';
 import { ISOToReadableString } from '../modules/date.js';
-import { SubmissionItem } from '../components/submission-display.js';
+import { SubmissionsTable } from '../components/tables/submissions.js';
 
 function SingleUserInfo({user}) {
-  console.log(user)
   return (
     <View style={styles.page_card}>
       <Text style={styles.title_card_text}>
@@ -39,39 +38,27 @@ function SingleUserInfo({user}) {
   );
 }
 
-function SingleUserSubmissions({submissions}) {
-  console.log(submissions);
+function SingleUserSubmissions({userId}) {
   return (
     <View style={styles.page_card}>
       <Text style={styles.body_text}>
         User Submissions:
       </Text>
-      {submissions.map(
-        (submission, index) => (
-          <SubmissionItem
-            submission={submission}
-            index={index}
-            key={submission._id}
-            admin={true}
-            showAuthor={false}
-            showChallenge={true}
-          />
-        ))
-      }
+      <SubmissionsTable
+        submissionsQueryParams={
+          {userId: userId, populateAuthor: false, populateChallenge: true}
+        }
+      />
     </View>
   );
 }
 
 function SingleUserPage({userId}) {
   const userQuery = useGetUser({userId: userId});
-  const submissionsQuery = useGetSubmissions(
-    {userId: userId, populateAuthor: false, populateChallenge: true}
-  );
 
-  let loading = ![userQuery, submissionsQuery].every(
+  let loading = ![userQuery].every(
     (query) => query.status === 'success'
   );
-
   if (loading) {
     return (
       <Text> User loading... </Text>
@@ -81,14 +68,8 @@ function SingleUserPage({userId}) {
   return (
     <>
       <SingleUserInfo user={userQuery.data}/>
-      <SingleUserSubmissions submissions={submissionsQuery.data}/>
+      <SingleUserSubmissions userId={userId}/>
     </>
-  );
-}
-
-function UserList() {
-  return (
-    <Text>User List</Text>
   );
 }
 
@@ -102,7 +83,10 @@ export function UserPage(props) {
   }
   return (
     <View style={page_styles.app_scrollview}>
-      <UserList/>
+      <View style={styles.page_card}>
+        <Text style={styles.title_text}>All Users:</Text>
+        <UsersTable/>
+      </View>
     </View>
   )
 }

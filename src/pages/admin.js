@@ -1,42 +1,20 @@
 import React from 'react';
 
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
  
 import { page_styles } from '../pages.js';
 import card_styles from './cardStyle.js';
 import common_styles from '../components/commonStyle.js';
 
 import { useGetPendingSubmissions } from '../modules/challenges/hooks.js';
-import { SubmissionItem } from '../components/submission-display.js';
+import { SubmissionsTable } from '../components/tables/submissions.js';
 
 function SubmissionQueue() {
   let submissionQueue = useGetPendingSubmissions();
-
-  let loading = ![submissionQueue].every(query => query.status === 'success');
-  if(loading) {
-    return (
-      <Text> Submissions Loading... </Text>
-    )
-  }
-
-  console.log(submissionQueue.data);
-  
   return (
-    <View>
-      { submissionQueue.data.map(
-        (submission, index) => (
-          <SubmissionItem
-            submission={submission}
-            index={index}
-            key={submission._id}
-            admin={true}
-            showAuthor={true}
-            showChallenge={true}
-          />
-        ))
-      }
-    </View>
+    <SubmissionsTable submissionsQuery={submissionQueue} showAuthor={true}/>
   )
+
 }
 
 function SubmissionQueueCard() {

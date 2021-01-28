@@ -113,7 +113,12 @@ function SubmissionList({ submissionData }) {
       </Text>
       { submissionData.map(
         (submission, index) => (
-          <SubmissionItem submission={submission} index={index} key={submission._id}/>
+          <SubmissionItem
+            submission={submission}
+            index={index}
+            key={submission._id}
+            showAuthor={false}
+          />
         )) 
       }
     </View>

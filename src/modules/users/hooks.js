@@ -21,6 +21,18 @@ export function useGetUser({userId}){
   return useGetUserQuery("users/id/" + userId);
 }
 
+export function useGetUserList(){
+  return useGetUserQuery("users/all");
+}
+
+export function useGetUserSubmissionCount(userId) { 
+  return useGetUserQuery("users/submission_count/id/" + userId);
+}
+
+export function useGetUserSubmissionCountFn(){
+  return (userId) => useGetUserQuery("users/submission_count/id/" + userId);
+}
+
 export function useDisableSession(){
   const header = useSelector(selectAuthHeader);
 
