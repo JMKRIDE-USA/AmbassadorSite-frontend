@@ -38,30 +38,38 @@ export function useGetSubmissions(
     userId,
     populateAuthor = true,
     populateChallenge = false,
+    admin = false,
   }) {
+  let options = []
   const currentUserId = useSelector(selectUserId);
-  if (!userId) {
+  if (!(userId || admin)) {
     userId = currentUserId;
   }
-  const prefix = "challenges/submissions?userId=" + userId
-
-  let postfix = "";
-  postfix += "&populateAuthor=" + (populateAuthor ? "true" : "false");
-  postfix += "&populateChallenge=" + (populateChallenge ? "true" : "false");
+  if (userId){
+    options.push(["userId", userId])
+  }
+  options.push(["populateAuthor", (populateAuthor ? "true" : "false")]);
+  options.push(["populateChallenge", (populateChallenge ? "true" : "false")]);
 
   if(submissionId) {
-    return challengeGetter(
-      prefix + "&submissionId=" + submissionId + postfix
-    );
+    options.push(["submissionId", submissionId])
   } else if (challengeId) {
-    return challengeGetter(
-      prefix + "&challengeId=" + challengeId + postfix
-    );
-  } else if (userId) {
-    return challengeGetter(prefix + postfix);
+    options.push(["challengeId", challengeId]);
+  } else if (admin) {
+    options.push(["admin", "true"]);
+  } else if (!userId) {
+    throw new Error("[useGetSubmissions] One of submissionId, challengeId, userId required.")
   }
-
-  throw new Error("[useGetSubmissions] One of submissionId, challengeId, userId required.")
+  
+  let queryString = "challenges/submissions";
+  options.map((option, index) => {
+    if(index === 0) {
+      queryString += "?" + option[0] + "=" + option[1];
+    } else { 
+      queryString += "&" + option[0] + "=" + option[1];
+    }
+  })
+  return challengeGetter(queryString);
 }
 
 export function useGetSubmissionsAllowed({ challengeId }) {

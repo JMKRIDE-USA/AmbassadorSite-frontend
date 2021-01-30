@@ -9,14 +9,14 @@ import { page_styles } from '../pages.js';
 import card_styles from './cardStyle.js';
 import common_styles from '../components/commonStyle.js';
 import { useLogoutUser } from '../modules/auth/hooks.js';
-import { useGetUserSessions, useDisableSession } from '../modules/users/hooks.js';
+import { useGetUser, useGetUserSessions, useDisableSession } from '../modules/users/hooks.js';
 import {
   useGetAmbassadorApplicationSubmission,
-  useGetSubmissions,
 } from '../modules/challenges/hooks.js';
 import { ISOToReadableString } from '../modules/date.js';
 import { SubmissionItem } from '../components/submission-display.js';
 import { SubmissionsTable } from '../components/tables/submissions.js';
+import { TransactionsTable } from '../components/tables/transactions.js';
 
 
 const SessionItem = (disable_session, current, logout) => (session, index) => {
@@ -50,8 +50,9 @@ const SessionItem = (disable_session, current, logout) => (session, index) => {
 
 export function Profile() {
   const userInfo = useSelector(selectUserInfo);
+  const userId = useSelector(selectUserId);
+  const userQuery = useGetUser({userId: userId});
   const userSessions = useGetUserSessions();
-  //const userSubmissionsQuery = useGetSubmissions({populateAuthor: false});
 
   const disable_session = useDisableSession();
 
@@ -59,7 +60,7 @@ export function Profile() {
 
   const logout = useLogoutUser();
 
-  let loading = ![userSessions, AASubmissionQuery].every(
+  let loading = ![userSessions, AASubmissionQuery, userQuery].every(
     (query) => query.status === 'success'
   );
 
@@ -81,6 +82,12 @@ export function Profile() {
         <Text style={styles.body_text}>
           Name: {userInfo.firstname} {userInfo.lastname}
         </Text>
+        {userInfo.is_ambassador || userInfo.is_admin
+          ? <Text style={styles.body_text}>
+              My Balance: {userQuery.data.balance}
+            </Text>
+          : <></>
+        }
         { userInfo.is_ambassador ? <></>
           : <Text style={styles.body_text}>
               Ambassador Status: {!AASubmission && "Not Yet Submitted."}
@@ -118,6 +125,15 @@ export function Profile() {
               My Submissions:
             </Text>
             <SubmissionsTable submissionsQueryParams={{showAuthor: false}}/>
+          </View>
+        : <></>
+      }
+      { (userInfo.is_ambassador || userInfo.is_admin)
+        ? <View style={styles.page_card}>
+            <Text style={styles.body_text}>
+              Transaction History:
+            </Text>
+            <TransactionsTable/>
           </View>
         : <></>
       }

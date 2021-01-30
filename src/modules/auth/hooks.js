@@ -78,7 +78,7 @@ export function useLogin(){
   return async ({email, password}) => {
     let to_submit = {email: email, password: password};
     console.log("Submitting:", to_submit);
-    let result, id;
+    let result;
     try {
       result = await login({to_submit})
     } catch (error) {

@@ -1,14 +1,30 @@
 import React from 'react';
 
 import { View, Text, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import { page_styles } from '../pages.js';
 import card_styles from './cardStyle.js';
 import common_styles from '../components/commonStyle.js';
-import { useGetUser, useGetUserList, useGetUserSubmissionsCount } from '../modules/users/hooks.js';
+import {
+  useGetUser,
+  useGetUserList,
+} from '../modules/users/hooks.js';
+import { selectUserInfo } from '../modules/users/userSlice.js';
+
+import {
+  useGetReferralCode,
+  useCreateReferralCode
+} from '../modules/transactions/hooks.js';
+import {
+  SingleReferralCodeDisplay,
+  CreateReferralCodeForm
+} from '../components/referralCode-display.js';
 import { UsersTable } from '../components/tables/users.js';
 import { ISOToReadableString } from '../modules/date.js';
 import { SubmissionsTable } from '../components/tables/submissions.js';
+
+
 
 function SingleUserInfo({user}) {
   return (
@@ -53,6 +69,67 @@ function SingleUserSubmissions({userId}) {
   );
 }
 
+function SingleUserReferralCodeCard({userId}) {
+  return (
+    <View style={styles.page_card}>
+      <Text style={styles.title_text}>
+        Referral Code:
+      </Text>
+      <SingleUserReferralCodeDisplay userId={userId}/>
+    </View>
+  )
+}
+
+function SingleUserReferralCodeDisplay({userId}) {
+  const referralCodeQuery = useGetReferralCode({userId: userId});
+  const userInfo = useSelector(selectUserInfo);
+
+  const createReferralCode = useCreateReferralCode()
+
+  const submitCreateReferralCode = async ({code, percent}, { setSubmitting }) => {
+    console.log("Creating referral code...")
+    console.log({userId: userId, code: code, percent: percent})
+    let success = createReferralCode({
+      owner: userId,
+      code: code,
+      percent: percent,
+    });
+    if(success) {
+      console.log("Success.")
+    } else {
+      console.log("Success.")
+    }
+    setSubmitting(false)
+    return;
+  }
+
+  let loading = ![referralCodeQuery].every(
+    (query) => query.status === 'success'
+  );
+
+  if (loading) {
+    return (
+      <Text> Referral Code loading... </Text>
+    )
+  }
+  console.log(referralCodeQuery.data);
+  if (referralCodeQuery.data.length) {
+    return (
+      <SingleReferralCodeDisplay referralCode={referralCodeQuery.data[0]}/>
+    )
+  } else if (userInfo.is_admin) {
+    return (
+      <>
+        <Text> No Referral Code found.</Text>
+        <CreateReferralCodeForm submitCreateReferralCode={submitCreateReferralCode}/>
+      </>
+    )
+  } 
+  return (
+    <Text> No Referral Code found.</Text>
+  );
+}
+
 function SingleUserPage({userId}) {
   const userQuery = useGetUser({userId: userId});
 
@@ -68,6 +145,7 @@ function SingleUserPage({userId}) {
   return (
     <>
       <SingleUserInfo user={userQuery.data}/>
+      <SingleUserReferralCodeCard userId={userId}/>
       <SingleUserSubmissions userId={userId}/>
     </>
   );

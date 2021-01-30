@@ -1,13 +1,27 @@
 import React from 'react';
 
-import { View } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 import { page_styles } from '../pages.js';
+import card_style from './cardStyle.js';
+import common_styles from '../components/commonStyle.js';
+
+import { SubmissionsTable } from '../components/tables/submissions.js';
 
 import { 
   FullChallengeSubmissionDisplay,
-  SubmissionList,
 } from '../components/submission-display.js';
+
+function SubmissionList() {
+  return (
+    <View style={styles.page_card}>
+      <Text style={styles.title_text}>
+        My Submissions:
+      </Text>
+      <SubmissionsTable/>
+    </View>
+  );
+}
 
 export function ChallengeSubmissions(props) {
   if(props.route.params && props.route.params.id){
@@ -24,3 +38,9 @@ export function ChallengeSubmissions(props) {
   )
 }
 
+const styles = StyleSheet.create({
+  ...card_style,
+  ...common_styles,
+  ...{
+  },
+});

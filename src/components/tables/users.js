@@ -63,6 +63,11 @@ export function UsersTable(){
       <Text> Users loading... </Text>
     )
   }
+  if (!usersQuery.data.length) {
+    return (
+      <Text> No Users found. </Text>
+    )
+  }
 
   return (
     <StandardTable

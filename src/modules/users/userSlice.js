@@ -19,7 +19,8 @@ const userSlice = createSlice({
       state.firstname = action.payload.firstName;
       state.lastname = action.payload.lastName;
       state.email = action.payload.email;
-      state.is_ambassador = action.payload.permissionLevel == AUTH_STATE.AMBASSADOR;
+      state.is_ambassador = action.payload.permissionLevel === AUTH_STATE.AMBASSADOR;
+      state.is_admin = action.payload.permissionLevel === AUTH_STATE.ADMIN;
     },
     fetchUserInfoRequest: state => state,
   },
@@ -34,6 +35,7 @@ export const selectUserInfo = state => {
     lastname: state.user.lastname,
     email: state.user.email,
     is_ambassador: state.user.is_ambassador,
+    is_admin: state.user.is_admin,
   };
 }
 

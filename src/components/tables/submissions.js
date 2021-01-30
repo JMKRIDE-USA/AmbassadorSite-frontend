@@ -103,6 +103,11 @@ export function SubmissionsTable(
       <Text> Submissions loading... </Text>
     )
   }
+  if (!submissionsQuery.data.length) {
+    return (
+      <Text> No Submissions found. </Text>
+    )
+  }
 
   return (
     <StandardTable

@@ -337,12 +337,6 @@ export function FullChallengeSubmissionDisplay({submissionId}) {
   );
 }
 
-export function SubmissionList() {
-  return (
-    <Text>SubmissionList</Text>
-  );
-}
-
 const styles = StyleSheet.create({
   ...card_style,
   ...common_styles,
