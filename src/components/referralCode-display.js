@@ -15,17 +15,26 @@ const creationValidationSchema = Yup.object().shape({
 });
 
 
-export function SingleReferralCodeDisplay({referralCode}){
+export function SingleReferralCodeDisplay({referralCode, row = false}){
   return (
-    <View>
-      <Text style={styles.body_text}>
-        Code: {"'" + referralCode.code + "'"}
+    <View style={row ? {flexDirection: "row"} : {}}>
+      <Text style={styles.bold_body_text}>
+        {row ? "My Referral Code: ": "Code: "}
+      </Text>
+      <Text style={[{paddingRight: "10px"}, styles.body_text]}>
+        {"'" + referralCode.code + "'"}
+      </Text>
+      <Text style={styles.bold_body_text}>
+        {"Uses: "}
+      </Text>
+      <Text style={[{paddingRight: "10px"}, styles.body_text]}>
+        {referralCode.usageCount}
+      </Text>
+      <Text style={styles.bold_body_text}>
+        {"Percent Reward: "}
       </Text>
       <Text style={styles.body_text}>
-        Uses: {referralCode.usageCount}
-      </Text>
-      <Text style={styles.body_text}>
-        Percent Reward: {referralCode.percent}%
+        {referralCode.percent}%
       </Text>
     </View>
   );

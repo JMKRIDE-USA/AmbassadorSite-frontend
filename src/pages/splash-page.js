@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
     page: {
       paddingTop: "30px",
       textAlign: "center",
+      maxWidth: "800px",
     },
     jmk_text: {
       fontFamily: 'JMKRIDE',

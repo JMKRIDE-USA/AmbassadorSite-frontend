@@ -12,57 +12,23 @@ import {
 
 import { SubmissionItem } from './submission-display.js';
 
-import Form from './forms/form.js';
-import validation from './forms/validation.js';
-import TextInput from './forms/textinput.js';
-import SwitchInput from './forms/switchinput.js';
+import { GenericForm } from './formik/generic-form.js';
 import card_styles from '../pages/cardStyle.js';
 import common_styles from '../components/commonStyle.js';
 
 
-function challengeField(field) {
-  let all_props = {label: field.title, id: field._id, key: field._id}
-
-  switch(field.fieldType){
-    case "TEXT_SHORT":
-      return <TextInput name="text" {...all_props} />
-    case "TEXT_MEDIUM":
-      return <TextInput name="text" {...all_props}/>
-    case "TEXT_LONG":
-      return <TextInput name="text" {...all_props}/>
-    case "EMAIL":
-      return <TextInput name="email" {...all_props}/>
-    case "NUMBER":
-      return <TextInput name="number" {...all_props}/>
-    case "DATE":
-      return <TextInput name="date" {...all_props}/>
-    case "YES_NO":
-      return <SwitchInput name="yesno" switchOptions={["Yes", "No"]} {...all_props}/>
-    case "LEGAL_CHECK":
-      return <></>
-    default:
-      return <></>
-  }
-}
-
-function ChallengeForm({ fields, submitChallenge}) {
-  const { handleSubmit, register, setValue, errors } = useForm();
-
-  const onSubmit = (data) => {
-    console.log('data:', data);
+function NewChallengeForm({ fields, submitChallenge}) {
+  const handleSubmit = (data, { setSubmitting }) => {
+    console.log("Submitting:", data);
     submitChallenge(data);
-  }
-  if(fields === undefined) {
-    return <></>;
+    setSubmitting(false);
   }
   return (
-    <View style={styles.challenge_field_container}>
-      <Form {... { register, setValue, validation, errors }}>
-        {fields.map(challengeField)}
-      </Form>
-      <Button title="Submit" onPress={handleSubmit(onSubmit)} />
-    </View>
-  );
+    <GenericForm
+      structure={fields}
+      handleSubmit={handleSubmit}
+    />
+  )
 }
 
 function ChallengeDisplayTitle({ challengeData }) {
@@ -78,29 +44,46 @@ function ChallengeDisplayTitle({ challengeData }) {
   )
 }
 
+function ChallengeInfoDisplay({ challengeData }) {
+  return (
+    <View style={styles.page_card}>
+      <View style={{paddingBottom: "10px"}}>
+        <Text style={styles.bold_body_text}>
+          Description:
+        </Text>
+        <Text style={styles.body_card_text}>
+          <Text style={styles.body_text}>{challengeData.longDescription}</Text>
+        </Text>
+      </View>
+      <View style={{flexDirection: "row"}}>
+        <Text style={styles.bold_body_text}>
+          {"Reward Points:   "}
+        </Text>
+        <Text style={styles.body_card_text}>
+          <Text style={styles.body_text}>{challengeData.award}</Text>
+        </Text>
+      </View>
+    </View>
+  )
+}
+
 function ChallengeDisplay({ challengeData, submissionsAllowed, submitChallenge }) {
   return (
     <View style={styles.page_card}>
-      <View>
-        { submissionsAllowed
-          ? <></>
-          : <View style={styles.disable_cover}>
-              <Text style={styles.disable_text}>
-                {"You've already submitted this challenge, and cannot submit another."}
-              </Text>
-            </View>
-        }
-        <View>
-          <Text style={styles.body_card_text}>
-            <Text style={styles.body_text}>{challengeData.longDescription}</Text>
-          </Text>
-          <ChallengeForm
-            enabled={submissionsAllowed}
-            fields={challengeData.structure}
-            submitChallenge={submitChallenge}
-          />
-        </View>
-      </View>
+      { submissionsAllowed
+        ? <></>
+        : <View style={styles.disable_cover}>
+            <Text style={styles.disable_text}>
+              {"You've already submitted this challenge, and cannot submit another."}
+            </Text>
+          </View>
+      }
+      <Text style={styles.bold_body_text}>Submission Form:</Text>
+      <NewChallengeForm
+        enabled={submissionsAllowed}
+        fields={challengeData.structure}
+        submitChallenge={submitChallenge}
+      />
     </View>
   );
 }
@@ -139,6 +122,7 @@ export function FullChallengeDisplay({ challengeId }) {
   const submissionsAllowedQuery = useGetSubmissionsAllowed({challengeId: challengeId});
 
   const submitChallenge = useSubmitChallenge(challengeId)
+  //const submitChallenge = (data) => console.log(data)
 
   let loading = ![challengeQuery, submissionQuery, submissionsAllowedQuery].every(
     (query) => query.status === 'success'
@@ -150,7 +134,7 @@ export function FullChallengeDisplay({ challengeId }) {
     )
   }
   return (
-    <>
+    <View style={styles.page}>
       <ChallengeDisplayTitle
         challengeData={challengeQuery.data}
       />
@@ -158,12 +142,15 @@ export function FullChallengeDisplay({ challengeId }) {
         ? <SubmissionList submissionData={submissionQuery.data}/>
         : <></>
       }
+      <ChallengeInfoDisplay
+        challengeData={challengeQuery.data}
+      />
       <ChallengeDisplay
         challengeData={challengeQuery.data}
         submissionsAllowed={submissionsAllowedQuery.data}
         submitChallenge={submitChallenge}
       />
-    </>
+    </View>
   )
 
 }
@@ -171,6 +158,10 @@ export function FullChallengeDisplay({ challengeId }) {
 const styles = StyleSheet.create({
   ...card_styles,
   ...common_styles,
+  page: {
+    maxWidth: "800px",
+    alignItems: "center",
+  },
   status_text: {
     fontSize: "10px",
   },
@@ -179,7 +170,8 @@ const styles = StyleSheet.create({
   },
   disable_cover: {
     backgroundColor: "rgba(52, 52, 52, 0.8)",
-    borderRadius: "4px",
+    borderRadius: "15px",
+    right: "0px",
     padding: "10px",
     alignItems: "center",
     justifyContent: "center",

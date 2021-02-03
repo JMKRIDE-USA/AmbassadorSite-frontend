@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import '@expo/match-media';
 import { registerRootComponent } from 'expo';
@@ -14,6 +15,8 @@ import {
   selectAuthPermissions,
 } from './modules/auth/authSlice.js';
 import { page_linking, genAppStack } from './pages.js';
+import { useFonts, Lato_400Regular } from '@expo-google-fonts/lato';
+import { Roboto_300Light, Roboto_500Medium } from '@expo-google-fonts/roboto';
 
 function AppPages() {
   const AppStack = createStackNavigator();
@@ -26,8 +29,20 @@ function AppPages() {
   );
 }
 
+function AppLoading() {
+  return (
+    <Text> App Loading.... </Text>
+  )
+}
+
 function PersistedApp({persistor}) {
   const dispatch = useDispatch()
+  let [fontsLoaded] = useFonts({Lato_400Regular, Roboto_300Light, Roboto_500Medium});
+  if (!fontsLoaded){
+    return (
+      <AppLoading/>
+    )
+  }
   return (
     <PersistGate
       onBeforeLift={() => dispatch(fetchAuthRequest())}

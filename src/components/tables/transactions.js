@@ -116,13 +116,14 @@ export function TransactionsTable(){
 export function ReferralCodeTable({query_params = {}} = {}){
   const referralCodeQuery = useGetReferralCode(query_params)
   
-  const header = ['Code', 'Created', 'Uses', '', 'Owner', ''];
-  const widthArr = ['100px', '180px', '80px', '100px', '180px', '100px'];
+  const header = ['Code', 'Percent', 'Created', 'Uses', '', 'Owner', ''];
+  const widthArr = ['100px', '100px', '180px', '80px', '100px', '180px', '100px'];
 
   const manualRowFn = (referralCode, row_index) => {
     const referralCodeToData = (referralCode) => {
       return ([
         referralCode.code,
+        referralCode.percent + "%",
         ISOToReadableString(referralCode.createdAt),
         referralCode.usageCount,
         referralCode._id,
@@ -133,8 +134,8 @@ export function ReferralCodeTable({query_params = {}} = {}){
     const OwnerViewButton = makeViewButtonFn("user");
     const ReferralCodeUsageViewButton = makeViewButtonFn("referralcode-usage");
 
-    const rcu_viewbutton_index = 2;
-    const user_viewbutton_index = 5;
+    const rcu_viewbutton_index = 4;
+    const user_viewbutton_index = 6;
     const dataFn = (cellValue, index) => {
       if(index === rcu_viewbutton_index){
         return <ReferralCodeUsageViewButton id={cellValue} index={index}/>

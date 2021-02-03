@@ -1,4 +1,5 @@
 import card_styles from '../pages/cardStyle.js';
+import config from '../config.js';
 
 export default {
 
@@ -13,14 +14,15 @@ export default {
   },
   item_text_small: {
     fontSize: "10px",
+    fontFamily: config.body_font,
   },
   item_text: {
     fontSize: "15px",
-    fontWeight: "normal",
+    fontFamily: config.body_font,
   },
   bold_item_text: {
     fontSize: "15px",
-    fontWeight: "bold",
+    fontFamily: config.bold_body_font,
   },
   item_view: {
     flexDirection: "row",
@@ -40,6 +42,7 @@ export default {
   item_button_text: {
     fontSize: "12px",
     color: "black",
+    fontFamily: config.body_font,
   },
   info_list: {
     marginTop: "15px",
@@ -69,6 +72,7 @@ export default {
   },
   standalone_button_text: {
     fontSize: 22,
+    fontFamily: config.title_font,
     color: "black",
     padding: "10px",
   },

@@ -13,6 +13,8 @@ import { useGetUser, useGetUserSessions, useDisableSession } from '../modules/us
 import {
   useGetAmbassadorApplicationSubmission,
 } from '../modules/challenges/hooks.js';
+import { useGetReferralCode } from '../modules/transactions/hooks.js';
+import { SingleReferralCodeDisplay } from '../components/referralCode-display.js';
 import { ISOToReadableString } from '../modules/date.js';
 import { SubmissionItem } from '../components/submission-display.js';
 import { SubmissionsTable } from '../components/tables/submissions.js';
@@ -48,6 +50,16 @@ const SessionItem = (disable_session, current, logout) => (session, index) => {
   );
 }
 
+export function ReferralCodeInfo({userId}){
+  const referralCodeQuery = useGetReferralCode({userId: userId});
+  if (referralCodeQuery.status !== 'success') {
+    return <></>
+  }
+  return (
+    <SingleReferralCodeDisplay referralCode={referralCodeQuery.data[0]} row={true}/>
+  )
+}
+
 export function Profile() {
   const userInfo = useSelector(selectUserInfo);
   const userId = useSelector(selectUserId);
@@ -60,9 +72,11 @@ export function Profile() {
 
   const logout = useLogoutUser();
 
-  let loading = ![userSessions, AASubmissionQuery, userQuery].every(
-    (query) => query.status === 'success'
-  );
+  let loading = ![
+    userSessions,
+    AASubmissionQuery,
+    userQuery,
+  ].every((query) => query.status === 'success');
 
   if (loading) {
     return (
@@ -79,18 +93,33 @@ export function Profile() {
         <Text style={styles.title_text}>
           {userInfo.is_ambassador ? "Ambassador" : "User"} Profile<br/>
         </Text>
-        <Text style={styles.body_text}>
-          Name: {userInfo.firstname} {userInfo.lastname}
+        <Text>
+          <Text style={styles.bold_body_text}>
+            {"Name: "}
+          </Text>
+          <Text style={styles.body_text}>
+            {userInfo.firstname} {userInfo.lastname}
+          </Text>
         </Text>
         {userInfo.is_ambassador || userInfo.is_admin
-          ? <Text style={styles.body_text}>
-              My Balance: {userQuery.data.balance}
+          ? <Text>
+              <Text style={styles.bold_body_text}>
+                {"My Balance: "}
+              </Text>
+              <Text style={styles.body_text}>
+                {userQuery.data.balance}
+              </Text>
             </Text>
           : <></>
         }
         { userInfo.is_ambassador ? <></>
-          : <Text style={styles.body_text}>
-              Ambassador Status: {!AASubmission && "Not Yet Submitted."}
+          : <Text> 
+              <Text style={styles.bold_body_text}>
+                {"Ambassador Status: "}
+              </Text>
+              <Text style={styles.body_text}>
+                {!AASubmission && "Not Yet Submitted."}
+              </Text>
             </Text>
         }
         {(!userInfo.is_ambassador && AASubmission)
@@ -101,7 +130,12 @@ export function Profile() {
             />
           : <></>
         }
+        { ( userInfo.is_ambassador )
+          ? <ReferralCodeInfo userId={userId}/>
+          : <></>
+        }
       </View>
+
       <TouchableOpacity
         style={[styles.standalone_button, {backgroundColor: "red"}]}
         onPress={logout}
