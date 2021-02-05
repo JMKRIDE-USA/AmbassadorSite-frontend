@@ -55,6 +55,9 @@ export function ReferralCodeInfo({userId}){
   if (referralCodeQuery.status !== 'success') {
     return <></>
   }
+  if (!referralCodeQuery.data.length) {
+    return <></>
+  }
   return (
     <SingleReferralCodeDisplay referralCode={referralCodeQuery.data[0]} row={true}/>
   )
