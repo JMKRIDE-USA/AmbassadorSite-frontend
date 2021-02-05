@@ -102,6 +102,31 @@ export function useSubmitChallenge(challengeId) {
 
 }
 
+export function useCreateChallenge() {
+  const header = useSelector(selectAuthHeader);
+
+  const [createChallenge, { error }] = useMutation(
+    ({ to_submit }) => fetch(
+      config.backend_url + "challenges/create",
+      {
+        method: "POST",
+        headers: {
+          ...header,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(to_submit)
+      }
+    ),
+    {
+      onSuccess: () => {
+        console.log("success");
+        queryCache.invalidateQueries(CACHE_KEY);
+      },
+    }
+  )
+  return createMutationCall(createChallenge, error, "creating challenge");
+}
+
 export function useDeleteSubmission(submissionId) {
   const header = useSelector(selectAuthHeader);
 
