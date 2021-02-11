@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import { page_styles } from '../pages.js';
-import { LoginAccountForm } from '../components/loginForm.js';
+import LoginAccountForm from '../forms/login-form.js';
 import {
   selectUserId,
 } from '../modules/auth/authSlice.js';

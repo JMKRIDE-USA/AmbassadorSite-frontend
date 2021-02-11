@@ -23,7 +23,7 @@ const validationSchema = Yup.object().shape({
     .required(),
 });
 
-export function CreateAccountForm({
+export default function CreateAccountForm({
   submitCreateAccount,
   styles,
 }) {

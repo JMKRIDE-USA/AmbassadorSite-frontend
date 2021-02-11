@@ -13,7 +13,7 @@ import {
 
 import { SubmissionItem } from './submission-display.js';
 
-import { GenericForm } from './formik/generic-form.js';
+import Form from '../forms/form.js';
 import card_styles from '../pages/cardStyle.js';
 import common_styles from '../components/commonStyle.js';
 
@@ -25,7 +25,7 @@ function NewChallengeForm({ fields, submitChallenge}) {
     setSubmitting(false);
   }
   return (
-    <GenericForm
+    <Form
       structure={fields}
       handleSubmit={handleSubmit}
     />

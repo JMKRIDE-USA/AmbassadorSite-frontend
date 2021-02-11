@@ -15,7 +15,7 @@ const validationSchema = Yup.object().shape({
     .required(),
 });
 
-export function LoginAccountForm({submitLogin, styles}){
+export default function LoginAccountForm({submitLogin, styles}){
   return (
     <Formik
       initialValues={{

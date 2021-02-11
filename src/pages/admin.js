@@ -15,7 +15,7 @@ import {
 } from '../modules/transactions/hooks.js';
 import { SubmissionsTable } from '../components/tables/submissions.js';
 import { ReferralCodeTable } from '../components/tables/transactions.js';
-import { GenericForm } from '../components/formik/generic-form.js'
+import Form from '../forms/form.js'
 
 function CreateReferralUsageForm() {
   const createReferralUsage = useCreateReferralUsage();
@@ -68,7 +68,7 @@ function CreateReferralUsageForm() {
     },
   ]
   return (
-    <GenericForm
+    <Form
       structure={structure}
       handleSubmit={handleSubmit}
     />

@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { page_styles } from '../pages.js';
-import { CreateAccountForm } from '../components/createAccountForm.js';
+import CreateAccountForm from '../forms/create-account-form.js';
 import {
   selectUserId,
   fetchAuthRequest,

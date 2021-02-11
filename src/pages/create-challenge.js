@@ -7,8 +7,10 @@ import card_styles from './cardStyle.js';
 import common_styles from '../components/commonStyle.js';
 
 import { Picker } from '@react-native-picker/picker';
-import { GenericForm } from '../components/formik/generic-form.js';
+import Form from '../forms/form.js';
+import { fieldTypes } from '../forms/constants.js';
 import { useCreateChallenge } from '../modules/challenges/hooks.js';
+
 
 let createChallengeBaseInfoForm = [
   {title: "Challenge Title", fieldType: "TEXT_SHORT", required: true, _id: "1"},
@@ -20,18 +22,8 @@ let createChallengeBaseInfoForm = [
   },
 ]
 
-const fieldTypes = [
-  "TEXT_SHORT", "TEXT_MEDIUM", "TEXT_LONG",
-  "EMAIL",
-  "NUMBER",
-  "YES_NO",
-  "SWITCH",
-  "DATE",
-  "DATETIME",
-  "YEAR",
-]
 
-const makeFieldFields = (index) => ([
+const makeField = (index) => ([
   {title: "", fieldType: "DIVIDER", _id: index + "_0"},
   {
     title: "Field Title",
@@ -95,7 +87,7 @@ export function CreateChallengePage() {
   let structureFields = [];
   let i;
   for (i = 0; i < numFields; i++) {
-    structureFields = structureFields.concat(makeFieldFields(i))
+    structureFields = structureFields.concat(makeField(i))
   }
   let structure = createChallengeBaseInfoForm.concat(structureFields);
   return (
@@ -108,7 +100,7 @@ export function CreateChallengePage() {
             <NumFieldsSelector/>
           </View>
         </View>
-        <GenericForm
+        <Form
           structure={structure}
           handleSubmit={handleSubmit}
           keyOverride={numFields}
