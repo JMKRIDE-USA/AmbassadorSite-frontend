@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, StyleSheet, View, Text } from 'react-native';
+import { Button, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
  
 import card_styles from '../pages/cardStyle.js';
 import common_styles from '../components/commonStyle.js';
@@ -9,36 +9,133 @@ import { Input } from 'react-native-elements';
 import { Formik, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
+import { useLinkProps } from '@react-navigation/native';
+
+import { useGetReferralCode } from '../modules/transactions/hooks.js';
+import { ReferralCodeTransactionsTable  } from '../components/tables/transactions.js';
+
+export function FullReferralCodeDisplay({referralCodeId}){
+  const referralCodeQuery = useGetReferralCode({referralCodeId: referralCodeId});
+  if(referralCodeQuery.status !== 'success') {
+    return (
+      <Text>Referral Code Loading...</Text>
+    )
+  }
+  return (
+    <>
+      <ReferralCodeInfoDisplay referralCode={referralCodeQuery.data[0]}/>
+      <View style={styles.page_card}>
+        <Text style={styles.title_text}>
+          All Uses:
+        </Text>
+        <ReferralCodeTransactionsTable referralCodeId={referralCodeId}/>
+      </View>
+    </>
+  );
+}
+
+function ReferralCodeInfoDisplay({referralCode}){
+  const { onPress } = useLinkProps(
+    {to: "/users?id=" + referralCode.owner._id}
+  )
+  const rowStyle = {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  }
+  return (
+    <View style={styles.page_card}>
+      <Text style={styles.title_text}>
+        {"Referral Code: '" + referralCode.code + "'"}
+      </Text>
+      <View style={rowStyle}>
+        <Text style={styles.bold_body_text}>
+          Owner:
+        </Text>
+        <View style={{flexDirection: "row", alignItems: "center"}}>
+          <Text style={styles.body_text}>
+            {referralCode.owner.firstName + " " + referralCode.owner.lastName}
+          </Text>
+          <TouchableOpacity
+            onPress={onPress}
+            style={[styles.item_button, {width: 70}]}
+          >
+            <Text style={styles.button_text}>View</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={rowStyle}>
+        <Text style={styles.bold_body_text}>
+          Num uses:
+        </Text>
+        <Text style={styles.body_text}>
+          {referralCode.usageCount}
+        </Text>
+      </View>
+      <View style={rowStyle}>
+        <Text style={styles.bold_body_text}>
+          Percent Reward:
+        </Text>
+        <Text style={styles.body_text}>
+          {referralCode.percent + "%"}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
+export function SingleReferralCodeDisplay({referralCode, row = false}){
+  const rowStyle = {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  }
+  const { onPress } = useLinkProps(
+    {to: "/referralcodes?id=" + referralCode._id}
+  );
+
+  return (
+    <View style={row ? {flexDirection: "row"} : {}}>
+      <View style={rowStyle}>
+        <Text style={styles.bold_body_text}>
+          {row ? "My Referral Code: ": "Code: "}
+        </Text>
+        <View style={rowStyle}>
+          <Text style={[{paddingRight: "10px"}, styles.body_text]}>
+            {"'" + referralCode.code + "'"}
+          </Text>
+          <TouchableOpacity
+            onPress={onPress}
+            style={[styles.item_button, {width: 70}]}
+          >
+            <Text styles={styles.button_text}>View</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={rowStyle}>
+        <Text style={styles.bold_body_text}>
+          {"Uses: "}
+        </Text>
+        <Text style={[{paddingRight: "10px"}, styles.body_text]}>
+          {referralCode.usageCount}
+        </Text>
+      </View>
+      <View style={rowStyle}>
+        <Text style={styles.bold_body_text}>
+          {"Percent Reward: "}
+        </Text>
+        <Text style={styles.body_text}>
+          {referralCode.percent}%
+        </Text>
+      </View>
+    </View>
+  );
+}
+
 const creationValidationSchema = Yup.object().shape({
   code: Yup.string().label('Code').required(),
   percent: Yup.number().label('Percent').required().positive().integer(),
 });
-
-
-export function SingleReferralCodeDisplay({referralCode, row = false}){
-  return (
-    <View style={row ? {flexDirection: "row"} : {}}>
-      <Text style={styles.bold_body_text}>
-        {row ? "My Referral Code: ": "Code: "}
-      </Text>
-      <Text style={[{paddingRight: "10px"}, styles.body_text]}>
-        {"'" + referralCode.code + "'"}
-      </Text>
-      <Text style={styles.bold_body_text}>
-        {"Uses: "}
-      </Text>
-      <Text style={[{paddingRight: "10px"}, styles.body_text]}>
-        {referralCode.usageCount}
-      </Text>
-      <Text style={styles.bold_body_text}>
-        {"Percent Reward: "}
-      </Text>
-      <Text style={styles.body_text}>
-        {referralCode.percent}%
-      </Text>
-    </View>
-  );
-}
 
 export function CreateReferralCodeForm({submitCreateReferralCode}){
   return (

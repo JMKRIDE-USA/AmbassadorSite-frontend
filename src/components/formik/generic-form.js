@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Button, Text, View, StyleSheet, CheckBox } from 'react-native';
 import { Input } from 'react-native-elements';
@@ -20,7 +20,7 @@ const stringValidationFn = makeValidationFn(Yup.string());
 const emailValidationFn = makeValidationFn(Yup.string().email(
   "This must be a valid email."
 ));
-const numberValidationFn = makeValidationFn(Yup.number());
+const numberValidationFn = makeValidationFn(Yup.number().typeError('This must be a number.'));
 const dateValidationFn = makeValidationFn(Yup.date());
 const yesNoValidationFn = makeValidationFn(Yup.mixed().oneOf(['yes', 'no']));
 const yearValidationFn = makeValidationFn(
@@ -45,23 +45,29 @@ const commonFieldProps = (field) => ({
 })
   
 const SwitchField = ({handleChange, value, handleBlur}, field) => {
+  let [hasSelected, setHasSelected] = useState(false);
+  const onChange = (...args) => {
+    setHasSelected(true);
+    return handleChange(...args);
+  }
   const SwitchComponent = (props) => {
     return (
-    <View
-      style={[styles.switch, {flexDirection: "row", justifyContent: "space-between"}]}
-    >
-      <Text style={styles.labelStyle}>{props.label}</Text>
-      <Picker
-        selectedValue={props.value}
-        onChange={handleChange}
-        onBlur={props.onBlur}
+      <View
+        style={[styles.switch, {flexDirection: "row", justifyContent: "space-between"}]}
       >
-        {field.options.map((option) => (
-          <Picker.Item label={option} value={option} key={option}/>)
-        )}
-      </Picker>
-    </View>
-  );
+        <Text style={styles.labelStyle}>{props.label}</Text>
+        <Picker
+          selectedValue={props.value}
+          onChange={onChange}
+          onBlur={props.onBlur}
+        >
+          { (!hasSelected) ? <Picker.Item label={'Select'} value={''} /> : <></>}
+          {field.options.map((option) => (
+            <Picker.Item label={option} value={option} key={option}/>)
+          )}
+        </Picker>
+      </View>
+    );
   }
   return (
     <Field
@@ -267,7 +273,7 @@ const getInitialValues = (structure) => {
   )
   return values;
 }
-const getField = ({handleChange, values, handleBlur}) => (field) => {
+const getField = ({handleChange, values, handleBlur}, {debug}) => (field) => {
   return (
     <View style={styles.formField} key={field._id}>
       {formTypes[field.fieldType].componentFn(
@@ -291,9 +297,9 @@ const getField = ({handleChange, values, handleBlur}) => (field) => {
 /*
  * Generic Form
  */
-export function GenericForm({structure, handleSubmit}) {
+export function GenericForm({structure, handleSubmit, debug = false, keyOverride = 1}) {
   return (
-    <View style={styles.formView}>
+    <View style={styles.formView} key={keyOverride ? keyOverride : 1}>
       <Formik
         initialValues={getInitialValues(structure)}
         validationSchema={getValidationSchema(structure)}
@@ -309,7 +315,8 @@ export function GenericForm({structure, handleSubmit}) {
         }) => (
           <View style={styles.formStructureView}>
             {structure.map(getField(
-              {handleChange: handleChange, values:values, handleBlur: handleBlur}
+              {handleChange: handleChange, values:values, handleBlur: handleBlur},
+              {debug: debug}
             ))}
             <Button
               onPress={handleSubmit}

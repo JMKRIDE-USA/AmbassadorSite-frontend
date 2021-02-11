@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text, Button, TouchableOpacity } from 'react-native';
 import { useForm } from 'react-hook-form';
+import { useLinkProps } from '@react-navigation/native';
 
 import {
   useGetChallenge,
@@ -84,6 +85,31 @@ function ChallengeDisplay({ challengeData, submissionsAllowed, submitChallenge }
         fields={challengeData.structure}
         submitChallenge={submitChallenge}
       />
+    </View>
+  );
+}
+
+export function SingleChallengeDisplay({ challenge }) {
+  const { onPress } = useLinkProps(
+    {to: "/challenges?id=" + challenge._id}
+  );
+  return (
+    <View style={styles.page_card}>
+      <View style={{
+        flexDirection: "row",
+        alignItems: "flex-start",
+        justifyContent: "space-between",
+        width: "100%"}}
+      >
+        <Text style={styles.title_text}>{challenge.title}</Text>
+        <TouchableOpacity
+          onPress={onPress}
+          style={[styles.item_button, {width: 70}]}
+        >
+          <Text style={styles.button_text}>View</Text>
+        </TouchableOpacity>
+      </View>
+      <Text style={styles.body_text}>{challenge.shortDescription}</Text>
     </View>
   );
 }

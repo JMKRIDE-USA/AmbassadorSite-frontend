@@ -72,9 +72,15 @@ function SingleUserSubmissions({userId}) {
 function SingleUserReferralCodeCard({userId}) {
   return (
     <View style={styles.page_card}>
-      <Text style={styles.title_text}>
-        Referral Code:
-      </Text>
+      <View style={{
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-around"
+      }}>
+        <Text style={styles.title_text}>
+          Referral Code:
+        </Text>
+      </View>
       <SingleUserReferralCodeDisplay userId={userId}/>
     </View>
   )
@@ -112,7 +118,6 @@ function SingleUserReferralCodeDisplay({userId}) {
       <Text> Referral Code loading... </Text>
     )
   }
-  console.log(referralCodeQuery.data);
   if (referralCodeQuery.data.length) {
     return (
       <SingleReferralCodeDisplay referralCode={referralCodeQuery.data[0]}/>

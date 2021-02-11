@@ -17,8 +17,21 @@ const transactionColors = (amount) => {
   return "#eb3434";
 };
 
-export function TransactionsTable(){
-  const transactionsQuery = useGetTransactions();
+export function UserTransactionsTable() {
+  const transactionsQuery = useGetTransactions({useCurrentUser: true});
+  return (
+    <RawTransactionsTable transactionsQuery={transactionsQuery}/>
+  );
+}
+
+export function ReferralCodeTransactionsTable({referralCodeId}) {
+  const transactionsQuery = useGetTransactions({referralCodeId: referralCodeId})
+  return (
+    <RawTransactionsTable transactionsQuery={transactionsQuery}/>
+  );
+}
+
+function RawTransactionsTable({transactionsQuery}){
   
   const header = ['Date', 'Amount', 'Reason', ''];
   const widthArr = ['180px', '80px', '200px', '100px'];
@@ -42,7 +55,7 @@ export function TransactionsTable(){
       ])
     }
     const SubmissionViewButton = makeViewButtonFn("challenge-submissions");
-    const ReferralCodeUsageViewButton = makeViewButtonFn("referralcode-usage");
+    const ReferralCodeViewButton = makeViewButtonFn("referralcodes");
 
     const amount_index = 1;
     const button_index = 3;
@@ -51,7 +64,7 @@ export function TransactionsTable(){
         if(cellValue[1]){ // submission
           return <SubmissionViewButton id={cellValue[0]} index={index}/>
         } else {
-          return <ReferralCodeUsageViewButton id={cellValue[0]} index={index}/>
+          return <ReferralCodeViewButton id={cellValue[0]} index={index}/>
         }
       } else if (index === amount_index){
         return (
@@ -131,8 +144,8 @@ export function ReferralCodeTable({query_params = {}} = {}){
         referralCode.owner._id,
       ])
     }
-    const OwnerViewButton = makeViewButtonFn("user");
-    const ReferralCodeUsageViewButton = makeViewButtonFn("referralcode-usage");
+    const OwnerViewButton = makeViewButtonFn("users");
+    const ReferralCodeUsageViewButton = makeViewButtonFn("referralcodes");
 
     const rcu_viewbutton_index = 4;
     const user_viewbutton_index = 6;

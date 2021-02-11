@@ -111,6 +111,7 @@ export function CreateChallengePage() {
         <GenericForm
           structure={structure}
           handleSubmit={handleSubmit}
+          keyOverride={numFields}
          />
       </View>
     </View>

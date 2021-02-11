@@ -15,18 +15,29 @@ function transactionGetter(endpoint){
   )
 }
 
-export function useGetTransactions({userId, submissionId} = {}){
+export function useGetTransactions({userId, useCurrentUser = false, submissionId, referralCodeId} = {}){
   const currentUserId = useSelector(selectUserId);
-  userId = userId ? userId : currentUserId;
-  let postfix = "?userId=" + userId;
-  if(submissionId) {
-    postfix += "&submissionId=" + submissionId;
+  if(useCurrentUser) {
+    userId = currentUserId
+  }
+  let postfix = ""
+  if(userId){
+    postfix += "?userId=" + userId;
+  } else if(submissionId) {
+    postfix += "?submissionId=" + submissionId;
+  } else if(referralCodeId) {
+    postfix += "?referralCodeId=" + referralCodeId;
   }
   return transactionGetter("transactions/get" + postfix);
 }
 
-export function useGetReferralCode({userId} = {}){
-  let postfix = userId ? "?userId=" + userId : "";
+export function useGetReferralCode({referralCodeId, userId} = {}){
+  let postfix = ""
+  if(userId) {
+    postfix += "?userId=" + userId;
+  } else if (referralCodeId) {
+    postfix += "?id=" + referralCodeId;
+  }
   return transactionGetter("transactions/referralCodes/get" + postfix);
 }
 
@@ -53,3 +64,32 @@ export function useCreateReferralCode() {
   );
   return createMutationCall(createReferralCode, error, "creating referral code");
 }
+
+export function useGetAllReferralCodes() {
+  return transactionGetter("transactions/referralCodes/get/all");
+}
+
+export function useCreateReferralUsage() {
+  const header = useSelector(selectAuthHeader);
+
+  const [createReferralUsage, { error }] = useMutation(
+    ({ to_submit }) => fetch(
+      config.backend_url + "transactions/referralCodes/usage/create",
+      {
+        method: "POST",
+        headers: {
+          ...header,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(to_submit),
+      },
+    ),
+    {
+      onSuccess: () => {
+        queryCache.invalidateQueries(CACHE_KEY);
+      },
+    }
+  );
+  return createMutationCall(createReferralUsage, error, "creating referral code usage");
+}
+

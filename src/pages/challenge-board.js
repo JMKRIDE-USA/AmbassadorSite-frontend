@@ -11,16 +11,9 @@ const mapDispatchToProps = { resetAuth, logoutUser };
 
 
 export default connect(null, mapDispatchToProps)(({ resetAuth, logoutUser }) => {
-  function logout() {
-    resetAuth()
-    logoutUser()
-  }
   return (
     <View style={page_styles.app_scrollview}>
-      <Text>Challenge Board</Text>
-      <TouchableOpacity onPress={() => logout()}>
-        <Text> Reset Auth </Text>
-      </TouchableOpacity>
+      <Text>Challenge Board!</Text>
     </View>
   );
 });

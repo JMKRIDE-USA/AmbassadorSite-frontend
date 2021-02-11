@@ -67,9 +67,9 @@ export function SplashPage() {
               the skates really turn heads! Everyone who rides freeskates is in
               a very real way already an ambassador! So when we were envisioning this
               program, we realized we needed to do something more. We want this program to
-              be more than just an advertisement, we want our program to encourage
+              be more than just an advertisement. We want our program to encourage
               meaningful interactions with interested people and show them that with your
-              help, and our youtube tutorials, that learning to freeskate is more
+              help and our youtube tutorials, learning to freeskate is more
               achievable now than ever before!<br/><br/>
               We want to know that you're a freeskater to your core. That
               doesn't mean you have to be a pro! But you should be stoked on practicing
@@ -96,8 +96,8 @@ export function SplashPage() {
                 These will be things like 'teach a brand new person and document
                 their progress.' The actual challenges will of course have much
                 more clarifications than this example.<br/>
-              - Ambassador points can be used on our site, or they can be
-                exchanged for cold hard ca$h!
+              - Ambassador points can be used on our site, and eventually may be
+                eligible to be exchanged for cold hard ca$h!
             </Text>
           </Text>
         </View>

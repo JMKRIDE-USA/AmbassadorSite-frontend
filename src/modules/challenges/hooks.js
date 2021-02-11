@@ -31,6 +31,10 @@ export function useGetChallenge({ challengeId, submissionId }) {
   throw new Error("[useGetChallenge] One of submissionId, challengeId required.")
 }
 
+export function useListChallenges({ perPage = 15, page = 0}) {
+  return challengeGetter("challenges/list?perpage=" + perPage + "&page=" + page)
+}
+
 export function useGetSubmissions(
   {
     submissionId,

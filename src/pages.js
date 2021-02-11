@@ -16,6 +16,7 @@ import { ChallengeSubmissions } from './pages/challenge-submission.js';
 import { AdminPage } from './pages/admin.js';
 import { UserPage } from './pages/user.js';
 import { ChallengePage } from './pages/challenge.js';
+import { ReferralCodePage } from './pages/referralcode.js';
 
 import { verifyAuthRequest } from './modules/auth/authSlice.js';
 
@@ -100,9 +101,15 @@ export const admin_pages = [
   {
     title: "User Page",
     component: UserPage,
-    url: "user",
+    url: "users",
     in_header: false,
-  }
+  },
+  {
+    title: "Referral Codes",
+    component: ReferralCodePage,
+    url: "referralcodes",
+    in_header: true,
+  },
 ];
 const all_pages = welcome_pages
   .concat(user_pages)

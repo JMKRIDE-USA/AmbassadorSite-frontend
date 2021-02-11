@@ -18,7 +18,7 @@ import { SingleReferralCodeDisplay } from '../components/referralCode-display.js
 import { ISOToReadableString } from '../modules/date.js';
 import { SubmissionItem } from '../components/submission-display.js';
 import { SubmissionsTable } from '../components/tables/submissions.js';
-import { TransactionsTable } from '../components/tables/transactions.js';
+import { UserTransactionsTable } from '../components/tables/transactions.js';
 
 
 const SessionItem = (disable_session, current, logout) => (session, index) => {
@@ -170,7 +170,7 @@ export function Profile() {
             <Text style={styles.body_text}>
               Transaction History:
             </Text>
-            <TransactionsTable/>
+            <UserTransactionsTable/>
           </View>
         : <></>
       }

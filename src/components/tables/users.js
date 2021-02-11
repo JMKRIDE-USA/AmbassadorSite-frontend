@@ -18,7 +18,7 @@ export function UsersTable(){
 
   const userRowFn = (user, row_index) => {
     const button_index = 4;
-    const UserViewButton = makeViewButtonFn("user");
+    const UserViewButton = makeViewButtonFn("users");
     const userToData = (user) => {
       return ([
         user.firstName + " " + user.lastName,
