@@ -15,7 +15,7 @@ import {
 } from '../modules/transactions/hooks.js';
 import { SubmissionsTable } from '../components/tables/submissions.js';
 import { ReferralCodeTable } from '../components/tables/transactions.js';
-import Form from '../forms/form.js'
+import Form from '../components/forms/form.js'
 
 function CreateReferralUsageForm() {
   const createReferralUsage = useCreateReferralUsage();

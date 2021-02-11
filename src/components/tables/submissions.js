@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 
 import { TableWrapper, Cell } from 'react-native-table-component';
 
-import { StandardTable, styles, makeViewButtonFn } from '../tables.js';
+import { StandardTable, styles, makeViewButtonFn } from './table.js';
 import { ISOToReadableString } from '../../modules/date.js';
 import { statusColors } from '../submission-display.js';
 import { useGetSubmissions } from '../../modules/challenges/hooks.js';

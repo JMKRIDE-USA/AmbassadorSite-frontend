@@ -7,8 +7,8 @@ import card_styles from './cardStyle.js';
 import common_styles from '../components/commonStyle.js';
 
 import { Picker } from '@react-native-picker/picker';
-import Form from '../forms/form.js';
-import { fieldTypes } from '../forms/constants.js';
+import Form from '../components/forms/form.js';
+import { fieldTypes } from '../components/forms/constants.js';
 import { useCreateChallenge } from '../modules/challenges/hooks.js';
 
 

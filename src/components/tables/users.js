@@ -4,7 +4,7 @@ import { Text } from 'react-native';
 
 import { TableWrapper, Cell } from 'react-native-table-component';
 
-import { StandardTable, styles, makeViewButtonFn } from '../tables.js';
+import { StandardTable, styles, makeViewButtonFn } from './table.js';
 import { ISOToReadableString } from '../../modules/date.js';
 
 import { useGetUserList } from '../../modules/users/hooks.js';

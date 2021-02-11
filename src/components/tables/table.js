@@ -5,7 +5,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { useLinkProps } from '@react-navigation/native';
 import { Table, Row } from 'react-native-table-component';
 
-import common_styles from './commonStyle.js';
+import common_styles from '../commonStyle.js';
 
 /*
  * Standard Table

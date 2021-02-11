@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 import { TableWrapper, Cell } from 'react-native-table-component';
 
-import { StandardTable, styles, makeViewButtonFn } from '../tables.js';
+import { StandardTable, styles, makeViewButtonFn } from './table.js';
 import { ISOToReadableString } from '../../modules/date.js';
 import { useGetTransactions } from '../../modules/transactions/hooks.js';
 import { useGetReferralCode } from '../../modules/transactions/hooks.js';

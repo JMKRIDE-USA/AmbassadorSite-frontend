@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { StyleSheet, View, Text, Button, TouchableOpacity } from 'react-native';
-import { useForm } from 'react-hook-form';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useLinkProps } from '@react-navigation/native';
 
 import {
@@ -13,7 +12,7 @@ import {
 
 import { SubmissionItem } from './submission-display.js';
 
-import Form from '../forms/form.js';
+import Form from './forms/form.js';
 import card_styles from '../pages/cardStyle.js';
 import common_styles from '../components/commonStyle.js';
 
