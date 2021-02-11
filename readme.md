@@ -3,9 +3,6 @@
 # TODO:
 
 * Resize/format header logo
-* Admin page
-  - Create referral usage
-  + List users + last active
 
 Bugs:
   - Reload on submits of several things
