@@ -2,7 +2,7 @@ import React from 'react';
 
 import { View, Text } from 'react-native';
 
-import { page_styles } from '../pages.js';
+import page_styles from '../styles/pageStyle.js';
 import { useGetAmbassadorApplication } from '../modules/challenges/hooks.js';
 import { FullChallengeDisplay } from '../components/challenge-display.js';
 

@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
-import { page_styles } from '../pages.js';
+import page_styles from '../styles/pageStyle.js';
 import LoginAccountForm from '../components/forms/login-form.js';
 import {
   selectUserId,
@@ -36,7 +36,7 @@ export function SignIn() {
   }
   console.log(navigation)
   return (
-    <View style={page_styles.app_scrollview}>
+    <View style={styles.app_scrollview}>
       <View style={styles.page}>
         <Text style={styles.title}>
           LOG IN
@@ -58,36 +58,39 @@ export function SignIn() {
 }
 
 const styles = StyleSheet.create({
-  page: {
-    flex: 1, 
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "stretch",
-    backgroundColor: "white",
-    padding: "20px",
-    borderRadius: "10px",
-    maxWidth: "90%",
-  },
-  formview: {},
-  title: {
-    textAlign: "center",
-    fontSize: "40px",
-    fontWeight: "bold",
-    paddingBottom: "10px",
-  },
-  subtitle: {
-    textAlign: "center",
-    paddingBottom: "30px",
-  },
-  clickableText: {
-    textAlign: "center",
-    color: "blue",
-    textDecorationLine: "underline",
-    marginTop: "10px",
-  },
-  inputField: {},
-  errorText: {
-    color: "red",
+  ...page_styles,
+  ...{
+    page: {
+      flex: 1, 
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "stretch",
+      backgroundColor: "white",
+      padding: "20px",
+      borderRadius: "10px",
+      maxWidth: "90%",
+    },
+    formview: {},
+    title: {
+      textAlign: "center",
+      fontSize: "40px",
+      fontWeight: "bold",
+      paddingBottom: "10px",
+    },
+    subtitle: {
+      textAlign: "center",
+      paddingBottom: "30px",
+    },
+    clickableText: {
+      textAlign: "center",
+      color: "blue",
+      textDecorationLine: "underline",
+      marginTop: "10px",
+    },
+    inputField: {},
+    errorText: {
+      color: "red",
+    },
   },
 });
 

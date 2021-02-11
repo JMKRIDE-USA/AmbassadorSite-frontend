@@ -3,22 +3,23 @@ import React, { useEffect } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux';
 
-import { Header } from './components/header.js';
-import { Footer } from './components/footer.js';
+import { Header } from '../components/header.js';
+import { Footer } from '../components/footer.js';
 
-import { SplashPage } from './pages/splash-page.js';
-import SignUp from './pages/sign-up.js';
-import { SignIn } from './pages/sign-in.js';
-import { CreateChallengePage } from './pages/create-challenge.js';
-import { Profile } from './pages/profile.js';
-import { AmbassadorApplication } from './pages/ambassador-application.js';
-import { ChallengeSubmissions } from './pages/challenge-submission.js';
-import { AdminPage } from './pages/admin.js';
-import { UserPage } from './pages/user.js';
-import { ChallengePage } from './pages/challenge.js';
-import { ReferralCodePage } from './pages/referralcode.js';
+import { SplashPage } from './splash-page.js';
+import SignUp from './sign-up.js';
+import { SignIn } from './sign-in.js';
+import { CreateChallengePage } from './create-challenge.js';
+import { Profile } from './profile.js';
+import { AmbassadorApplication } from './ambassador-application.js';
+import { ChallengeSubmissions } from './challenge-submission.js';
+import { AdminPage } from './admin.js';
+import { UserPage } from './user.js';
+import { ChallengePage } from './challenge.js';
+import { ReferralCodePage } from './referralcode.js';
 
-import { verifyAuthRequest } from './modules/auth/authSlice.js';
+import { verifyAuthRequest } from '../modules/auth/authSlice.js';
+import page_styles from '../styles/pageStyle.js';
 
 const homePage = {
   title: "Home",
@@ -170,13 +171,12 @@ export const page_linking = {
 const makeAppScreen = (Component) => (props) => { 
   const dispatch = useDispatch()
   useEffect(() => dispatch(verifyAuthRequest()), []);
-  //useEffect(() => console.log("ran"), []);
   return (
-    <View style={page_styles.app_container}>
+    <View style={styles.app_container}>
       <Header/>
       <ScrollView
-        style={page_styles.page_scrollview}
-        contentContainerStyle={page_styles.page_cc_scrollview}
+        style={styles.page_scrollview}
+        contentContainerStyle={styles.page_cc_scrollview}
       >
         <Component {...props}/>
       </ScrollView>
@@ -203,29 +203,7 @@ export function genAppStack(stack, auth_permissions){
   )
 }
 
-export const page_styles = StyleSheet.create({
-  app_container: {
-    flex: 1,
-    backgroundColor: '#00a0db',
-  },
-  page_scrollview: {
-    zIndex: -10,
-  },
-  scrollview_main: {
-    alignItems: "center",
-  },
-  scrollview_footer :{
-    justifyContent: "flex-end",
-  },
-  page_cc_scrollview: {
-    flexDirection: "column",
-    justifyContent: "center", 
-    alignItems: "center", 
-    minHeight: "100%",
-  },
-  app_scrollview: {
-    alignItems: 'center',
-    maxWidth: 1200,
-    zIndex: -10,
-  }
+const styles = StyleSheet.create({
+  ...page_styles,
+  ...{},
 });

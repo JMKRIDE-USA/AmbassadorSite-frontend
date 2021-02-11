@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 import { selectUserInfo } from '../modules/users/userSlice.js';
 import { selectUserId } from '../modules/auth/authSlice.js';
-import { page_styles } from '../pages.js';
+import page_styles from '../styles/pageStyle.js';
 import card_styles from '../styles/cardStyle.js';
 import common_styles from '../styles/commonStyle.js';
 import { useLogoutUser } from '../modules/auth/hooks.js';
@@ -91,7 +91,7 @@ export function Profile() {
     AASubmission = AASubmissionQuery.data[0]
   }
   return (
-    <View style={page_styles.app_scrollview}>
+    <View style={styles.app_scrollview}>
       <View style={styles.page_card}>
         <Text style={styles.title_text}>
           {userInfo.is_ambassador ? "Ambassador" : "User"} Profile<br/>
@@ -181,6 +181,7 @@ export function Profile() {
 const styles = StyleSheet.create({
   ...card_styles,
   ...common_styles,
+  ...page_styles,
   ...{
   },
 });

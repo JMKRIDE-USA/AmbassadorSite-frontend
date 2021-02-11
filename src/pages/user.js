@@ -3,13 +3,11 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
-import { page_styles } from '../pages.js';
+import page_styles from '../styles/pageStyle.js';
 import card_styles from '../styles/cardStyle.js';
 import common_styles from '../styles/commonStyle.js';
-import {
-  useGetUser,
-  useGetUserList,
-} from '../modules/users/hooks.js';
+
+import { useGetUser } from '../modules/users/hooks.js';
 import { selectUserInfo } from '../modules/users/userSlice.js';
 
 import {
@@ -159,13 +157,13 @@ function SingleUserPage({userId}) {
 export function UserPage(props) {
   if(props.route.params && props.route.params.id){
     return (
-      <View style={page_styles.app_scrollview}>
+      <View style={styles.app_scrollview}>
         <SingleUserPage userId={props.route.params.id}/>
       </View>
     )
   }
   return (
-    <View style={page_styles.app_scrollview}>
+    <View style={styles.app_scrollview}>
       <View style={styles.page_card}>
         <Text style={styles.title_text}>All Users:</Text>
         <UsersTable/>
@@ -177,6 +175,7 @@ export function UserPage(props) {
 const styles = StyleSheet.create({
   ...card_styles,
   ...common_styles,
+  ...page_styles,
   ...{
   }
 });

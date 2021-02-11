@@ -5,9 +5,10 @@ import { useFonts } from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
-import { page_styles, getApplyPage } from '../pages.js';
-import card_styles from '../styles/cardStyle.js';
+import { getApplyPage } from './page.js';
 import { selectAuthPermissions } from '../modules/auth/authSlice.js';
+import card_styles from '../styles/cardStyle.js';
+import page_styles from '../styles/pageStyle.js';
 
 
 
@@ -27,7 +28,7 @@ export function SplashPage() {
 	if(!fontsLoaded) { return <></> }
 
   return (
-    <View style={page_styles.app_scrollview}>
+    <View style={styles.app_scrollview}>
       <View style={styles.page}>
         <Text style={styles.title_text}>
           Welcome to the JMKRIDE Ambassador Portal.<br/>
@@ -124,6 +125,7 @@ export function SplashPage() {
 
 const styles = StyleSheet.create({
   ...card_styles,
+  ...page_styles,
   ...{
     page: {
       paddingTop: "30px",

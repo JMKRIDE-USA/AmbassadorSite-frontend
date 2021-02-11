@@ -2,20 +2,16 @@ import React, { useEffect } from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { page_styles } from '../pages.js';
+import page_styles from '../styles/pageStyle.js';
 import CreateAccountForm from '../components/forms/create-account-form.js';
-import {
-  selectUserId,
-  fetchAuthRequest,
-} from '../modules/auth/authSlice.js';
+import { selectUserId } from '../modules/auth/authSlice.js';
 import { useCreateAccount } from '../modules/auth/hooks.js';
 
 
 export default function SignUp(){
   let navigation = useNavigation();
-  const dispatch = useDispatch();
 
   const createAccount = useCreateAccount();
   let userId = useSelector(selectUserId)
@@ -73,36 +69,38 @@ export default function SignUp(){
 }
 
 const styles = StyleSheet.create({
-  page: {
-    flex: 1, 
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "stretch",
-    backgroundColor: "white",
-    padding: "20px",
-    borderRadius: "10px",
-    maxWidth: "90%",
-  },
-  formview: {},
-  title: {
-    textAlign: "center",
-    fontSize: "40px",
-    fontWeight: "bold",
-    paddingBottom: "10px",
-  },
-  subtitle: {
-    textAlign: "center",
-    paddingBottom: "30px",
-  },
-  clickableText: {
-    textAlign: "center",
-    color: "blue",
-    textDecorationLine: "underline",
-    marginTop: "10px",
-  },
-  inputField: {},
-  errorText: {
-    color: "red",
+  ...page_styles,
+  ...{
+    page: {
+      flex: 1, 
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "stretch",
+      backgroundColor: "white",
+      padding: "20px",
+      borderRadius: "10px",
+      maxWidth: "90%",
+    },
+    formview: {},
+    title: {
+      textAlign: "center",
+      fontSize: "40px",
+      fontWeight: "bold",
+      paddingBottom: "10px",
+    },
+    subtitle: {
+      textAlign: "center",
+      paddingBottom: "30px",
+    },
+    clickableText: {
+      textAlign: "center",
+      color: "blue",
+      textDecorationLine: "underline",
+      marginTop: "10px",
+    },
+    inputField: {},
+    errorText: {
+      color: "red",
+    },
   },
 });
-

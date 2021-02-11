@@ -2,7 +2,7 @@ import React from 'react';
 
 import { View, Text, StyleSheet } from 'react-native';
 
-import { page_styles } from '../pages.js';
+import page_styles from '../styles/pageStyle.js';
 import card_style from '../styles/cardStyle.js';
 import common_styles from '../styles/commonStyle.js';
 
@@ -26,13 +26,13 @@ function SubmissionList() {
 export function ChallengeSubmissions(props) {
   if(props.route.params && props.route.params.id){
     return (
-      <View style={page_styles.app_scrollview}>
+      <View style={styles.app_scrollview}>
         <FullChallengeSubmissionDisplay submissionId={props.route.params.id}/>
       </View>
     )
   }
   return (
-    <View style={page_styles.app_scrollview}>
+    <View style={styles.app_scrollview}>
       <SubmissionList/>
     </View>
   )
@@ -41,6 +41,7 @@ export function ChallengeSubmissions(props) {
 const styles = StyleSheet.create({
   ...card_style,
   ...common_styles,
+  ...page_styles,
   ...{
   },
 });

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { View, Text, StyleSheet } from 'react-native';
 
-import { page_styles } from '../pages.js';
+import page_styles from '../styles/pageStyle.js';
 import card_styles from '../styles/cardStyle.js';
 import common_styles from '../styles/commonStyle.js';
 
@@ -22,7 +22,7 @@ function AllReferralCodes() {
 
 export function ReferralCodePage(props) {
   return (
-    <View style={page_styles.app_scrollview}>
+    <View style={styles.app_scrollview}>
       {
         props.route.params && props.route.params.id
         ? <FullReferralCodeDisplay referralCodeId={props.route.params.id}/>
@@ -35,6 +35,7 @@ export function ReferralCodePage(props) {
 const styles = StyleSheet.create({
   ...card_styles,
   ...common_styles,
+  ...page_styles,
   ...{
   },
 });

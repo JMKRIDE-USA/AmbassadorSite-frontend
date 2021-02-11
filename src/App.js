@@ -14,7 +14,7 @@ import {
   fetchAuthRequest,
   selectAuthPermissions,
 } from './modules/auth/authSlice.js';
-import { page_linking, genAppStack } from './pages.js';
+import { page_linking, genAppStack } from './pages/page.js';
 import { useFonts, Lato_400Regular } from '@expo-google-fonts/lato';
 import { Roboto_300Light, Roboto_500Medium } from '@expo-google-fonts/roboto';
 

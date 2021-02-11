@@ -14,7 +14,7 @@ import { selectAuthPermissions } from '../modules/auth/authSlice.js';
 import { selectUserName } from '../modules/users/userSlice.js';
 import jmk_bigheaderlogo from '../assets/JMKHeaderLogoTemp.png';
 import jmk_smallheaderlogo from '../assets/JMKHeaderLogoTempMobile.png';
-import { getHeaderButtons, getProfilePage } from '../pages.js';
+import { getHeaderButtons, getProfilePage } from '../pages/page.js';
 import {
   desktop_styles,
   mobile_styles,
