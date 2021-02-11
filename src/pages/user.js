@@ -4,8 +4,8 @@ import { View, Text, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import { page_styles } from '../pages.js';
-import card_styles from './cardStyle.js';
-import common_styles from '../components/commonStyle.js';
+import card_styles from '../styles/cardStyle.js';
+import common_styles from '../styles/commonStyle.js';
 import {
   useGetUser,
   useGetUserList,

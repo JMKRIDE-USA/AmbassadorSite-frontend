@@ -1,4 +1,4 @@
-import card_styles from '../pages/cardStyle.js';
+import card_styles from './cardStyle.js';
 import config from '../config.js';
 
 export default {

@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Button, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
  
-import card_styles from '../pages/cardStyle.js';
-import common_styles from '../components/commonStyle.js';
+import card_styles from '../styles/cardStyle.js';
+import common_styles from '../styles/commonStyle.js';
 
 import { Input } from 'react-native-elements';
 import { Formik, Field, ErrorMessage } from 'formik';

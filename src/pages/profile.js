@@ -6,8 +6,8 @@ import { useSelector } from 'react-redux';
 import { selectUserInfo } from '../modules/users/userSlice.js';
 import { selectUserId } from '../modules/auth/authSlice.js';
 import { page_styles } from '../pages.js';
-import card_styles from './cardStyle.js';
-import common_styles from '../components/commonStyle.js';
+import card_styles from '../styles/cardStyle.js';
+import common_styles from '../styles/commonStyle.js';
 import { useLogoutUser } from '../modules/auth/hooks.js';
 import { useGetUser, useGetUserSessions, useDisableSession } from '../modules/users/hooks.js';
 import {

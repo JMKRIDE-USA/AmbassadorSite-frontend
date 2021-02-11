@@ -3,8 +3,8 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import { page_styles } from '../pages.js';
-import card_styles from '../pages/cardStyle.js';
-import common_styles from '../components/commonStyle.js';
+import card_styles from '../styles/cardStyle.js';
+import common_styles from '../styles/commonStyle.js';
 
 import { ReferralCodeTable } from '../components/tables/transactions.js';
 import { FullReferralCodeDisplay } from '../components/referralCode-display.js';

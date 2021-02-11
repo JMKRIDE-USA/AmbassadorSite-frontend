@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import { page_styles, getApplyPage } from '../pages.js';
-import card_styles from './cardStyle.js';
+import card_styles from '../styles/cardStyle.js';
 import { selectAuthPermissions } from '../modules/auth/authSlice.js';
 
 

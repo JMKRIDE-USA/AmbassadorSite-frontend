@@ -14,8 +14,8 @@ import { ISOToReadableString } from '../modules/date.js';
 
 import { selectIsAdmin, selectUserId } from '../modules/auth/authSlice.js';
 
-import card_style from '../pages/cardStyle.js';
-import common_styles from './commonStyle.js';
+import card_style from '../styles/cardStyle.js';
+import common_styles from '../styles/commonStyle.js';
 
 export const statusColors = {
   'PENDING': "#ebd234", // yellow

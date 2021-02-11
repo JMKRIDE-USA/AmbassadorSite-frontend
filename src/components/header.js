@@ -20,7 +20,7 @@ import {
   mobile_styles,
   desktopHeaderButtons_styles,
   mobileHeaderButtons_styles
-} from './headerStyles.js'
+} from '../styles/headerStyles.js'
 
 function HeaderButtons({style}){
   let navigation = useNavigation();

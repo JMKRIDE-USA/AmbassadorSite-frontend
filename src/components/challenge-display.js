@@ -13,8 +13,9 @@ import {
 import { SubmissionItem } from './submission-display.js';
 
 import Form from './forms/form.js';
-import card_styles from '../pages/cardStyle.js';
-import common_styles from '../components/commonStyle.js';
+
+import card_styles from '../styles/cardStyle.js';
+import common_styles from '../styles/commonStyle.js';
 
 
 function NewChallengeForm({ fields, submitChallenge}) {
