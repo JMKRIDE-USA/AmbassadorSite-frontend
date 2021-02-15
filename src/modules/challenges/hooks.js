@@ -1,8 +1,8 @@
-import { useMutation, queryCache} from 'react-query';
+import { useMutation } from 'react-query';
 import { useSelector } from 'react-redux';
 
 import { selectAuthHeader, selectUserId } from '../auth/authSlice.js';
-import { useGetQuery, createMutationCall } from '../data.js';
+import { queryClient, useGetQuery, createMutationCall } from '../data.js';
 import config from '../../config.js';
 
 const CACHE_KEY = 'challenge' //global key cache invalidations for queries this file
@@ -83,7 +83,7 @@ export function useGetSubmissionsAllowed({ challengeId }) {
 export function useSubmitChallenge(challengeId) {
   const header = useSelector(selectAuthHeader);
 
-  const [submitChallenge, { error }] = useMutation(
+  const { mutateAsync, error } = useMutation(
     ({ to_submit }) => fetch(
       config.backend_url + "challenges/id/" + challengeId,
       {
@@ -98,18 +98,18 @@ export function useSubmitChallenge(challengeId) {
     {
       onSuccess: async () => {
         console.log("success");
-        queryCache.invalidateQueries(CACHE_KEY);
+        queryClient.invalidateQueries(CACHE_KEY);
       },
     }
   )
-  return createMutationCall(submitChallenge, error, "submitting challenge");
+  return createMutationCall(mutateAsync, error, "submitting challenge");
 
 }
 
 export function useCreateChallenge() {
   const header = useSelector(selectAuthHeader);
 
-  const [createChallenge, { error }] = useMutation(
+  const { mutateAsync, error } = useMutation(
     ({ to_submit }) => fetch(
       config.backend_url + "challenges/create",
       {
@@ -124,17 +124,17 @@ export function useCreateChallenge() {
     {
       onSuccess: () => {
         console.log("success");
-        queryCache.invalidateQueries(CACHE_KEY);
+        queryClient.invalidateQueries(CACHE_KEY);
       },
     }
   )
-  return createMutationCall(createChallenge, error, "creating challenge");
+  return createMutationCall(mutateAsync, error, "creating challenge");
 }
 
-export function useDeleteSubmission(submissionId) {
+export function useDeleteSubmission({ submissionId, onSuccess = () => {} }) {
   const header = useSelector(selectAuthHeader);
 
-  const [deleteSubmission, {error}] = useMutation(
+  const { mutateAsync, error} = useMutation(
     () => fetch(
       config.backend_url + "challenges/submissions/id/" + submissionId,
       {
@@ -144,17 +144,18 @@ export function useDeleteSubmission(submissionId) {
     ),
     {
       onSuccess: async() => {
-        queryCache.invalidateQueries(CACHE_KEY);
+        queryClient.invalidateQueries(CACHE_KEY);
+        onSuccess();
       },
     }
   );
-  return createMutationCall(deleteSubmission, error, "deleting submission");
+  return createMutationCall(mutateAsync, error, "deleting submission");
 }
 
 export function useUpdateSubmission(submissionId) {
   const header = useSelector(selectAuthHeader);
 
-  const [updateSubmission, {error}] = useMutation(
+  const { mutateAsync, error} = useMutation(
     ({to_submit}) => fetch(
       config.backend_url + "challenges/submissions/update/id/" + submissionId,
       {
@@ -168,11 +169,11 @@ export function useUpdateSubmission(submissionId) {
     ),
     {
       onSuccess: async() => {
-        queryCache.invalidateQueries(CACHE_KEY);
+        queryClient.invalidateQueries(CACHE_KEY);
       },
     }
   );
-  return createMutationCall(updateSubmission, error, "updating submission");
+  return createMutationCall(mutateAsync, error, "updating submission");
 }
 
 export function useGetPendingSubmissions() {

@@ -1,8 +1,8 @@
-import { useMutation, queryCache} from 'react-query';
+import { useMutation } from 'react-query';
 import { useSelector } from 'react-redux';
 
 import { selectUserId, selectAuthHeader } from '../auth/authSlice.js';
-import { useGetQuery, createMutationCall } from '../data.js';
+import { queryClient, useGetQuery, createMutationCall } from '../data.js';
 import config from '../../config.js';
 
 
@@ -15,18 +15,20 @@ function transactionGetter(endpoint){
   )
 }
 
-export function useGetTransactions({userId, useCurrentUser = false, submissionId, referralCodeId} = {}){
+export function useGetTransactions(
+  {userId, useCurrentUser = false, submissionId, referralCodeId, populate = false} = {}
+){
   const currentUserId = useSelector(selectUserId);
   if(useCurrentUser) {
     userId = currentUserId
   }
-  let postfix = ""
+  let postfix = "?populate=" + (populate ? "true" : "false")
   if(userId){
-    postfix += "?userId=" + userId;
+    postfix += "&userId=" + userId;
   } else if(submissionId) {
-    postfix += "?submissionId=" + submissionId;
+    postfix += "&submissionId=" + submissionId;
   } else if(referralCodeId) {
-    postfix += "?referralCodeId=" + referralCodeId;
+    postfix += "&referralCodeId=" + referralCodeId;
   }
   return transactionGetter("transactions/get" + postfix);
 }
@@ -44,7 +46,7 @@ export function useGetReferralCode({referralCodeId, userId} = {}){
 export function useCreateReferralCode() {
   const header = useSelector(selectAuthHeader);
 
-  const [createReferralCode, { error }] = useMutation(
+  const { mutateAsync, error } = useMutation(
     ({ to_submit }) => fetch(
       config.backend_url + "transactions/referralCodes/create",
       {
@@ -58,11 +60,11 @@ export function useCreateReferralCode() {
     ),
     {
       onSuccess: () => {
-        queryCache.invalidateQueries(CACHE_KEY);
+        queryClient.invalidateQueries(CACHE_KEY);
       },
     }
   );
-  return createMutationCall(createReferralCode, error, "creating referral code");
+  return createMutationCall(mutateAsync, error, "creating referral code");
 }
 
 export function useGetAllReferralCodes() {
@@ -72,7 +74,7 @@ export function useGetAllReferralCodes() {
 export function useCreateReferralUsage() {
   const header = useSelector(selectAuthHeader);
 
-  const [createReferralUsage, { error }] = useMutation(
+  const { mutateAsync, error } = useMutation(
     ({ to_submit }) => fetch(
       config.backend_url + "transactions/referralCodes/usage/create",
       {
@@ -86,10 +88,9 @@ export function useCreateReferralUsage() {
     ),
     {
       onSuccess: () => {
-        queryCache.invalidateQueries(CACHE_KEY);
+        queryClient.invalidateQueries(CACHE_KEY);
       },
     }
   );
-  return createMutationCall(createReferralUsage, error, "creating referral code usage");
+  return createMutationCall(mutateAsync, error, "creating referral code usage");
 }
-

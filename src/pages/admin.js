@@ -13,8 +13,8 @@ import {
   useGetAllReferralCodes,
   useCreateReferralUsage
 } from '../modules/transactions/hooks.js';
+import { AllTransactionsTable } from '../components/tables/transactions.js';
 import { SubmissionsTable } from '../components/tables/submissions.js';
-import { ReferralCodeTable } from '../components/tables/transactions.js';
 import Form from '../components/forms/form.js'
 
 function CreateReferralUsageForm() {
@@ -104,29 +104,13 @@ function SubmissionQueueCard() {
   )
 }
 
-function SubmissionsHistoryCard() {
+function AllTransactionsCard() {
   return (
     <View style={styles.page_card}>
       <Text style={styles.body_text}>
-        All Submissions:
+        All Transactions:
       </Text>
-      <SubmissionsTable
-        submissionsQueryParams={
-          {admin: true, populateAuthor: true, populateChallenge: true}
-        }
-        showAuthor={true}
-      />
-    </View>
-  )
-}
-
-function ReferralCodeCard() {
-  return (
-    <View style={styles.page_card}>
-      <Text style={styles.body_text}>
-        Active Referral Codes:
-      </Text>
-      <ReferralCodeTable/>
+      <AllTransactionsTable/>
     </View>
   )
 }
@@ -143,8 +127,7 @@ export function AdminPage() {
       </View>
       <SubmissionQueueCard/>
       <CreateReferralUsageCard/>
-      <ReferralCodeCard/>
-      <SubmissionsHistoryCard/>
+      <AllTransactionsCard/>
     </View>
   );
 }

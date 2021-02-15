@@ -37,7 +37,7 @@ export function UsersTable(){
     return (
       <TableWrapper
         key={row_index}
-        style={[styles.standardTableRow, row_index%2 && {backgroundColor: "#F7F6E7"}]}
+        style={[styles.standardTableRow, row_index%2 && {backgroundColor: "#eeeeee"}]}
       >
         {
           userToData(user).map(

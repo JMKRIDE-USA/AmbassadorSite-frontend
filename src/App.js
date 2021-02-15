@@ -1,22 +1,30 @@
 import React from 'react';
 import { Text } from 'react-native';
+
 import { StatusBar } from 'expo-status-bar';
 import '@expo/match-media';
 import { registerRootComponent } from 'expo';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
+
+import { QueryClientProvider } from 'react-query';
+import { queryClient } from './modules/data.js';
+
+import { useFonts, Lato_400Regular } from '@expo-google-fonts/lato';
+import { Roboto_300Light, Roboto_500Medium } from '@expo-google-fonts/roboto';
 
 import store from './redux/store.js';
 import {
   fetchAuthRequest,
   selectAuthPermissions,
 } from './modules/auth/authSlice.js';
-import { page_linking, genAppStack } from './pages/page.js';
-import { useFonts, Lato_400Regular } from '@expo-google-fonts/lato';
-import { Roboto_300Light, Roboto_500Medium } from '@expo-google-fonts/roboto';
+import { page_linking, genAppStack } from './pages/app.js';
+
 
 function AppPages() {
   const AppStack = createStackNavigator();
@@ -58,7 +66,9 @@ function App() {
   let persistor = persistStore(store);
   return (
     <Provider store={store}>
-      <PersistedApp persistor={persistor}/>
+      <QueryClientProvider client={queryClient}>
+        <PersistedApp persistor={persistor}/>
+      </QueryClientProvider>
     </Provider>
   );
 }

@@ -1,9 +1,8 @@
-import { useMutation, queryCache } from 'react-query';
-import { useSelector, useDispatch } from 'react-redux';
+import { useMutation } from 'react-query';
+import { useSelector } from 'react-redux';
 
-import { useGetQuery, createMutationCall } from '../data.js';
-import { logoutUser } from './userSlice.js';
-import { selectAuthHeader, resetAuth } from '../auth/authSlice.js';
+import { queryClient, useGetQuery, createMutationCall } from '../data.js';
+import { selectAuthHeader} from '../auth/authSlice.js';
 import config from '../../config.js';
 
 function useGetUserQuery(endpoint) {
@@ -36,7 +35,7 @@ export function useGetUserSubmissionCountFn(){
 export function useDisableSession(){
   const header = useSelector(selectAuthHeader);
 
-  const [disableSession, { error }] = useMutation(
+  const { mutateAsync, error } = useMutation(
     ({to_submit}) => fetch(
       config.backend_url + "auth/sessions/id/" + to_submit.session_id,
       {
@@ -46,14 +45,14 @@ export function useDisableSession(){
     ),
     {
       onSuccess: async () => {
-        queryCache.invalidateQueries('user');
-        queryCache.invalidateQueries('users');
+        queryClient.invalidateQueries('user');
+        queryClient.invalidateQueries('users');
       },
     }
   );
 
   return createMutationCall(
-    disableSession, error, "disabling session",
+    mutateAsync, error, "disabling session",
   )
 }
 

@@ -6,117 +6,69 @@ import { useDispatch } from 'react-redux';
 import { Header } from '../components/header.js';
 import { Footer } from '../components/footer.js';
 
-import { SplashPage } from './splash-page.js';
-import SignUp from './sign-up.js';
-import { SignIn } from './sign-in.js';
-import { CreateChallengePage } from './create-challenge.js';
-import { Profile } from './profile.js';
-import { AmbassadorApplication } from './ambassador-application.js';
-import { ChallengeSubmissions } from './challenge-submission.js';
-import { AdminPage } from './admin.js';
-import { UserPage } from './user.js';
-import { ChallengePage } from './challenge.js';
-import { ReferralCodePage } from './referralcode.js';
-
 import { verifyAuthRequest } from '../modules/auth/authSlice.js';
 import page_styles from '../styles/pageStyle.js';
 
-const homePage = {
-  title: "Home",
-  component: SplashPage,
-  url: "/",
-  in_header: true,
-};
+import {
+  homePage,
+  profilePage,
+  challengeSubmissionPage,
+  challengePage,
+  signUpPage,
+  signInPage,
+  ambassadorApplicationPage,
+  createChallengePage,
+  adminDashboardPage,
+  userPage,
+  referralCodePage,
 
-const profilePage = {
-  title: "Profile",
-  component: Profile,
-  url: "profile",
-  in_header: false,
-  profile_page: true,
-};
+  all_pages,
+} from './pages.js';
 
-const challengeSubmissions = {
-  title: "Challenge Submission",
-  component: ChallengeSubmissions,
-  url: "challenge-submissions",
-  in_header: false,
-}
-const challengeBoard = {
-  title: "Challenge Board",
-  component: ChallengePage,
-  url: "challenges",
-  in_header: true,
-}
-
+/*
+ * Welcome Pages:
+ * Before the user has created an account
+ */
 export const welcome_pages = [
   homePage,
-  {
-    title: "Apply Now",
-    component: SignUp,
-    url: "sign-up",
-    in_header: true,
-    apply_page: true, // User needs an account before an application can be created
-  },
-  {
-    title: "Sign In",
-    component: SignIn,
-    url: "sign-in",
-    profile_page: true,
-  },
+  {...signUpPage, apply_page: true },
+  {...signInPage, profile_page: true },
 ];
+/*
+ * User Pages:
+ * After an account, before being approved as an ambassador
+ */
 export const user_pages = [
   homePage,
   profilePage,
-  challengeSubmissions,
-  {...challengeBoard, in_header: false},
-  {
-    title: "Ambassador Application",
-    component: AmbassadorApplication,
-    url: "ambassador-application",
-    in_header: true,
-    apply_page: true,
-  },
+  {...challengeSubmissionPage, in_header: false},
+  {...challengePage, in_header: false},
+  {...ambassadorApplicationPage, apply_page: true},
 ];
+/*
+ * Ambassador Pages:
+ * After being approved as an ambassador
+ */
 export const ambassador_pages = [
+  homePage,
   profilePage,
-  challengeSubmissions,
-  challengeBoard,
+  challengePage,
+  {... challengeSubmissionPage, displayName: "My Submissions"},
+  {...referralCodePage, displayName: "My Referral Code"},
 ];
+/*
+ * Admin Pages
+ */
 export const admin_pages = [
+  homePage,
   profilePage,
-  challengeSubmissions,
-  challengeBoard,
-  {
-    title: "Create Challenge",
-    component: CreateChallengePage, 
-    url: "create-challenge",
-    in_header: true,
-  },
-  {
-    title: "Admin Page",
-    component: AdminPage,
-    url: "dashboard",
-    in_header: true,
-  },
-  {
-    title: "User Page",
-    component: UserPage,
-    url: "users",
-    in_header: false,
-  },
-  {
-    title: "Referral Codes",
-    component: ReferralCodePage,
-    url: "referralcodes",
-    in_header: true,
-  },
+  challengeSubmissionPage,
+  challengePage,
+  createChallengePage,
+  adminDashboardPage,
+  userPage,
+  referralCodePage,
 ];
-const all_pages = welcome_pages
-  .concat(user_pages)
-  .concat(ambassador_pages)
-  .concat(admin_pages);
-
 export function authPermissionsToPages(auth_permissions) {
   if (auth_permissions) {
     return {
@@ -131,7 +83,7 @@ export function authPermissionsToPages(auth_permissions) {
 
 export function getHeaderButtons(auth_permissions){
   let pages = authPermissionsToPages(auth_permissions);
-  return pages.filter(page => page.in_header).map(page => page.title);
+  return pages.filter(page => page.in_header);
 }
 
 export function getProfilePage(auth_permissions){
@@ -142,7 +94,7 @@ export function getProfilePage(auth_permissions){
       profile_page = page;
     }
   });
-  return profile_page.title;
+  return profile_page;
 }
 
 export function getApplyPage(auth_permissions){
@@ -153,12 +105,13 @@ export function getApplyPage(auth_permissions){
       apply_page = page;
     }
   });
-  return apply_page.title;
+  return apply_page;
 }
 
 function getPageLinkings(){
   let all_linkings = {}
   all_pages.forEach(page => all_linkings[page.title] = page.url);
+  console.log(all_linkings);
   return all_linkings;
 }
 

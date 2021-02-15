@@ -11,11 +11,11 @@ import { useGetTransactions } from '../../modules/transactions/hooks.js';
 import { useGetReferralCode } from '../../modules/transactions/hooks.js';
 import { selectUserId } from '../../modules/auth/authSlice.js';
 
-
-const transactionColors = (amount) => {
-  if(amount > 0) return "#34eb49";
-  return "#eb3434";
-};
+const transactionType = {
+  increase: "#34eb49",
+  decrease: "#eb3434",
+  neutral: "#cccccc",
+}
 
 export function UserTransactionsTable() {
   const transactionsQuery = useGetTransactions({useCurrentUser: true});
@@ -31,34 +31,59 @@ export function ReferralCodeTransactionsTable({referralCodeId}) {
   );
 }
 
-function RawTransactionsTable({transactionsQuery}){
+export function AllTransactionsTable() {
+  const transactionsQuery = useGetTransactions({populate: true})
+  return (
+    <RawTransactionsTable transactionsQuery={transactionsQuery} showSubjects={true}/>
+  );
+}
+
+function RawTransactionsTable({transactionsQuery, showSubjects = false}){
   
-  const header = ['Date', 'Amount', 'Reason', ''];
-  const widthArr = ['180px', '80px', '200px', '100px'];
+  let header = ['Date', 'Amount', 'Reason', ''];
+  let widthArr = ['180px', '80px', '200px', '100px'];
+  if(showSubjects) {
+    header = header.concat(['Source', 'Destination']);
+    widthArr = widthArr.concat(['180px', '180px']);
+  }
 
   const userId = useSelector(selectUserId);
   const manualRowFn = (transaction, row_index) => {
     const transactionToData = (transaction) => {
-      let amount = (userId === transaction.destination.toString())
-        ? transaction.amount
-        : -transaction.amount;
+      let amount;
+      if (userId === transaction.destination._id.toString()) {
+        amount = [transaction.amount, transactionType.increase];
+      } else if (userId === transaction.source._id.toString()) {
+        amount = [-transaction.amount, transactionType.decrease];
+      } else {
+        amount = [transaction.amount, transactionType.neutral];
+      }
 
       let id = transaction.submission 
         ? transaction.submission 
         : transaction.referralCode;
 
-      return ([
+      let data = [
         ISOToReadableString(transaction.createdAt),
         amount,
         transaction.reason,
         [id, Boolean(transaction.submission)],
-      ])
+      ]
+      if(showSubjects){
+        data = data.concat([
+          transaction.source, transaction.destination
+        ]);
+      }
+      return data
     }
     const SubmissionViewButton = makeViewButtonFn("challenge-submissions");
     const ReferralCodeViewButton = makeViewButtonFn("referralcodes");
+    const UserViewButton = makeViewButtonFn("users");
 
     const amount_index = 1;
     const button_index = 3;
+    const user_indices = [4, 5];
+
     const dataFn = (cellValue, index) => {
       if(index === button_index){
         if(cellValue[1]){ // submission
@@ -68,10 +93,19 @@ function RawTransactionsTable({transactionsQuery}){
         }
       } else if (index === amount_index){
         return (
-          <View style={{backgroundColor: transactionColors(cellValue), borderRadius: "5px"}}>
+          <View style={{backgroundColor: cellValue[1], borderRadius: "5px"}}>
             <Text style={styles.standardTableDataText}>
-              {cellValue}
+              {cellValue[0]}
             </Text>
+          </View>
+        )
+      } else if(user_indices.includes(index)){
+        return (
+          <View style={{flexDirection: "row", alignItems: "center"}}>
+            <Text style={styles.standardTableDataText}>
+              {cellValue.firstName + " " + cellValue.lastName}
+            </Text>
+            <UserViewButton id={cellValue._id} index={index}/>  
           </View>
         )
       } else {
@@ -81,7 +115,7 @@ function RawTransactionsTable({transactionsQuery}){
     return (
       <TableWrapper
         key={row_index}
-        style={[styles.standardTableRow, row_index%2 && {backgroundColor: "#F7F6E7"}]}
+        style={[styles.standardTableRow, row_index%2 && {backgroundColor: "#eeeeee"}]}
       >
         {
           transactionToData(transaction).map(

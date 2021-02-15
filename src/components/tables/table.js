@@ -31,7 +31,7 @@ export function StandardTable({header, widthArr, rowDataInputs, manualRowFn, raw
         key={rowDataInput}
         data={rowData}
         widthArr={widthArr}
-        style={[styles.row, index%2 && {backgroundColor: "#F7F6E7"}]}
+        style={[styles.row, index%2 && {backgroundColor: "#eeeeee"}]}
         textStyle={styles.standardTableHeaderText}
       />
     );

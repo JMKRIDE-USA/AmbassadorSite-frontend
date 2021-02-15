@@ -1,5 +1,3 @@
-import { queryCache } from 'react-query';
-
 import {
   verifyAuthRequest,
   fetchAuthRequest,
@@ -17,6 +15,7 @@ import {
 import { setUserInfo } from '../modules/users/userSlice.js';
 import config from '../config.js';
 import { getDateAfter, hasExpired, needsRefresh } from '../modules/date.js';
+import { queryClient } from '../modules/data.js';
 
 
 export default {
@@ -135,8 +134,8 @@ export default {
 
   [resetAuth]: (action, dispatch, state) => {
     const access_token = selectAccessToken(state);
-    queryCache.invalidateQueries('user');
-    queryCache.invalidateQueries('users');
+    queryClient.invalidateQueries('user');
+    queryClient.invalidateQueries('users');
     if(access_token){
       const header = selectAuthHeader(state);
       try {

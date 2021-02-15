@@ -1,18 +1,21 @@
 import React from 'react';
 
 import { Button, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { useSelector } from 'react-redux';
  
-import card_styles from '../styles/cardStyle.js';
-import common_styles from '../styles/commonStyle.js';
-
 import { Input } from 'react-native-elements';
 import { Formik, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
+import card_styles from '../styles/cardStyle.js';
+import common_styles from '../styles/commonStyle.js';
+
+import { selectIsAdmin } from '../modules/auth/authSlice.js';
 import { useLinkProps } from '@react-navigation/native';
 
 import { useGetReferralCode } from '../modules/transactions/hooks.js';
 import { ReferralCodeTransactionsTable  } from '../components/tables/transactions.js';
+
 
 export function FullReferralCodeDisplay({referralCodeId}){
   const referralCodeQuery = useGetReferralCode({referralCodeId: referralCodeId});
@@ -43,6 +46,8 @@ function ReferralCodeInfoDisplay({referralCode}){
     justifyContent: "space-between",
     alignItems: "center",
   }
+  const isAdmin = useSelector(selectIsAdmin);
+  
   return (
     <View style={styles.page_card}>
       <Text style={styles.title_text}>
@@ -50,20 +55,31 @@ function ReferralCodeInfoDisplay({referralCode}){
       </Text>
       <View style={rowStyle}>
         <Text style={styles.bold_body_text}>
-          Owner:
+          ID:
         </Text>
-        <View style={{flexDirection: "row", alignItems: "center"}}>
-          <Text style={styles.body_text}>
-            {referralCode.owner.firstName + " " + referralCode.owner.lastName}
-          </Text>
-          <TouchableOpacity
-            onPress={onPress}
-            style={[styles.item_button, {width: 70}]}
-          >
-            <Text style={styles.button_text}>View</Text>
-          </TouchableOpacity>
-        </View>
+        <Text style={styles.body_text}>
+          {referralCode._id.toString()}
+        </Text>
       </View>
+      { isAdmin ? 
+        <View style={rowStyle}>
+          <Text style={styles.bold_body_text}>
+            Owner:
+          </Text>
+          <View style={{flexDirection: "row", alignItems: "center"}}>
+            <Text style={[styles.body_text, {marginRight: 10}]}>
+              {referralCode.owner.firstName + " " + referralCode.owner.lastName}
+            </Text>
+            <TouchableOpacity
+              onPress={onPress}
+              style={[styles.item_button, {width: 70}]}
+            >
+              <Text style={styles.button_text}>View</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        : <></>
+      }
       <View style={rowStyle}>
         <Text style={styles.bold_body_text}>
           Num uses:

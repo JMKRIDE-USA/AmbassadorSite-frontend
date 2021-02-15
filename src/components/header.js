@@ -7,14 +7,14 @@ import {
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useMediaQuery } from 'react-responsive';
-import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import { useLinkProps } from '@react-navigation/native';
 
 import { selectAuthPermissions } from '../modules/auth/authSlice.js';
 import { selectUserName } from '../modules/users/userSlice.js';
 import jmk_bigheaderlogo from '../assets/JMKHeaderLogoTemp.png';
 import jmk_smallheaderlogo from '../assets/JMKHeaderLogoTempMobile.png';
-import { getHeaderButtons, getProfilePage } from '../pages/page.js';
+import { getHeaderButtons, getProfilePage } from '../pages/app.js';
 import {
   desktop_styles,
   mobile_styles,
@@ -23,24 +23,22 @@ import {
 } from '../styles/headerStyles.js'
 
 function HeaderButtons({style}){
-  let navigation = useNavigation();
   let auth_permissions = useSelector(selectAuthPermissions);
   function redirect_to(location){
-    return (() => {
-      navigation.reset({index: 0, routes: [{name: location}]});
-    });
+    const { onPress } = useLinkProps({to: location})
+    return onPress;
   }
   return(
     <View style={style.view}>
       { getHeaderButtons(auth_permissions).map(
-        (page_title, index) => (
+        (page, index) => (
           <TouchableOpacity
             style={style.button}
             key={index}
-            onPress={redirect_to(page_title)}
+            onPress={redirect_to("/" + page.url)}
           >
             <View style={style.textview}>
-              <Text style={style.text}>{page_title}</Text>
+              <Text style={style.text}>{page.displayName ? page.displayName : page.title}</Text>
             </View>
           </TouchableOpacity>
         ))
@@ -58,15 +56,13 @@ function MobileHeaderMenuToggle({toggle_menu, style}){
 }
 
 function ProfileButton({style}) {
-  let navigation = useNavigation();
   let auth_permissions = useSelector(selectAuthPermissions);
   let user_name = useSelector(selectUserName);
+  let { onPress } = useLinkProps({to: "/" + getProfilePage(auth_permissions).url});
 
   return ( 
     <TouchableOpacity
-      onPress={() => navigation.reset(
-        {index: 0, routes: [{name: getProfilePage(auth_permissions)}]}
-      )}
+      onPress={onPress}
       style={style.profile_button}
     >
       <MaterialIcons name="account-circle" size={30} color="#00a0db"/>
@@ -91,7 +87,7 @@ export function Header() {
   let styles = bigHeader ? desktop_styles : mobile_styles;
   let header_logo = bigHeader ? jmk_bigheaderlogo : jmk_smallheaderlogo;
 
-  let navigation = useNavigation();
+  const { onPress } = useLinkProps({to: "/"});
 
   return (
     <View style={styles.container}>
@@ -100,7 +96,7 @@ export function Header() {
       >
         <View style={styles.header_visible}>
           <View style={styles.header_left}>
-            <TouchableOpacity style={styles.logo} onPress={() => navigation.reset({index: 0, routes: [{name: "Home"}]})}>
+            <TouchableOpacity style={styles.logo} onPress={onPress}>
               <Image
                 style={styles.logo}
                 source={header_logo}

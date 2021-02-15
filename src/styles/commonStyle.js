@@ -29,6 +29,8 @@ export default {
     alignItems: "center",
     justifyContent: "space-between",
     borderColor: "black",
+    paddingTop: "5px",
+    paddingBottom: "5px",
   },
   item_button: {
     width: 100,
@@ -37,7 +39,8 @@ export default {
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#d5d5d5",
-    margin: "10px",
+    marginLeft: "10px",
+    marginRight: "10px",
   },
   item_button_text: {
     fontSize: "12px",

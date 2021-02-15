@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
-import { useLinkProps } from '@react-navigation/native';
+import { useLinkProps, useLinkTo } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import {
@@ -203,9 +203,10 @@ function SubmissionContentDisplay({submission, challenge}){
   );
 }
 
-function SubmissionOperationButtons({submissionId, admin, isOwner, isPending}) {
+function SubmissionOperationButtons(
+  {submissionId, admin, isOwner, isPending, deleteSubmission}
+) {
 
-  const deleteSubmission = useDeleteSubmission(submissionId);
   const updateSubmission = useUpdateSubmission(submissionId);
 
   const [noteState, setNoteState] = useState("");
@@ -308,6 +309,15 @@ export function FullChallengeSubmissionDisplay({submissionId}) {
 
   let submissionQuery = useGetSubmissions({ submissionId: submissionId });
   let challengeQuery = useGetChallenge({ submissionId: submissionId });
+
+  const linkTo = useLinkTo();
+  let deleteSubmission = useDeleteSubmission({
+    submissionId: submissionId, onSuccess: () => {
+      submissionQuery.remove();
+      challengeQuery.remove();
+      linkTo("/");
+    }
+  });
   if (![submissionQuery, challengeQuery].every(query => query.status === "success")) {
     return (
       <Text>Loading Submissions... </Text>
@@ -332,6 +342,7 @@ export function FullChallengeSubmissionDisplay({submissionId}) {
         isPending={submissionQuery.data.status === 'PENDING'}
         admin={admin}
         isOwner={submissionQuery.data.author._id.toString() === userId}
+        deleteSubmission={deleteSubmission}
     />
     </>
   );

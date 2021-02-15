@@ -1,4 +1,4 @@
-import { useMutation, queryCache } from 'react-query';
+import { useMutation } from 'react-query';
 import { useDispatch } from 'react-redux';
 
 import config from '../../config.js';
@@ -8,7 +8,8 @@ import {
   fetchAuthRequest,
   resetAuth,
 } from './authSlice.js'
-import {  getDateAfter } from '../date.js';
+import { getDateAfter } from '../date.js';
+import { queryClient } from '../data.js';
 import { logoutUser } from '../users/userSlice.js';
 
 export function useLogoutUser() {
@@ -24,7 +25,7 @@ export function useCreateAccount(){
   let dispatch = useDispatch();
   let login = useLogin();
 
-  const [createAccount, { error }] = useMutation(({to_submit}) => fetch(
+  const { mutateAsync, error } = useMutation(({to_submit}) => fetch(
     config.backend_url + "users/create",
     {
       method: "POST",
@@ -33,8 +34,8 @@ export function useCreateAccount(){
     }).then(res => res.json()),
     {
       onSuccess: async () => {
-        queryCache.invalidateQueries('user');
-        queryCache.invalidateQueries('users');
+        queryClient.invalidateQueries('user');
+        queryClient.invalidateQueries('users');
       }
     },
   );
@@ -42,7 +43,7 @@ export function useCreateAccount(){
   return async (to_submit) => {
     let result;
     try {
-      result = await createAccount({to_submit})
+      result = await mutateAsync({to_submit})
     } catch (error) {
       console.log("[!] Error creating account:", error);
       return false;
@@ -66,7 +67,7 @@ export function useCreateAccount(){
 export function useLogin(){
   let dispatch = useDispatch();
 
-  const [login, { error }] = useMutation(({to_submit}) => fetch(
+  const { mutateAsync, status, error } = useMutation((to_submit) => fetch(
     config.backend_url + "auth",
     {
       method: "POST",
@@ -80,12 +81,12 @@ export function useLogin(){
     console.log("Submitting:", to_submit);
     let result;
     try {
-      result = await login({to_submit})
+      result = await mutateAsync(to_submit)
     } catch (error) {
       console.log("[!] Error logging in:", error);
       return false;
     }
-    if (error){
+    if (status === 'error'){
       console.log("[!] Error logging in:", error);
       return false;
     }

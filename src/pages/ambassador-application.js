@@ -6,7 +6,7 @@ import page_styles from '../styles/pageStyle.js';
 import { useGetAmbassadorApplication } from '../modules/challenges/hooks.js';
 import { FullChallengeDisplay } from '../components/challenge-display.js';
 
-export function AmbassadorApplication() {
+export function AmbassadorApplicationPage() {
   let challengeQueryResult = useGetAmbassadorApplication();
   return (
     <View style={page_styles.app_scrollview}>

@@ -1,8 +1,12 @@
 import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
 
+import { QueryClient } from 'react-query';
+
 import { selectAuthHeader, selectUserId } from './auth/authSlice.js';
 import config from '../config.js';
+
+export const queryClient = new QueryClient();
 
 export function useGetQuery(endpoint, key, auth = true) {
   let header;
@@ -17,8 +21,8 @@ export function useGetQuery(endpoint, key, auth = true) {
   }
 
   try {
-    const { data, error, status } = useQuery(
-      [key + endpoint, endpoint], // caching invalidations from either
+    const query = useQuery(
+      [key, endpoint], // caching invalidations from either
       () => fetch(
         config.backend_url + endpoint,
         {
@@ -27,18 +31,22 @@ export function useGetQuery(endpoint, key, auth = true) {
         }
       ).then(res => res.json()),
     )
-
-    if (error) {
-      console.log("[!] Error fetching", key, "endpoint \"", endpoint, "\":", error);
-      return { data: {}, error: error, status: status }
+    if (query.error) {
+      console.log(
+        "[!] Error fetching", key, "endpoint \"", endpoint, "\":", query.error
+      );
+      return query;
     }
-    if (data && data.error){
-      return { data: data, error: data.error, status: "error" }
+    if (query.data && query.data.error){
+      console.log(
+        "[!] Error fetching", key, "endpoint \"", endpoint, "\":", query.error
+      );
+      return query;
     }
-    return { data: data, error: error, status: status }
+      return query;
   } catch (error) {
     console.log("[!] Error fetching", key, "endpoint \"", endpoint, "\":", error);
-    return { data: {}, error: error, status: 'error' }
+    return { data: {}, error: error, status: 'error'}
   }
 }
 

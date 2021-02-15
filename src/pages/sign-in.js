@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useLinkTo } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import page_styles from '../styles/pageStyle.js';
@@ -12,14 +12,15 @@ import {
 import { useLogin } from '../modules/auth/hooks.js';
 
 
-export function SignIn() {
-  const navigation = useNavigation();
-
+export function SignInPage() {
   let userId = useSelector(selectUserId);
+  const linkTo = useLinkTo();
+  const goHome = () => linkTo("/");
+  const goSignUp = () => linkTo("/sign-up");
 
   useEffect(() => {
     if (userId) {
-      navigation.reset({index: 0, routes: [{name: "Home"}]});
+      goHome();
     }
   }, [userId]);
 
@@ -34,7 +35,6 @@ export function SignIn() {
     setSubmitting(false);
     return;
   }
-  console.log(navigation)
   return (
     <View style={styles.app_scrollview}>
       <View style={styles.page}>
@@ -45,9 +45,7 @@ export function SignIn() {
           Log in to your JMKRIDE ambassador account.
         </Text>
         <LoginAccountForm styles={styles} submitLogin={submitLogin}/>
-        <TouchableOpacity onPress={
-          () => navigation.reset({index: 0, routes: [{name: "Apply Now"}]})
-        }>
+        <TouchableOpacity onPress={goSignUp}>
           <Text style={styles.clickableText}>
             {'Don\'t yet have an account? Sign Up.'}
           </Text>

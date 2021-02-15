@@ -10,7 +10,7 @@ import { useListChallenges } from '../modules/challenges/hooks.js';
 import { FullChallengeDisplay, SingleChallengeDisplay } from '../components/challenge-display.js';
 
 
-function ChallengeBoard(props) {
+export function ChallengeBoard(props) {
   let {perpage, page} = props.route.params ? props.route.params : {
     perpage: undefined, page: undefined 
   }

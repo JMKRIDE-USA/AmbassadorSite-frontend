@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useLinkTo } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import page_styles from '../styles/pageStyle.js';
@@ -10,16 +10,16 @@ import { selectUserId } from '../modules/auth/authSlice.js';
 import { useCreateAccount } from '../modules/auth/hooks.js';
 
 
-export default function SignUp(){
-  let navigation = useNavigation();
-
+export function SignUpPage(){
   const createAccount = useCreateAccount();
   let userId = useSelector(selectUserId)
 
+  const linkTo = useLinkTo();
+  const goHome = () => linkTo("/");
+  const goSignIn = () => linkTo("/sign-in");
+
   useEffect(() => {
-    if (userId) {
-      navigation.reset({index: 0, routes: [{name: "Home"}]})
-    }
+    if (userId) {goHome()}
   }, [userId]);
 
   async function submitSignUp(
@@ -56,9 +56,7 @@ export default function SignUp(){
           ambassador application and view its status.
         </Text>
         <CreateAccountForm styles={styles} submitCreateAccount={submitSignUp}/>
-        <TouchableOpacity onPress={
-          () => navigation.reset({index: 0, routes: [{name: "Sign In"}]})
-        }>
+        <TouchableOpacity onPress={goSignIn}>
           <Text style={styles.clickableText}>
             Already have an account? Log in.
           </Text>
