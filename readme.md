@@ -12,7 +12,6 @@ Bugs:
     - ...
     * maybe a cache issue?
 
-  - Admin + ambassador need a "/"
   - Notes field in submission approve/deny
 
 
