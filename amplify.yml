@@ -5,7 +5,7 @@ frontend:
       commands:
         - echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
         - npm ci
-        - npm run login &
+        - npm run login
         - nvm use 10
         - npm install --silent --global expo-cli
         - npm install
