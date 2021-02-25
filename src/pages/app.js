@@ -21,6 +21,7 @@ import {
   adminDashboardPage,
   userPage,
   referralCodePage,
+  faqPage,
 
   all_pages,
 } from './pages.js';
@@ -53,6 +54,7 @@ export const ambassador_pages = [
   homePage,
   profilePage,
   challengePage,
+  faqPage,
   {... challengeSubmissionPage, displayName: "My Submissions"},
   {...referralCodePage, displayName: "My Referral Code"},
 ];
@@ -68,6 +70,7 @@ export const admin_pages = [
   adminDashboardPage,
   userPage,
   referralCodePage,
+  {...faqPage, in_header: false},
 ];
 export function authPermissionsToPages(auth_permissions) {
   if (auth_permissions) {
@@ -111,7 +114,6 @@ export function getApplyPage(auth_permissions){
 function getPageLinkings(){
   let all_linkings = {}
   all_pages.forEach(page => all_linkings[page.title] = page.url);
-  console.log(all_linkings);
   return all_linkings;
 }
 

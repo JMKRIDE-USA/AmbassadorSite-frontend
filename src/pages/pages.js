@@ -10,6 +10,7 @@ import { AdminPage } from './admin.js';
 import { UserPage } from './user.js';
 import { ChallengePage } from './challenge.js';
 import { ReferralCodePage } from './referralcode.js';
+import { FAQPage } from './faq.js';
 
 
 export const homePage = {
@@ -84,6 +85,12 @@ export const referralCodePage = {
   url: "referralcodes",
   in_header: true,
 }
+export const faqPage = {
+  title: "FAQ",
+  component: FAQPage,
+  url: "faq",
+  in_header: true,
+}
 export const all_pages = [
   homePage,
   splashPage,
@@ -97,5 +104,6 @@ export const all_pages = [
   adminDashboardPage,
   userPage,
   referralCodePage,
+  faqPage,
 ]
 
