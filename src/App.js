@@ -2,7 +2,6 @@ import React from 'react';
 import { Text } from 'react-native';
 
 import { StatusBar } from 'expo-status-bar';
-import '@expo/match-media';
 import { registerRootComponent } from 'expo';
 
 import { NavigationContainer } from '@react-navigation/native';
