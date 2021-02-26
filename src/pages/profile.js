@@ -33,7 +33,7 @@ const SessionItem = (disable_session, current, logout) => (session, index) => {
     <View style={[styles.item_view, item_style]} key={session.id}>
       <Text style={styles.item_text}>
         <Text style={styles.bold_item_text}>{"Last Seen: "}</Text>
-        {ISOToReadableString(session.lastUsedDate)} at {session.lastUsedIP}
+        {ISOToReadableString(session.lastUsedDate)}
       </Text>
       <TouchableOpacity
         style={styles.item_button}
@@ -90,11 +90,14 @@ export function Profile() {
   if(AASubmissionQuery.data && AASubmissionQuery.data.length) {
     AASubmission = AASubmissionQuery.data[0]
   }
+  let title = "User";
+  if(userInfo.is_ambassador){ title = "Ambassador"}
+  if(userInfo.is_admin){ title = "Admin";}
   return (
     <View style={styles.app_scrollview}>
       <View style={styles.page_card}>
         <Text style={styles.title_text}>
-          {userInfo.is_ambassador ? "Ambassador" : "User"} Profile<br/>
+          {title} Profile<br/>
         </Text>
         <Text>
           <Text style={styles.bold_body_text}>

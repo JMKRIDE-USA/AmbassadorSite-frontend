@@ -89,7 +89,7 @@ export function SubmissionItem(
 function SubmissionInfoDisplay({submissionId, submission, challenge, admin }) {
 
   let { onPress, ...props } = useLinkProps(
-    {to: "/user?id=" + submission.author._id}
+    {to: "/users?id=" + submission.author._id}
   )
   let onViewChallenge = useLinkProps(
     {to: "/challenges?id=" + challenge._id}
