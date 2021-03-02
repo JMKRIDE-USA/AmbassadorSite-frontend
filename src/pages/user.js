@@ -47,6 +47,10 @@ function SingleUserInfo({user}) {
           <Text style={styles.bold_body_text}>Permissions:</Text>
           <Text style={styles.body_text}>{user.permissionLevel}</Text>
         </View>
+        <View style={styles.info_item}>
+          <Text style={styles.bold_body_text}>Points Balance:</Text>
+          <Text style={styles.body_text}>{user.balance}</Text>
+        </View>
       </View>
     </View>
   );

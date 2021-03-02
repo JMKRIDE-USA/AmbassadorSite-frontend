@@ -21,7 +21,9 @@ const QAs = [
     "Currently, because I'm new to hosting a public website and don't yet have a good " +
     "scalable data storage solution, you'll need to use an external site to upload " +
     "an image or video.\n" +
-    "You can choose any site as long as I can access it, but here are my recommendations:" + 
+    "If you already have the image uploaded on your social page, and its privacy is public, then " +
+    "you can just figure out how to copy the link to the post. Otherwise, " +
+    "you can choose any site as long as I can access it, but here are my recommendations:" + 
     "\n\n" +
     "For uploading a video, I'd recommend YouTube. To keep the video private, " +
     "you can choose to upload it as an 'unlisted' video, which means only those who " +
