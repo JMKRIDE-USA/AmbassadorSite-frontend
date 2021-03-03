@@ -23,7 +23,18 @@ function FullPageReferralCodes() {
   if (userReferralCodeQuery.status !== 'success'){
     return <Text> Loading Ambassador Referral Code... </Text>
   }
-  return <FullReferralCodeDisplay referralCodeId={userReferralCodeQuery.data[0]._id}/>
+  return (
+    <>
+      { userReferralCodeQuery.data[0]
+        ? <FullReferralCodeDisplay referralCodeId={userReferralCodeQuery.data[0]._id}/>
+        : <View style={styles.page_card}>
+            <Text style={styles.body_text}>
+              No Referral Code Found.
+            </Text>
+          </View>
+      }
+    </>
+  )
 }
 
 function AllReferralCodes() {
