@@ -11,7 +11,7 @@ import { useGetTransactions } from '../../modules/transactions/hooks.js';
 import { useGetReferralCode } from '../../modules/transactions/hooks.js';
 import { selectUserId } from '../../modules/auth/authSlice.js';
 
-const transactionType = {
+const balanceEffects = {
   increase: "#34eb49",
   decrease: "#eb3434",
   neutral: "#cccccc",
@@ -47,16 +47,31 @@ function RawTransactionsTable({transactionsQuery, showSubjects = false}){
     widthArr = widthArr.concat(['180px', '180px']);
   }
 
+  const transactionTypes = {
+    SUBMISSION: 0,
+    REFERRALCODEUSAGE: 1,
+    ADMIN: 2,
+  }
+
   const userId = useSelector(selectUserId);
   const manualRowFn = (transaction, row_index) => {
     const transactionToData = (transaction) => {
       let amount;
       if (userId === transaction.destination._id.toString()) {
-        amount = [transaction.amount, transactionType.increase];
+        amount = [transaction.amount, balanceEffects.increase];
       } else if (userId === transaction.source._id.toString()) {
-        amount = [-transaction.amount, transactionType.decrease];
+        amount = [-transaction.amount, balanceEffects.decrease];
       } else {
-        amount = [transaction.amount, transactionType.neutral];
+        amount = [transaction.amount, balanceEffects.neutral];
+      }
+
+      let transactionType;
+      if(transaction.submission) {
+        transactionType = transactionTypes.SUBMISSION;
+      } else if (transaction.referralCode) {
+        transactionType = transactionTypes.REFERRALCODEUSAGE;
+      } else {
+        transactionType = transactionTypes.ADMIN
       }
 
       let id = transaction.submission 
@@ -67,7 +82,7 @@ function RawTransactionsTable({transactionsQuery, showSubjects = false}){
         ISOToReadableString(transaction.createdAt),
         amount,
         transaction.reason,
-        [id, Boolean(transaction.submission)],
+        [id, transactionType],
       ]
       if(showSubjects){
         data = data.concat([
@@ -86,10 +101,12 @@ function RawTransactionsTable({transactionsQuery, showSubjects = false}){
 
     const dataFn = (cellValue, index) => {
       if(index === button_index){
-        if(cellValue[1]){ // submission
+        if(cellValue[1] == transactionTypes.SUBMISSION){
           return <SubmissionViewButton id={cellValue[0]} index={index}/>
-        } else {
+        } else if (cellValue[1] == transactionTypes.REFERRALCODEUSAGE) {
           return <ReferralCodeViewButton id={cellValue[0]} index={index}/>
+        } else {
+          return <></>
         }
       } else if (index === amount_index){
         return (

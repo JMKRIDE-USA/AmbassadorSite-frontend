@@ -11,8 +11,10 @@ import {
 } from '../modules/challenges/hooks.js';
 import {
   useGetAllReferralCodes,
-  useCreateReferralUsage
+  useCreateReferralUsage,
+  useCreateAdminTransaction,
 } from '../modules/transactions/hooks.js';
+import { useGetUserList } from '../modules/users/hooks.js';
 import { AllTransactionsTable } from '../components/tables/transactions.js';
 import { SubmissionsTable } from '../components/tables/submissions.js';
 import Form from '../components/forms/form.js'
@@ -86,6 +88,76 @@ function CreateReferralUsageCard() {
   );
 }
 
+function CreateAdminTransactionForm() {
+  const createAdminTransaction = useCreateAdminTransaction();
+
+  const allUsersQuery = useGetUserList({namesOnly: true});
+  if (allUsersQuery.status !== 'success') {
+    return (
+      <Text>Loading All Users...</Text>
+    );
+  }
+
+  let user_to_id = {}
+  let user_options = []
+  allUsersQuery.data.map(
+    user => {
+      user_to_id[user.fullName] = user._id;
+      user_options.push(user.fullName);
+    }
+  )
+
+  const handleSubmit = (data, {setSubmitting}) => {
+    let to_submit = {
+      amount: data["0"],
+      user: user_to_id[data["1"]],
+      reason: data["2"],
+    }
+    console.log("Submitting:", to_submit);
+    createAdminTransaction(to_submit);
+    setSubmitting(false);
+  }
+
+  const structure = [
+    {
+      title: "Transaction Amount",
+      fieldType: "NUMBER",
+      required: true,
+      _id: "0",
+    },
+    {
+      title: "User",
+      fieldType: "SWITCH",
+      required: true,
+      options: user_options,
+      _id: "1",
+    },
+    {
+      title: "Reason",
+      fieldType: "TEXT_SHORT",
+      required: true,
+      _id: "2"
+    },
+  ]
+  return (
+    <Form
+      structure={structure}
+      handleSubmit={handleSubmit}
+    />
+  );
+}
+
+function CreateAdminTransactionCard() {
+  return (
+    <View style={styles.page_card}>
+      <Text style={styles.body_text}>
+        Create Arbitrary Admin Transaction:
+      </Text>
+      <CreateAdminTransactionForm/>
+    </View>
+  );
+}
+
 function SubmissionQueue() {
   let submissionQueue = useGetPendingSubmissions();
   return (
@@ -127,6 +199,7 @@ export function AdminPage() {
       </View>
       <SubmissionQueueCard/>
       <CreateReferralUsageCard/>
+      <CreateAdminTransactionCard/>
       <AllTransactionsCard/>
     </View>
   );

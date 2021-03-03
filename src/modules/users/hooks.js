@@ -20,8 +20,12 @@ export function useGetUser({userId}){
   return useGetUserQuery("users/id/" + userId);
 }
 
-export function useGetUserList(){
-  return useGetUserQuery("users/all");
+export function useGetUserList({ namesOnly = false } = {}){
+  let endpoint = "users/all";
+  if(namesOnly) {
+    endpoint += "?namesOnly=1"
+  }
+  return useGetUserQuery(endpoint);
 }
 
 export function useGetUserSubmissionCount(userId) { 

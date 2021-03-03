@@ -94,3 +94,27 @@ export function useCreateReferralUsage() {
   );
   return createMutationCall(mutateAsync, error, "creating referral code usage");
 }
+
+export function useCreateAdminTransaction() {
+  const header = useSelector(selectAuthHeader);
+
+  const { mutateAsync, error } = useMutation(
+    ({ to_submit }) => fetch(
+      config.backend_url + "transactions/admin/create",
+      {
+        method: "POST",
+        headers: {
+          ...header,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(to_submit),
+      },
+    ),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(CACHE_KEY);
+      },
+    }
+  );
+  return createMutationCall(mutateAsync, error, "creating admin transaction");
+}
