@@ -66,7 +66,7 @@ const QAs = [
 function QA(qa, index) {
   const [question, answer] = qa;
   return (
-    <View style={[styles.page_card, {maxWidth: 800}]} key={index}>
+    <View style={styles.page_card} key={index}>
       <Text style={styles.title_text}>{question}</Text>
       <Text style={styles.body_text}>{answer}</Text>
     </View>
@@ -76,7 +76,7 @@ function QA(qa, index) {
 export function FAQPage() {
   return (
     <View style={styles.app_scrollview}>
-      <View style={[styles.page_card, {maxWidth: 800}]}>
+      <View style={styles.page_card}>
         <Text style={styles.title_text}>
           Frequently Asked Questions:
         </Text>

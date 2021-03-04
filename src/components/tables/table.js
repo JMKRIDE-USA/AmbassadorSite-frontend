@@ -41,7 +41,7 @@ export function StandardTable({header, widthArr, rowDataInputs, manualRowFn, raw
 
   return (
     <View style={styles.standardTableView}>
-      <ScrollView horizontal={true}>
+      <ScrollView horizontal={true} style={styles.standardTableView}>
         <View>
           <Table borderStyle={{borderColor: "black", borderWidth: 2}}>
             <Row

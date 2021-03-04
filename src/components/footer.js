@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { Dimensions, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import * as Linking from 'expo-linking';
 
 import { FontAwesome } from '@expo/vector-icons';
@@ -38,10 +38,12 @@ export function Footer() {
         </View>
         <View style={styles.right_side}>
           <Text style={styles.social_font}> Follow Us:   </Text>
-          <SocialLink name="instagram" url="https://instagram.com/jmkride"/>
-          <SocialLink name="facebook" url="https://facebook.com/jmkride"/>
-          <SocialLink name="twitter" url="https://twitter.com/jmkride"/>
-          <SocialLink name="youtube" url="https://youtube.com/c/JMKRIDERollWithUs"/>
+          <View style={{flexDirection: "row"}}>
+            <SocialLink name="instagram" url="https://instagram.com/jmkride"/>
+            <SocialLink name="facebook" url="https://facebook.com/jmkride"/>
+            <SocialLink name="twitter" url="https://twitter.com/jmkride"/>
+            <SocialLink name="youtube" url="https://youtube.com/c/JMKRIDERollWithUs"/>
+          </View>
         </View>
       </View>
     </View>
@@ -57,7 +59,7 @@ const styles = StyleSheet.create({
     justifyContent: "stretch",
   },
   right_side: {
-    flexDirection: "row",
+    flexDirection: Dimensions.get('window').width < 450 ? "column" : "row",
     alignItems: "center",
     justifyContent: "flex-end",
     marginRight: "50px",

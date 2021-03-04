@@ -1,11 +1,12 @@
+import { Dimensions } from 'react-native';
+
 import config from '../config.js';
 
 export default {
   page_card: {
     marginTop: "30px",
     margin: "10px",
-    //maxWidth: "800px",
-    minWidth: "400px",
+    maxWidth: Math.min(0.9 * Dimensions.get('window').width, 800),
     backgroundColor: "white",
     borderColor: "#080808",
     borderWidth: "2px",
