@@ -54,12 +54,12 @@ export default {
   info_item: {  // used in submission information, (admin) user profile
     flexDirection: "row",
     alignItems: "center",
+    flexWrap: 'wrap',
     justifyContent: "space-between",
   },
   info_item_column: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-end",
   },
   standalone_button: { // large outside-of-page-card button
     minWidth: 300,

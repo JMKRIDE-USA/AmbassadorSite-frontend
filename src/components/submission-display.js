@@ -143,7 +143,7 @@ function SubmissionInfoDisplay({submissionId, submission, challenge, admin }) {
         </View>
       </View>
       <View style={styles.info_item}>
-        <Text style={[styles.body_text, {fontWeight: "bold"}]}>
+        <Text style={styles.bold_body_text}>
           Status:
         </Text>
         <View 

@@ -21,7 +21,7 @@ export const labelStyle = {
 export const styles = StyleSheet.create({
   formView: {padding: "15px", paddingTop: "30px", alignItems: "center"},
   formField: {},
-  formStructureView: {},
+  formStructureView: {padding: "15px"},
   fieldLabel: {
     color: "black",
   },
@@ -38,4 +38,8 @@ export const styles = StyleSheet.create({
     borderBottomWidth: "1px",
     borderColor: "1px",
   },
+  buttonStyle: {
+    paddingLeft: 10,
+    paddingRight: 10,
+  }
 });

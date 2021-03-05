@@ -49,13 +49,15 @@ export default function Form ({structure, handleSubmit, debug = false, keyOverri
               {handleChange: handleChange, values:values, handleBlur: handleBlur},
               {debug: debug}
             ))}
-            <Button
-              onPress={handleSubmit}
-              title={"Submit"}
-              disabled={!isValid || isSubmitting}
-              color={"#00a0db"}
-              style={{zIndex: -1}}
-            />
+            <View style={styles.buttonStyle}>
+              <Button
+                onPress={handleSubmit}
+                title={"Submit"}
+                disabled={!isValid || isSubmitting}
+                color={"#00a0db"}
+                style={{zIndex: -1}}
+              />
+            </View>
           </View>
         )}
       </Formik>

@@ -5,6 +5,7 @@ import { useLinkTo } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import page_styles from '../styles/pageStyle.js';
+import card_styles from '../styles/cardStyle.js';
 import CreateAccountForm from '../components/forms/create-account-form.js';
 import { selectUserId } from '../modules/auth/authSlice.js';
 import { useCreateAccount } from '../modules/auth/hooks.js';
@@ -47,7 +48,7 @@ export function SignUpPage(){
   }
   return (
     <View style={page_styles.app_scrollview}>
-      <View style={styles.page}>
+      <View style={styles.page_card}>
         <Text style={styles.title}>
           CREATE AN ACCOUNT
         </Text>
@@ -68,6 +69,7 @@ export function SignUpPage(){
 
 const styles = StyleSheet.create({
   ...page_styles,
+  ...card_styles,
   ...{
     page: {
       flex: 1, 
