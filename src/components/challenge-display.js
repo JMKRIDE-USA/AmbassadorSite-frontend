@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { useLinkProps } from '@react-navigation/native';
+import { useLinkProps, useLinkTo } from '@react-navigation/native';
 
 import {
   useGetChallenge,
@@ -18,10 +18,21 @@ import card_styles from '../styles/cardStyle.js';
 import common_styles from '../styles/commonStyle.js';
 
 
-function NewChallengeForm({ fields, submitChallenge}) {
-  const handleSubmit = (data, { setSubmitting }) => {
+function NewChallengeForm({ fields, submitChallenge }) {
+  const linkTo = useLinkTo();
+  const handleSubmit = async (data, { setSubmitting }) => {
     console.log("Submitting:", data);
-    submitChallenge(data);
+    submitChallenge(data)
+      .then(response => response.json())
+      .then(
+        (result) => {
+          if(result.id) {
+            linkTo("/challenge-submissions?id=" + result.id + "&successAlert=1")
+          } else {
+            console.log("Error submitting:", result)
+          }
+        }
+      );
     setSubmitting(false);
   }
   return (
@@ -148,7 +159,6 @@ export function FullChallengeDisplay({ challengeId }) {
   const submissionsAllowedQuery = useGetSubmissionsAllowed({challengeId: challengeId});
 
   const submitChallenge = useSubmitChallenge(challengeId)
-  //const submitChallenge = (data) => console.log(data)
 
   let loading = ![challengeQuery, submissionQuery, submissionsAllowedQuery].every(
     (query) => query.status === 'success'

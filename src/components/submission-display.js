@@ -13,6 +13,7 @@ import {
 import { ISOToReadableString } from '../modules/date.js';
 
 import { selectIsAdmin, selectUserId } from '../modules/auth/authSlice.js';
+import { SubmissionReceivedAlert } from '../components/alert.js';
 
 import card_style from '../styles/cardStyle.js';
 import common_styles from '../styles/commonStyle.js';
@@ -303,12 +304,14 @@ function SubmissionOperationButtons(
   );
 }
 
-export function FullChallengeSubmissionDisplay({submissionId}) {
+export function FullChallengeSubmissionDisplay({submissionId, successAlert = false}) {
   let admin = useSelector(selectIsAdmin);
   let userId = useSelector(selectUserId);
 
   let submissionQuery = useGetSubmissions({ submissionId: submissionId });
   let challengeQuery = useGetChallenge({ submissionId: submissionId });
+
+  let [showAlert, setShowAlert] = useState(Boolean(successAlert));
 
   const linkTo = useLinkTo();
   let deleteSubmission = useDeleteSubmission({
@@ -343,7 +346,8 @@ export function FullChallengeSubmissionDisplay({submissionId}) {
         admin={admin}
         isOwner={submissionQuery.data.author._id.toString() === userId}
         deleteSubmission={deleteSubmission}
-    />
+      />
+      <SubmissionReceivedAlert show={showAlert} setShow={setShowAlert}/>
     </>
   );
 }

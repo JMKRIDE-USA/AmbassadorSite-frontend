@@ -97,7 +97,7 @@ export function useSubmitChallenge(challengeId) {
     ),
     {
       onSuccess: async () => {
-        console.log("success");
+        console.log("Success");
         queryClient.invalidateQueries(CACHE_KEY);
       },
     }

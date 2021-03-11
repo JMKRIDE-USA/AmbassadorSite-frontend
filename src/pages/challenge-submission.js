@@ -43,7 +43,10 @@ export function ChallengeSubmissionPage(props) {
   if(props.route.params && props.route.params.id){
     return (
       <View style={styles.app_scrollview}>
-        <FullChallengeSubmissionDisplay submissionId={props.route.params.id}/>
+        <FullChallengeSubmissionDisplay
+          submissionId={props.route.params.id}
+          successAlert={props.route.params.successAlert}
+        />
       </View>
     )
   }
