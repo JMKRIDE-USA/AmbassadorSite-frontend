@@ -12,12 +12,17 @@ import {
 
 import authReducer from '../modules/auth/authSlice.js';
 import userReducer from '../modules/users/userSlice.js';
+import challengesReducer from '../modules/challenges/challengesSlice.js';
 import asyncListenerMiddleware from './asyncListenerMiddleware.js';
 import authALM from './authALM.js';
 import userALM from './userALM.js';
 
 const persistConfig = {key: 'root', storage: AsyncStorage, whitelist: ['auth']}; 
-const rootReducer = combineReducers({auth: authReducer, user: userReducer});
+const rootReducer = combineReducers({
+  auth: authReducer,
+  user: userReducer,
+  challenges: challengesReducer,
+});
 
 export default configureStore({
   reducer: persistReducer(persistConfig, rootReducer),

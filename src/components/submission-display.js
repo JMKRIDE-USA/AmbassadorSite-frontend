@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { useLinkProps, useLinkTo } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   useGetChallenge,
@@ -10,6 +10,10 @@ import {
   useDeleteSubmission,
   useUpdateSubmission,
 } from '../modules/challenges/hooks.js';
+import {
+  selectSubmissionsAlert,
+  setSubmissionsSuccessAlert,
+} from '../modules/challenges/challengesSlice.js';
 import { ISOToReadableString } from '../modules/date.js';
 
 import { selectIsAdmin, selectUserId } from '../modules/auth/authSlice.js';
@@ -304,16 +308,18 @@ function SubmissionOperationButtons(
   );
 }
 
-export function FullChallengeSubmissionDisplay({submissionId, successAlert = false}) {
-  let admin = useSelector(selectIsAdmin);
-  let userId = useSelector(selectUserId);
+export function FullChallengeSubmissionDisplay({submissionId}) {
+  const dispatch = useDispatch();
+  const admin = useSelector(selectIsAdmin);
+  const userId = useSelector(selectUserId);
+  const submissionsSuccessAlert = useSelector(selectSubmissionsAlert);
 
-  let submissionQuery = useGetSubmissions({ submissionId: submissionId });
-  let challengeQuery = useGetChallenge({ submissionId: submissionId });
+  const submissionQuery = useGetSubmissions({ submissionId: submissionId });
+  const challengeQuery = useGetChallenge({ submissionId: submissionId });
 
-  let [showAlert, setShowAlert] = useState(Boolean(successAlert));
-
+  const dismiss = () => dispatch(setSubmissionsSuccessAlert(false));
   const linkTo = useLinkTo();
+
   let deleteSubmission = useDeleteSubmission({
     submissionId: submissionId, onSuccess: () => {
       submissionQuery.remove();
@@ -347,7 +353,7 @@ export function FullChallengeSubmissionDisplay({submissionId, successAlert = fal
         isOwner={submissionQuery.data.author._id.toString() === userId}
         deleteSubmission={deleteSubmission}
       />
-      <SubmissionReceivedAlert show={showAlert} setShow={setShowAlert}/>
+      <SubmissionReceivedAlert show={submissionsSuccessAlert} onDismiss={dismiss}/>
     </>
   );
 }

@@ -2,6 +2,7 @@ import React from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useLinkProps, useLinkTo } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 
 import {
   useGetChallenge,
@@ -9,6 +10,7 @@ import {
   useSubmitChallenge,
   useGetSubmissionsAllowed,
 } from '../modules/challenges/hooks.js';
+import { setSubmissionsSuccessAlert } from '../modules/challenges/challengesSlice.js';
 
 import { SubmissionItem } from './submission-display.js';
 
@@ -20,6 +22,7 @@ import common_styles from '../styles/commonStyle.js';
 
 function NewChallengeForm({ fields, submitChallenge }) {
   const linkTo = useLinkTo();
+  const dispatch = useDispatch();
   const handleSubmit = async (data, { setSubmitting }) => {
     console.log("Submitting:", data);
     submitChallenge(data)
@@ -27,7 +30,8 @@ function NewChallengeForm({ fields, submitChallenge }) {
       .then(
         (result) => {
           if(result.id) {
-            linkTo("/challenge-submissions?id=" + result.id + "&successAlert=1")
+            dispatch(setSubmissionsSuccessAlert(true));
+            linkTo("/challenge-submissions?id=" + result.id)
           } else {
             console.log("Error submitting:", result)
           }

@@ -11,7 +11,7 @@ import card_styles from '../styles/cardStyle.js';
 import common_styles from '../styles/commonStyle.js';
 
 
-export function SubmissionReceivedAlert({show, setShow}) {
+export function SubmissionReceivedAlert({show, onDismiss}) {
   return (
     <AwesomeAlert
       show={show}
@@ -24,7 +24,8 @@ export function SubmissionReceivedAlert({show, setShow}) {
       titleStyle={styles.title_text}
       messageStyle={styles.body_text}
       confirmButtonTextStyle={styles.body_text}
-      onConfirmPressed={() => setShow(false)}
+      onConfirmPressed={onDismiss}
+      onDismiss={onDismiss}
     />
   );
 }

@@ -2,21 +2,20 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const challengesSlice = createSlice({
   name: 'challenges',
-  initialState: {},
+  initialState: {
+    submissionsSuccessAlert: false,  // temporary flag to display a submissions success message
+  },
   reducers: {
-    setChallengeFieldState: (state, action) => {
-      let { challengeId, fieldName, fieldState } = action.payload;
-
-      if(state[challengeId] === undefined){
-        state[challengeId] = {}
-      }
-      state[challengeId][fieldName] = fieldState;
+    setSubmissionsSuccessAlert: (state, action) => {
+      state.submissionsSuccessAlert = action.payload;
     },
   },
 });
 
 export const {
-  setChallengeFieldState,
+  setSubmissionsSuccessAlert,
 } = challengesSlice.actions;
 
-export const getChallengeFieldState = state => {}
+export const selectSubmissionsAlert = state => state.challenges.submissionsSuccessAlert;
+
+export default challengesSlice.reducer;

@@ -11,8 +11,13 @@ import { FullChallengeDisplay, SingleChallengeDisplay } from '../components/chal
 
 
 export function ChallengeBoard(props) {
+  let [showAlert, setShowAlert] = useState(false);
   let {perpage, page} = props.route.params ? props.route.params : {
     perpage: undefined, page: undefined 
+  }
+  const verifyEmail = useVerifyEmail();
+  if(props.route.params && props.route.params.verifyEmail) {
+    let result = verifyEmail({key: props.route.params.verifyEmail})
   }
   const challengeQuery = useListChallenges(
     {perPage: perpage, page: page}

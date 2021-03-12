@@ -1,7 +1,9 @@
 import { useMutation } from 'react-query';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
+import { selectAuthHeader } from '../auth/authSlice.js';
 import config from '../../config.js';
+import { createMutationCall } from '../data.js';
 import {
   setUserId,
   setAuthTokens,
@@ -107,4 +109,32 @@ export function useLogin(){
     console.log("[!] Error logging in:", "[unknown]");
     return false
   };
+}
+
+export function useSendEmailVerification(){
+  const header = useSelector(selectAuthHeader);
+  const { mutateAsync, error } = useMutation(() => fetch(
+    config.backend_url + "auth/email-verification/create",
+    {
+      method: "POST",
+      headers: header,
+    }).then(res => res.json()),
+  );
+  return createMutationCall(mutateAsync, error, "sending email verification");
+}
+
+export function useVerifyEmail(){
+  const header = useSelector(selectAuthHeader);
+  const { mutateAsync, error } = useMutation((to_submit) => fetch(
+    config.backend_url + "auth/email-verification/verify",
+    {
+      method: "POST",
+      headers: {
+        ...header,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(to_submit),
+    }).then(res => res.json()),
+  );
+  return createMutationCall(mutateAsync, error, "verifying email");
 }
