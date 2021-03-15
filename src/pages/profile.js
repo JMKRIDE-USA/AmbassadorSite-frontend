@@ -1,24 +1,31 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
+import { Octicons, MaterialIcons } from '@expo/vector-icons';
 
-import { selectUserInfo } from '../modules/users/userSlice.js';
-import { selectUserId } from '../modules/auth/authSlice.js';
 import page_styles from '../styles/pageStyle.js';
 import card_styles from '../styles/cardStyle.js';
 import common_styles from '../styles/commonStyle.js';
-import { useLogoutUser } from '../modules/auth/hooks.js';
+
+import { selectUserInfo } from '../modules/users/userSlice.js';
+import { selectUserId } from '../modules/auth/authSlice.js';
+import { useLogoutUser, useSendEmailVerification } from '../modules/auth/hooks.js';
 import { useGetUser, useGetUserSessions, useDisableSession } from '../modules/users/hooks.js';
 import {
   useGetAmbassadorApplicationSubmission,
 } from '../modules/challenges/hooks.js';
 import { useGetReferralCode } from '../modules/transactions/hooks.js';
 import { SingleReferralCodeDisplay } from '../components/referralCode-display.js';
+
 import { ISOToReadableString } from '../modules/date.js';
+
 import { SubmissionItem } from '../components/submission-display.js';
 import { SubmissionsTable } from '../components/tables/submissions.js';
+
 import { UserTransactionsTable } from '../components/tables/transactions.js';
+
+import { VerifyEmailPrompt } from '../components/alert.js';
 
 
 const SessionItem = (disable_session, current, logout) => (session, index) => {
@@ -63,15 +70,40 @@ export function ReferralCodeInfo({userId}){
   )
 }
 
+function EmailVerification({user, setShowVerifyAlert}){
+  if(user.emailVerified) {
+    return (
+      <View style={{flexDirection: "column", alignItems: "center"}}>
+        <Octicons name="verified" size={23} color="#00a0db"/>
+        <Text style={styles.item_button_text}>Verified</Text>
+      </View>
+    )
+  } else {
+    return (
+      <>
+        <TouchableOpacity onPress={() => setShowVerifyAlert(true)}>
+          <View style={{flexDirection: "column", alignItems: "center"}}>
+            <MaterialIcons name="warning" size={30} color="red"/>
+            <Text style={styles.item_button_text}>Not Verified</Text>
+          </View>
+        </TouchableOpacity>
+      </>
+    )
+  }
+
+}
+
 export function Profile() {
   const userInfo = useSelector(selectUserInfo);
   const userId = useSelector(selectUserId);
   const userQuery = useGetUser({userId: userId});
   const userSessions = useGetUserSessions();
 
+  const sendEmailVerification = useSendEmailVerification();
   const disable_session = useDisableSession();
 
   const AASubmissionQuery = useGetAmbassadorApplicationSubmission();
+  let [showVerifyAlert, setShowVerifyAlert] = useState(false);
 
   const logout = useLogoutUser();
 
@@ -116,6 +148,23 @@ export function Profile() {
                 {userQuery.data.balance}
               </Text>
             </Text>
+          : <></>
+        }
+        { userInfo.is_ambassador || userInfo.is_admin
+          ? <View style={styles.info_item}>
+              <Text>
+                <Text style={styles.bold_body_text}>
+                  {"Email: "}
+                </Text>
+                <Text style={styles.body_text}>
+                  {userInfo.email}
+                </Text>
+              </Text>
+              <EmailVerification
+                user={userQuery.data}
+                setShowVerifyAlert={setShowVerifyAlert}
+              />
+            </View>
           : <></>
         }
         { userInfo.is_ambassador ? <></>
@@ -177,6 +226,12 @@ export function Profile() {
           </View>
         : <></>
       }
+
+      <VerifyEmailPrompt
+        show={showVerifyAlert}
+        onConfirm={() => {sendEmailVerification(); setShowVerifyAlert(false)}}
+        onCancel={() => setShowVerifyAlert(false)}
+      />
     </View>
   );
 }

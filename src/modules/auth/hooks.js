@@ -118,14 +118,14 @@ export function useSendEmailVerification(){
     {
       method: "POST",
       headers: header,
-    }).then(res => res.json()),
+    })
   );
   return createMutationCall(mutateAsync, error, "sending email verification");
 }
 
 export function useVerifyEmail(){
   const header = useSelector(selectAuthHeader);
-  const { mutateAsync, error } = useMutation((to_submit) => fetch(
+  const { mutateAsync, error } = useMutation(({to_submit}) => fetch(
     config.backend_url + "auth/email-verification/verify",
     {
       method: "POST",

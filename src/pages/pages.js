@@ -11,6 +11,7 @@ import { UserPage } from './user.js';
 import { ChallengePage } from './challenge.js';
 import { ReferralCodePage } from './referralcode.js';
 import { FAQPage } from './faq.js';
+import { VerifyEmailPage } from './verify-email.js';
 
 
 export const homePage = {
@@ -91,6 +92,12 @@ export const faqPage = {
   url: "faq",
   in_header: true,
 }
+export const verifyEmailPage = {
+  title: "VerifyEmail",
+  component: VerifyEmailPage,
+  url: "verify-email",
+  in_header: false,
+}
 export const all_pages = [
   homePage,
   splashPage,
@@ -105,5 +112,6 @@ export const all_pages = [
   userPage,
   referralCodePage,
   faqPage,
+  verifyEmailPage,
 ]
 

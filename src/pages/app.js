@@ -22,6 +22,7 @@ import {
   userPage,
   referralCodePage,
   faqPage,
+  verifyEmailPage,
 
   all_pages,
 } from './pages.js';
@@ -55,6 +56,7 @@ export const ambassador_pages = [
   profilePage,
   challengePage,
   faqPage,
+  verifyEmailPage,
   {... challengeSubmissionPage, displayName: "My Submissions"},
   {...referralCodePage, displayName: "My Referral Code"},
 ];
@@ -70,6 +72,7 @@ export const admin_pages = [
   adminDashboardPage,
   userPage,
   referralCodePage,
+  verifyEmailPage,
   {...faqPage, in_header: false},
 ];
 export function authPermissionsToPages(auth_permissions) {

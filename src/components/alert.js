@@ -30,6 +30,34 @@ export function SubmissionReceivedAlert({show, onDismiss}) {
   );
 }
 
+export function VerifyEmailPrompt({show, onConfirm, onCancel}) {
+  return (
+    <AwesomeAlert
+      show={show}
+      title={"Send Verification Email?"}
+      message={
+        "We'll send you an email with a link you can click. " +
+        "Check your spam folder if you aren't finding it."
+      }
+      showConfirmButton={true}
+      showCancelButton={true}
+      cancelButtonColor={"lightgray"}
+      confirmText={"Confirm"}
+
+      confirmButtonColor={"#00a0db"}
+      overlayStyle={styles.super_overlay}
+      titleStyle={styles.title_text}
+      messageStyle={styles.body_text}
+      confirmButtonTextStyle={styles.body_text}
+      cancelButtonTextStyle={styles.body_text}
+
+      onConfirmPressed={onConfirm}
+      onCancelPressed={onCancel}
+      onDismiss={onCancel}
+    />
+  );
+}
+
 export function EmailVerifiedAlert() {
   let [showAlert, setShowAlert] = useState(true);
   return (
