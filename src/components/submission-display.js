@@ -3,12 +3,14 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { useLinkProps, useLinkTo } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import {
   useGetChallenge,
   useGetSubmissions,
   useDeleteSubmission,
   useUpdateSubmission,
+  useGetSubmissionsAllowed,
 } from '../modules/challenges/hooks.js';
 import {
   selectSubmissionsAlert,
@@ -27,6 +29,16 @@ export const statusColors = {
   'APPROVED': "#34eb49", // green
   'DENIED': "#eb3434", // red
 }
+const doFnAfterConfirmFn = (value, setterFn) => (clickedStateKey, fn, ...args) => 
+  () => {
+    if(value === clickedStateKey) {
+      fn(...args);
+    } else {
+      setterFn(clickedStateKey);
+    }
+  }
+
+
 
 export function SubmissionItem(
   {
@@ -46,10 +58,10 @@ export function SubmissionItem(
     {backgroundColor: statusColors[status]},
   ]);
 
-  const itemStyle = (index) => {
-    let style = styles.item_view;
+  const itemStyles = (index) => {
+    let style = [styles.item_view];
     if(index > 0) {
-      style.borderTopWidth = "1px";
+      style.push({borderTopWidth: "1px"})
     }
     return style
   }
@@ -57,7 +69,7 @@ export function SubmissionItem(
   const submittedAt = admin ? " " : " Submitted At: " ;
 
   return (
-    <View style={itemStyle(index)} key={submission._id}>
+    <View style={itemStyles(index)} key={submission._id}>
       <View style={statusStyle(submission.status)}>
         <Text style={styles.item_text_small}>{submission.status}</Text>
       </View>
@@ -208,29 +220,108 @@ function SubmissionContentDisplay({submission, challenge}){
   );
 }
 
-function SubmissionOperationButtons(
-  {submissionId, admin, isOwner, isPending, deleteSubmission}
-) {
+function SubmissionDeniedDisplay({challenge, submission, deleteSubmission}) {
+  const userId = useSelector(selectUserId);
+  const submissionsAllowedQuery = useGetSubmissionsAllowed({challengeId: challenge._id})
+  let onViewChallengeProps = useLinkProps(
+    {to: "/challenges?id=" + challenge._id}
+  );
+  const linkTo = useLinkTo();
 
-  const updateSubmission = useUpdateSubmission(submissionId);
-
-  const [noteState, setNoteState] = useState("");
   const [confirmation, setConfirmation] = useState("");
-  
-  function doFnAfterConfirm(clickedStateKey, fn, ...args) {
-    return () => {
-      if(confirmation === clickedStateKey) {
-        fn(...args);
-      } else {
-        setConfirmation(clickedStateKey);
-      }
-    }
-  }
-
+  const doFnAfterConfirm = doFnAfterConfirmFn(confirmation, setConfirmation);
   const onDeleteSubmission = doFnAfterConfirm(
     "delete",
-    deleteSubmission,
+    () => {
+      deleteSubmission();
+      linkTo("/challenges?id=" + challenge._id)
+    },
   );
+
+  if (submissionsAllowedQuery.status !== 'success') {
+    return <View style={styles.page_card}><Text>Loading...</Text></View>
+  }
+
+  if(submission.status !== 'DENIED') {
+    return <></>
+  } else if (userId !== submission.author._id) {
+    return (
+      <View style={styles.page_card}>
+        <View style={styles.item_view}>
+          <Text style={[styles.bold_body_text, {paddingRight: "30px"}]}>
+            Denied Reason:
+          </Text>
+          <Text style={styles.body_text}>{submission.note}</Text>
+        </View>
+      </View>
+    )
+  } else {
+    return (
+      <View style={styles.page_card}>
+        <View style={{flexDirection: "row", alignItems: "center"}}>
+          <MaterialIcons
+            name="warning" size={30} color="red"
+            style={{paddingRight: "10px"}}
+          />
+          <Text style={styles.title_text}>
+            Sorry, this submission was rejected.
+          </Text>
+        </View>
+        <View style={
+          [styles.item_view,
+            {
+              borderBottomWidth: 1,
+              borderColor: "black",
+              marginBottom: "10px",
+            }
+          ]}>
+          <Text style={[styles.bold_body_text, {paddingRight: "30px"}]}>Reason:</Text>
+          <Text style={styles.body_text}>{submission.note}</Text>
+        </View>
+        { submissionsAllowedQuery.data
+          ? <View style={styles.item_view}>
+              <Text style={styles.body_text}>
+                To re-submit, go back to the challenge page:
+              </Text>
+              <TouchableOpacity
+                style={[styles.item_button, {width: 120}]}
+                {...onViewChallengeProps}
+              >
+                <Text style={styles.item_button_text}>View Challenge</Text>
+              </TouchableOpacity>
+            </View>
+          : <View style={{flexDirection: "column", alignItems: "center", width: "100%"}}>
+              <Text style={styles.body_text}>
+                {
+                  "If you would like to re-submit, " +
+                  "you can choose to delete this submission and re-submit."
+                }
+              </Text>
+              <TouchableOpacity
+                style={[styles.standalone_button, {backgroundColor: "red", width: "90px"}]}
+                onPress={onDeleteSubmission}
+              >
+                <Text style={styles.standalone_button_text}>
+                  {
+                    confirmation === "delete" 
+                    ? "Really Delete Submission?" 
+                    : "Delete Submission"
+                  }
+                </Text>
+              </TouchableOpacity>
+            </View>
+        }
+      </View>
+    )
+  }
+}
+
+function AdminButtons({submissionId}) {
+  const updateSubmission = useUpdateSubmission(submissionId);
+  const [noteState, setNoteState] = useState("");
+  const [height, setHeight] = useState(0);
+  const [confirmation, setConfirmation] = useState("");
+  const doFnAfterConfirm = doFnAfterConfirmFn(confirmation, setConfirmation);
   const onApproveSubmission = doFnAfterConfirm(
     "approve",
     updateSubmission,
@@ -247,49 +338,56 @@ function SubmissionOperationButtons(
       note: noteState,
     }
   );
+  return (
+    <>
+      <View style={{flexDirection: "row"}}>
+        <TouchableOpacity
+          style={[
+            styles.standalone_button,
+            {backgroundColor: "green", marginRight: "15px"}
+          ]}
+          onPress={onApproveSubmission}
+        >
+          <Text style={styles.standalone_button_text}>
+            {confirmation === "approve" 
+              ? "Confirm Approve Submission?" 
+              : "Approve Submission"}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.standalone_button, {backgroundColor: "red"}]}
+          onPress={onDenySubmission}
+        >
+          <Text style={styles.standalone_button_text}>
+            {confirmation === "deny" 
+              ? "Confirm Reject Submission?" 
+              : "Reject Submission"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <View style={{padding: "15px"}}>
+        <TextInput
+          multiline={true}
+          onChangeText={setNoteState}
+          onContentSizeChange={(event) => {
+              setHeight(event.nativeEvent.contentSize.height)
+          }}
+          style={[styles.note_textinput, {height: Math.max(35, height)}]}
+          value={noteState}
+        />
+      </View>
+    </>
+  )
+}
 
-  const AdminButtons = () =>
-    (
-      <>
-        <View style={{flexDirection: "row"}}>
-          <TouchableOpacity
-            style={[
-              styles.standalone_button,
-              {backgroundColor: "green", marginRight: "15px"}
-            ]}
-            onPress={onApproveSubmission}
-          >
-            <Text style={styles.standalone_button_text}>
-              {confirmation === "approve" 
-                ? "Confirm Approve Submission?" 
-                : "Approve Submission"}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.standalone_button, {backgroundColor: "red"}]}
-            onPress={onDenySubmission}
-          >
-            <Text style={styles.standalone_button_text}>
-              {confirmation === "deny" 
-                ? "Confirm Reject Submission?" 
-                : "Reject Submission"}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{padding: "15px"}}>
-          {/* TODO Component-ify this crap cuz it keeps re-mounting on every
-            keystroke*/}
-          <TextInput
-            style={styles.note_textinput}
-            placeholder={"  Note"}
-            onChangeText={setNoteState}
-            value={noteState}
-          />
-        </View>
-      </>
-    )
-
-  const OwnerButtons = () => (
+function OwnerButtons({deleteSubmission}) {
+  const [confirmation, setConfirmation] = useState("");
+  const doFnAfterConfirm = doFnAfterConfirmFn(confirmation, setConfirmation);
+  const onDeleteSubmission = doFnAfterConfirm(
+    "delete",
+    deleteSubmission,
+  );
+  return (
     <TouchableOpacity
       style={[styles.standalone_button, {backgroundColor: "red"}]}
       onPress={onDeleteSubmission}
@@ -299,14 +397,20 @@ function SubmissionOperationButtons(
       </Text>
     </TouchableOpacity>
   )
-
-  return (
-    <>
-      {isPending && isOwner ? <OwnerButtons/> : <></>}
-      {isPending && admin ? <AdminButtons/> : <></>}
-    </>
-  );
 }
+
+function SubmissionOperationButtons(
+  {submissionId, admin, isOwner, isPending, deleteSubmission}
+) {
+  if(!isPending) {
+    return <></>
+  } else if (isOwner) {
+      return <OwnerButtons deleteSubmission={deleteSubmission}/>
+  } else if (admin) {
+      return <AdminButtons submissionId={submissionId}/>
+  }
+}
+
 
 export function FullChallengeSubmissionDisplay({submissionId}) {
   const dispatch = useDispatch();
@@ -317,7 +421,7 @@ export function FullChallengeSubmissionDisplay({submissionId}) {
   const submissionQuery = useGetSubmissions({ submissionId: submissionId });
   const challengeQuery = useGetChallenge({ submissionId: submissionId });
 
-  const dismiss = () => dispatch(setSubmissionsSuccessAlert(false));
+  const dismissAlert = () => dispatch(setSubmissionsSuccessAlert(false));
   const linkTo = useLinkTo();
 
   let deleteSubmission = useDeleteSubmission({
@@ -341,6 +445,14 @@ export function FullChallengeSubmissionDisplay({submissionId}) {
         challenge={challengeQuery.data}
         admin={admin}
       />
+      { submissionQuery.data.status === 'DENIED' 
+        ? <SubmissionDeniedDisplay
+            challenge={challengeQuery.data}
+            submission={submissionQuery.data}
+            deleteSubmission={deleteSubmission}
+          /> 
+        :<></>
+      }
       <SubmissionContentDisplay
         submission={submissionQuery.data}
         challenge={challengeQuery.data}
@@ -353,7 +465,7 @@ export function FullChallengeSubmissionDisplay({submissionId}) {
         isOwner={submissionQuery.data.author._id.toString() === userId}
         deleteSubmission={deleteSubmission}
       />
-      <SubmissionReceivedAlert show={submissionsSuccessAlert} onDismiss={dismiss}/>
+      <SubmissionReceivedAlert show={submissionsSuccessAlert} onDismiss={dismissAlert}/>
     </>
   );
 }
@@ -380,8 +492,8 @@ const styles = StyleSheet.create({
     borderRadius: "10px",
   },
   note_textinput: {
-    height: "40px",
-    minWidth: "160px",
+    height: "50px",
+    minWidth: "600px",
     borderColor: "gray",
     borderWidth: 2,
     backgroundColor: "white",
