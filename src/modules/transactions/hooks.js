@@ -113,8 +113,34 @@ export function useCreateAdminTransaction() {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(CACHE_KEY);
+        queryClient.invalidateQueries('user');
       },
     }
   );
   return createMutationCall(mutateAsync, error, "creating admin transaction");
+}
+
+export function useRecalculateUserBalance() {
+  const header = useSelector(selectAuthHeader);
+
+  const { mutateAsync, error } = useMutation(
+    ({ to_submit }) => fetch(
+      config.backend_url + "transactions/admin/recalculateBalance",
+      {
+        method: "POST",
+        headers: {
+          ...header,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(to_submit),
+      },
+    ),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(CACHE_KEY);
+        queryClient.invalidateQueries('user');
+      },
+    }
+  );
+  return createMutationCall(mutateAsync, error, "recalculating user balance");
 }

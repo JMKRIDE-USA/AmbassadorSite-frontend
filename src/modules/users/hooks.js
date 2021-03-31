@@ -59,4 +59,3 @@ export function useDisableSession(){
     mutateAsync, error, "disabling session",
   )
 }
-

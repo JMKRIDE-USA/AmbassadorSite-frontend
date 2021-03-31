@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import page_styles from '../styles/pageStyle.js';
@@ -12,7 +12,8 @@ import { selectUserInfo } from '../modules/users/userSlice.js';
 
 import {
   useGetReferralCode,
-  useCreateReferralCode
+  useCreateReferralCode,
+  useRecalculateUserBalance,
 } from '../modules/transactions/hooks.js';
 import {
   SingleReferralCodeDisplay,
@@ -54,6 +55,24 @@ function SingleUserInfo({user}) {
       </View>
     </View>
   );
+}
+
+function AdminButtons({userId}) {
+  const recalculateUserBalance = useRecalculateUserBalance();
+  const onRecalculatePressed = () => recalculateUserBalance({userId: userId})
+  return (
+    <View style={{flexDirection: "row"}}>
+      <TouchableOpacity
+        style={[
+          styles.standalone_button,
+          {backgroundColor: "lightgray"}
+        ]}
+        onPress={onRecalculatePressed}
+      >
+        <Text style={styles.standalone_button_text}>Recalculate User Balance</Text>
+      </TouchableOpacity>
+    </View>
+  )
 }
 
 function SingleUserSubmissions({userId}) {
@@ -152,6 +171,7 @@ function SingleUserPage({userId}) {
   return (
     <>
       <SingleUserInfo user={userQuery.data}/>
+      <AdminButtons userId={userId}/>
       <SingleUserReferralCodeCard userId={userId}/>
       <SingleUserSubmissions userId={userId}/>
     </>
