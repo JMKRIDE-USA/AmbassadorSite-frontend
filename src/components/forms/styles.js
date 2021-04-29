@@ -12,6 +12,7 @@ export const stringStyles = {
   NUMBER: [borderStyle, {}],
   YEAR: [borderStyle, {width: "180px"}],
   URL: [borderStyle, {width: "180px"}],
+  PASSWORD: [borderStyle, {width: "350px"}],
 }
 export const dateStyle = {margin: "5px", marginLeft: '20px', zIndex: 5}
 export const yesNoStyle = {margin: "5px", marginLeft: '20px', width: "350px"}

@@ -18,6 +18,7 @@ import DividerField from './divider-field.js';
 import YesNoField from './yesno-field.js';
 import EmailField  from './email-field.js';
 import { DateField, DateTimeField } from './date-fields.js';
+import PasswordField from './password-field.js';
 
 
 export const fieldTypes = [
@@ -30,6 +31,7 @@ export const fieldTypes = [
   "DATE",
   "DATETIME",
   "YEAR",
+  "PASSWORD",
 ]
 
 export const commonFieldProps = (field) => ({
@@ -83,6 +85,10 @@ export const formTypes = {
   URL: {
     componentFn: InputField,
     validationFn: urlValidationFn,
+  },
+  PASSWORD: {
+    componentFn: PasswordField,
+    validationFn: stringValidationFn,
   },
   LEGAL_CHECK: {}, // TODO
   DIVIDER: {
