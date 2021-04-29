@@ -154,3 +154,19 @@ export function useResetPasswordWithPassword(){
   );
   return createMutationCall(mutateAsync, error, "resetting password with password");
 }
+
+export function useAdminResetUserPassword(){
+  const header = useSelector(selectAuthHeader);
+  const { mutateAsync, error } = useMutation(({to_submit}) => fetch(
+    config.backend_url + "auth/reset_password/admin",
+    {
+      method: "POST",
+      headers: {
+        ...header,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(to_submit),
+    }).then(res => res.json()),
+  );
+  return createMutationCall(mutateAsync, error, "resetting password with admin priviledges");
+}

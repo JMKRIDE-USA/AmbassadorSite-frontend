@@ -17,6 +17,7 @@ export default {
   },
   title_card_text: {
     color: "#080808",
+    fontSize: "30px",
     fontFamily: config.title_font,
     textAlign: "center",
   },

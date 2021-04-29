@@ -3,10 +3,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import Form from '../components/forms/form.js'
-import { useSelector } from 'react-redux';
 import { PasswordsDontMatchAlert, FormResultAlert } from '../components/alert.js';
 import { useLogoutUser, useResetPasswordWithPassword } from '../modules/auth/hooks.js';
-import { selectUserId } from '../modules/auth/authSlice.js';
 
 import page_styles from '../styles/pageStyle.js';
 import card_styles from '../styles/cardStyle.js';
@@ -47,7 +45,6 @@ export function ResetPasswordWithPasswordPage() {
     }
     setShowResultAlert(false);
   }
-  const userId = useSelector(selectUserId);
 
 
   const handleSubmit = (data, {setSubmitting, resetForm}) => {
@@ -58,7 +55,6 @@ export function ResetPasswordWithPasswordPage() {
       return false;
     }
     let to_submit = {
-      userId: userId,
       oldPassword: data["0"],
       newPassword: data["1"],
     }
@@ -87,8 +83,14 @@ export function ResetPasswordWithPasswordPage() {
     <>
       <View style={styles.app_scrollview}>
         <View style={styles.page_card}>
-          <Text style={styles.title_text}>
+          <Text style={styles.title_card_text}>
             Reset Password:
+          </Text>
+          <Text style={[styles.sub_title_text, {maxWidth: "500px"}]}>
+            {
+              "If it's successful, you'll be logged out " +
+              "and need to log in with your new password."
+            }
           </Text>
           <Form
             structure={formStructure}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -7,6 +7,7 @@ import page_styles from '../styles/pageStyle.js';
 import card_styles from '../styles/cardStyle.js';
 import common_styles from '../styles/commonStyle.js';
 
+import Form from '../components/forms/form.js';
 import { useGetUser } from '../modules/users/hooks.js';
 import { selectUserInfo } from '../modules/users/userSlice.js';
 
@@ -15,6 +16,7 @@ import {
   useCreateReferralCode,
   useRecalculateUserBalance,
 } from '../modules/transactions/hooks.js';
+import { useAdminResetUserPassword } from '../modules/auth/hooks.js';
 import {
   SingleReferralCodeDisplay,
   CreateReferralCodeForm
@@ -60,8 +62,43 @@ function SingleUserInfo({user}) {
 function AdminButtons({userId}) {
   const recalculateUserBalance = useRecalculateUserBalance();
   const onRecalculatePressed = () => recalculateUserBalance({userId: userId})
+
+  let [showPasswordResetForm, setShowPasswordResetForm] = useState(false);
+  const resetUserPassword = useAdminResetUserPassword();
+  const handlePasswordResetSubmit = (data, {setSubmitting, resetForm}) => {
+    if(data["0"] !== data["1"]) {
+      console.log("Passwords do not match.");
+      resetForm();
+      setSubmitting(false);
+      return false;
+    }
+    let to_submit = {
+      userId: userId,
+      newPassword: data["0"],
+    }
+    console.log("Submitting", to_submit);
+    resetUserPassword(to_submit).then(result => {
+      console.log(result ? "Success." : "Failed.");
+      setSubmitting(false);
+    });
+  }
+  const passwordResetFormStructure = [
+    {
+      title: "New Password",
+      fieldType: "PASSWORD",
+      required: true,
+      _id: "0",
+    },
+    {
+      title: "Repeat New Password",
+      fieldType: "PASSWORD",
+      required: true,
+      _id: "1",
+    },
+  ]
+
   return (
-    <View style={{flexDirection: "row"}}>
+    <View style={{flexDirection: "column"}}>
       <TouchableOpacity
         style={[
           styles.standalone_button,
@@ -71,6 +108,23 @@ function AdminButtons({userId}) {
       >
         <Text style={styles.standalone_button_text}>Recalculate User Balance</Text>
       </TouchableOpacity>
+      { showPasswordResetForm
+        ? <View style={styles.page_card}>
+            <Form
+              structure={passwordResetFormStructure}
+              handleSubmit={handlePasswordResetSubmit}
+            />
+          </View>
+        : <TouchableOpacity
+          style={[
+            styles.standalone_button,
+            {backgroundColor: "lightgray"}
+          ]}
+          onPress={() => setShowPasswordResetForm(true)}
+        >
+          <Text style={styles.standalone_button_text}>Reset User Password</Text>
+        </TouchableOpacity>
+      }
     </View>
   )
 }
