@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Dimensions, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import * as Linking from 'expo-linking';
+import { useLinkTo } from '@react-navigation/native';
 
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -17,6 +18,7 @@ function SocialLink({name, url}){
 }
 
 export function Footer() {
+  const linkTo = useLinkTo();
   const github_bugreport_url = newGithubIssueUrl({
     user: 'JMKRIDE-USA',
     repo: 'AmbassadorSite-frontend',
@@ -28,13 +30,24 @@ export function Footer() {
     <View style={styles.container}>
       <View style={styles.visible_container}>
         <View style={styles.left_side}>
-          <Text style={styles.social_font}>Having issues?</Text>
-          <Text style={styles.link} onPress={() => Linking.openURL(github_bugreport_url)}>
-            File a bug
-          </Text>
-          <Text>
-            <Text style={styles.link} onPress={() => Linking.openURL(jeff_bugreport_email_url)}>Or email me</Text>
-          </Text>
+          <View style={{flexDirection: "column"}}>
+            <Text style={styles.social_font}>Having issues?</Text>
+            <Text style={styles.link} onPress={() => Linking.openURL(github_bugreport_url)}>
+              File a bug
+            </Text>
+            <Text>
+              <Text style={styles.link} onPress={() => Linking.openURL(jeff_bugreport_email_url)}>Or email me</Text>
+            </Text>
+          </View>
+          <View style={{flexDirection: "column", alignItems: "center"}}>
+            <Text style={styles.privacy_warning}>
+              {"*By using this site you agree to our "}
+              <Text style={[styles.link, {fontSize: "10px", maxWidth: "130px"}]} onPress={() => linkTo("/privacy-policy")}>
+                privacy policy
+              </Text>
+              {"."}
+            </Text>
+          </View>
         </View>
         <View style={styles.right_side}>
           <Text style={styles.social_font}> Follow Us:   </Text>
@@ -54,7 +67,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     backgroundColor: "#080808",
-    minHeight: "70px",
+    minHeight: "90px",
     alignItems: "center",
     justifyContent: "stretch",
   },
@@ -65,10 +78,19 @@ const styles = StyleSheet.create({
     marginRight: "50px",
   },
   left_side: {
-    flexDirection: "column",
+    //flexDirection: "column",
+    flexDirection: Dimensions.get('window').width < 450 ? "column" : "row",
     alignItems: "flex-start",
     justifyContent: "flex-start",
     margin: "10px",
+  },
+  privacy_warning: {
+    ...{
+      color: "white",
+      fontSize: "10px",
+      maxWidth: "130px"
+    },
+    ...Dimensions.get('window').width < 450 ? {marginTop: "10px"} : {marginLeft: "50px"},
   },
   visible_container: {
     maxWidth: 1000,

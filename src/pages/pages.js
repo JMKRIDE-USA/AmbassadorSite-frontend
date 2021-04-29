@@ -12,6 +12,7 @@ import { ChallengePage } from './challenge.js';
 import { ReferralCodePage } from './referralcode.js';
 import { FAQPage } from './faq.js';
 import { VerifyEmailPage } from './verify-email.js';
+import { PrivacyPolicyPage } from './privacy-policy.js';
 
 
 export const homePage = {
@@ -98,6 +99,12 @@ export const verifyEmailPage = {
   url: "verify-email",
   in_header: false,
 }
+export const privacyPolicyPage = { 
+  title: "Privacy Policy",
+  component: PrivacyPolicyPage,
+  url: "privacy-policy",
+  in_header: false,
+}
 export const all_pages = [
   homePage,
   splashPage,
@@ -113,5 +120,6 @@ export const all_pages = [
   referralCodePage,
   faqPage,
   verifyEmailPage,
+  privacyPolicyPage,
 ]
 

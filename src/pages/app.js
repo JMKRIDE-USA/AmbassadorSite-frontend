@@ -23,6 +23,7 @@ import {
   referralCodePage,
   faqPage,
   verifyEmailPage,
+  privacyPolicyPage,
 
   all_pages,
 } from './pages.js';
@@ -33,6 +34,7 @@ import {
  */
 export const welcome_pages = [
   homePage,
+  privacyPolicyPage,
   {...signUpPage, apply_page: true },
   {...signInPage, profile_page: true },
 ];
@@ -43,6 +45,7 @@ export const welcome_pages = [
 export const user_pages = [
   homePage,
   profilePage,
+  privacyPolicyPage,
   {...challengeSubmissionPage, in_header: false},
   {...challengePage, in_header: false},
   {...ambassadorApplicationPage, apply_page: true},
@@ -57,6 +60,7 @@ export const ambassador_pages = [
   challengePage,
   faqPage,
   verifyEmailPage,
+  privacyPolicyPage,
   {... challengeSubmissionPage, displayName: "My Submissions"},
   {...referralCodePage, displayName: "My Referral Code"},
 ];
@@ -73,6 +77,7 @@ export const admin_pages = [
   userPage,
   referralCodePage,
   verifyEmailPage,
+  privacyPolicyPage,
   {...faqPage, in_header: false},
 ];
 export function authPermissionsToPages(auth_permissions) {
