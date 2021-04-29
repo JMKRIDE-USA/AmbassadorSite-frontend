@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
     marginRight: "50px",
   },
   left_side: {
-    //flexDirection: "column",
     flexDirection: Dimensions.get('window').width < 450 ? "column" : "row",
     alignItems: "flex-start",
     justifyContent: "flex-start",

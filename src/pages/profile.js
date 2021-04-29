@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Octicons, MaterialIcons } from '@expo/vector-icons';
+import { useLinkTo } from '@react-navigation/native';
 
 import page_styles from '../styles/pageStyle.js';
 import card_styles from '../styles/cardStyle.js';
@@ -98,6 +99,8 @@ export function Profile() {
   const userId = useSelector(selectUserId);
   const userQuery = useGetUser({userId: userId});
   const userSessions = useGetUserSessions();
+
+  const linkTo = useLinkTo();
 
   const sendEmailVerification = useSendEmailVerification();
   const disable_session = useDisableSession();
@@ -197,6 +200,14 @@ export function Profile() {
       >
         <Text style={styles.standalone_button_text}>
           Log Out
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.standalone_button, {backgroundColor: "lightgray"}]}
+        onPress={() => linkTo("/reset-password-with-password")}
+      >
+        <Text style={styles.standalone_button_text}>
+          Reset Password
         </Text>
       </TouchableOpacity>
       { userSessions.data.length

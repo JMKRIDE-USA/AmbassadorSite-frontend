@@ -13,6 +13,7 @@ import { ReferralCodePage } from './referralcode.js';
 import { FAQPage } from './faq.js';
 import { VerifyEmailPage } from './verify-email.js';
 import { PrivacyPolicyPage } from './privacy-policy.js';
+import { ResetPasswordWithPasswordPage } from './reset-password.js';
 
 
 export const homePage = {
@@ -79,7 +80,7 @@ export const userPage = {
   title: "User Page",
   component: UserPage,
   url: "users",
-  in_header: false,
+  in_header: true,
 }
 export const referralCodePage = {
   title: "Referral Codes",
@@ -105,6 +106,12 @@ export const privacyPolicyPage = {
   url: "privacy-policy",
   in_header: false,
 }
+export const resetPasswordWithPasswordPage = { 
+  title: "Reset Password",
+  component: ResetPasswordWithPasswordPage,
+  url: "reset-password-with-password",
+  in_header: false,
+}
 export const all_pages = [
   homePage,
   splashPage,
@@ -121,5 +128,6 @@ export const all_pages = [
   faqPage,
   verifyEmailPage,
   privacyPolicyPage,
+  resetPasswordWithPasswordPage,
 ]
 

@@ -138,3 +138,19 @@ export function useVerifyEmail(){
   );
   return createMutationCall(mutateAsync, error, "verifying email");
 }
+
+export function useResetPasswordWithPassword(){
+  const header = useSelector(selectAuthHeader);
+  const { mutateAsync, error } = useMutation(({to_submit}) => fetch(
+    config.backend_url + "auth/reset_password/password",
+    {
+      method: "POST",
+      headers: {
+        ...header,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(to_submit),
+    }).then(res => res.json()),
+  );
+  return createMutationCall(mutateAsync, error, "resetting password with password");
+}

@@ -11,6 +11,44 @@ import card_styles from '../styles/cardStyle.js';
 import common_styles from '../styles/commonStyle.js';
 
 
+export function PasswordsDontMatchAlert({show, onDismiss}) {
+  return (
+    <AwesomeAlert
+      show={show}
+      title={"Passwords do not match."}
+      message={"Please try again."}
+      showConfirmButton={true}
+      confirmText={"Dismiss"}
+      confirmButtonColor={"#00a0db"}
+      overlayStyle={styles.overlay}
+      titleStyle={styles.title_text}
+      messageStyle={styles.body_text}
+      confirmButtonTextStyle={styles.body_text}
+      onConfirmPressed={onDismiss}
+      onDismiss={onDismiss}
+    />
+  );
+}
+
+export function FormResultAlert({show, onDismiss, title, message}) {
+  return (
+    <AwesomeAlert
+      show={show}
+      title={title}
+      message={message}
+      showConfirmButton={true}
+      confirmText={"Dismiss"}
+      confirmButtonColor={"#00a0db"}
+      overlayStyle={styles.overlay}
+      titleStyle={styles.title_text}
+      messageStyle={styles.body_text}
+      confirmButtonTextStyle={styles.body_text}
+      onConfirmPressed={onDismiss}
+      onDismiss={onDismiss}
+    />
+  );
+}
+
 export function SubmissionReceivedAlert({show, onDismiss}) {
   return (
     <AwesomeAlert
