@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import * as Linking from 'expo-linking';
 
 import page_styles from '../styles/pageStyle.js';
@@ -15,6 +15,12 @@ const QAs = [
     "BUT, if we find your code on any of those bulk-discount code sites, " +
     "(the ones you can find just by googling 'JMKRIDE discount code'), we will " +
     "change it and email you about it."
+  ],
+  [
+    "How can I connect with my fellow ambassadors?",
+    "Click the button to be taken to our Ambassadors-only FB page. " +
+    "Request to join and I will approve your request ASAP!",
+    "https://www.facebook.com/groups/1611571015700692"
   ],
   [
     "How do I upload an image or video for a submission?",
@@ -52,6 +58,13 @@ const QAs = [
     "$(points * 0.25) in store credits!"
   ],
   [
+    "Do you have any business cards that I can use to promote my ambassador code?",
+    "Yes! Click the link to download the pdf, which has our website and a place to " +
+    "write in your discount code.",
+    "https://www.dropbox.com/s/vxt1epxm6f973p0/AmbassadorCards.pdf?" +
+    "dl=0&fbclid=IwAR2xT9xrTe7RbqWwSLTo8rDc0cBLApZRcgGKQBrE8dO7UPtlf-p0zc5ttNU"
+  ],
+  [
     "How do I exchange my ambassador points for cash?",
     "Sorry, at the moment this is not possible, we still need to speak with our tax guy " +
     "to find out how we can legally pay people and iron out other details with the site."
@@ -64,11 +77,20 @@ const QAs = [
 ]
 
 function QA(qa, index) {
-  const [question, answer] = qa;
+  const [question, answer, link] = qa;
   return (
-    <View style={styles.page_card} key={index}>
+    <View style={[styles.page_card, {alignItems: "center"}]} key={index}>
       <Text style={styles.title_text}>{question}</Text>
       <Text style={styles.body_text}>{answer}</Text>
+      { link 
+        ? <TouchableOpacity
+            style={styles.item_button}
+            onPress={() => Linking.openURL(link)}
+          >
+            <Text style={styles.item_button_text}>Visit Link</Text>
+          </TouchableOpacity>
+        : <></>
+      }
     </View>
   )
 }
