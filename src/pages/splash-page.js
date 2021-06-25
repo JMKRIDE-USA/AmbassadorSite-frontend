@@ -94,8 +94,7 @@ export function SplashPage() {
                 These will be things like 'teach a brand new person and document
                 their progress.' The actual challenges will of course have much
                 more clarifications than this example.<br/>
-              - Ambassador points can be used on our site, and eventually may be
-                eligible to be exchanged for cold hard ca$h!
+              - Ambassador points can be exchanged for credit on on our site.
             </Text>
           </Text>
         </View>
