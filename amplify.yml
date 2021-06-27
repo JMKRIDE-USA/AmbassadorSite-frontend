@@ -5,7 +5,7 @@ frontend:
       commands:
         - echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
         - npm ci
-        - nvm use 10
+        - nvm use 12
         - npm install --silent --global expo-cli
         - npm install
         - sh ./scripts/fix-rn-web-proptypes-issue.sh
