@@ -18,14 +18,14 @@ const balanceEffects = {
 }
 
 export function UserTransactionsTable() {
-  const transactionsQuery = useGetTransactions({useCurrentUser: true});
+  const transactionsQuery = useGetTransactions({useCurrentUser: true, populate: true});
   return (
     <RawTransactionsTable transactionsQuery={transactionsQuery}/>
   );
 }
 
 export function ReferralCodeTransactionsTable({referralCodeId}) {
-  const transactionsQuery = useGetTransactions({referralCodeId: referralCodeId})
+  const transactionsQuery = useGetTransactions({referralCodeId: referralCodeId, populate: true})
   return (
     <RawTransactionsTable transactionsQuery={transactionsQuery}/>
   );
