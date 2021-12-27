@@ -2,7 +2,9 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "build": "expo build:web",
-    "start": "expo start --web"
+    "start": "expo start --web",
+    "postinstall": "sh ./scripts/fix-rn-web-proptypes-issue.sh"
+
   },
   "dependencies": {
     "@expo-google-fonts/lato": "^0.1.0",
